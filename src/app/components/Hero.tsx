@@ -34,7 +34,11 @@ export function Hero() {
     <div className="relative min-h-screen overflow-hidden bg-black">
       {/* Spline Background */}
       <div className="absolute inset-0 z-0">
-        <Spline scene="https://my.spline.design/r4xbot-j18mmSGvHZoYHkC5n0B2EB0H"/>
+        <Spline 
+          scene="https://prod.spline.design/r4xbot-j18mmSGvHZoYHkC5n0B2EB0H/scene.splinecode"
+          onLoad={() => console.log('Spline loaded successfully')}
+          onError={(error) => console.error('Spline loading error:', error)}
+        />
       </div>
 
       {/* Foreground UI */}
