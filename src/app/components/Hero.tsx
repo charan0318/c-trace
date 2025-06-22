@@ -89,36 +89,38 @@ export function Hero() {
           A sleek interface to query and explore Chiliz chain data with natural language.
         </p>
 
-        <div className="mt-12 flex flex-col sm:flex-row gap-4 items-center w-full sm:w-[600px]">
-          <Input
-            type="text"
-            placeholder="Enter contract address or question..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full p-4 rounded-lg bg-white/10 border border-white/10 focus:outline-none focus:ring-2 focus:ring-pink-600 placeholder-white/50 text-white backdrop-blur-md"
-          />
-          <Select value={selectedChain} onValueChange={setSelectedChain}>
-            <SelectTrigger className="w-full sm:w-[200px] bg-white/10 border border-white/10 text-white backdrop-blur-md">
-              <SelectValue placeholder="Select chain" />
-            </SelectTrigger>
-            <SelectContent className="bg-gray-900 border-white/10">
-              {blockchains.map((chain) => (
-                <SelectItem 
-                  key={chain.id} 
-                  value={chain.id}
-                  className="text-white hover:bg-white/10"
-                >
-                  {chain.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <button 
-            onClick={handleSearch}
-            className="bg-pink-600 hover:bg-pink-700 px-6 py-3 rounded-lg text-white font-semibold shadow-[0_0_12px_#ec4899] transition-all"
-          >
-            🔍 Search
-          </button>
+        <div className="mt-12 glass-panel w-full sm:w-[700px]">
+          <div className="flex flex-col sm:flex-row gap-4 items-center">
+            <Input
+              type="text"
+              placeholder="Enter contract address or question..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full p-4 rounded-xl bg-white/5 border border-white/20 focus:outline-none focus:ring-2 focus:ring-chiliz-primary placeholder-white/50 text-white backdrop-blur-xl"
+            />
+            <Select value={selectedChain} onValueChange={setSelectedChain}>
+              <SelectTrigger className="w-full sm:w-[200px] bg-white/5 border border-white/20 text-white backdrop-blur-xl rounded-xl">
+                <SelectValue placeholder="Select chain" />
+              </SelectTrigger>
+              <SelectContent className="backdrop-blur-xl bg-chiliz-dark/90 border-white/10 rounded-xl">
+                {blockchains.map((chain) => (
+                  <SelectItem 
+                    key={chain.id} 
+                    value={chain.id}
+                    className="text-white hover:bg-white/10 rounded-lg"
+                  >
+                    {chain.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <button 
+              onClick={handleSearch}
+              className="btn-chiliz px-6 py-3 rounded-xl text-white font-semibold whitespace-nowrap"
+            >
+              🔍 Search
+            </button>
+          </div>
         </div>
 
         <div className="mt-20 grid grid-cols-1 sm:grid-cols-3 gap-8 w-full max-w-6xl px-4">
@@ -129,13 +131,13 @@ export function Hero() {
           ].map((item, index) => (
             <motion.div 
               key={index} 
-              className="glass-card rounded-2xl p-6 hover:scale-105 transition-all cursor-pointer"
+              className="glass-panel hover:scale-105 transition-all cursor-pointer group"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
             >
-              <h3 className="text-xl font-bold text-chiliz-primary mb-2">{item.title}</h3>
-              <p className="text-white/70">{item.desc}</p>
+              <h3 className="text-xl font-bold text-chiliz-primary mb-3 group-hover:text-glow transition-all">{item.title}</h3>
+              <p className="text-white/80 leading-relaxed">{item.desc}</p>
             </motion.div>
           ))}
         </div>

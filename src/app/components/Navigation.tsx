@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link'
@@ -8,22 +7,28 @@ import { client } from "../client"
 
 export function Navigation() {
   return (
-    <nav className="flex justify-between items-center px-6 py-4 border-b border-white/10 backdrop-blur-md bg-white/5 rounded-xl shadow-md">
-      <Link href="/" className="text-2xl font-bold tracking-wide">
-        🌶️ Chiliz AI Explorer
-      </Link>
-      <div className="flex items-center gap-4">
-        <Link href="/" className="text-white/70 hover:text-white transition-colors">
-          Home
-        </Link>
-        <ConnectButton
-          client={client}
-          connectModal={{ size: "compact" }}
-          connectButton={{
-            className: "bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-full font-semibold shadow-[0_0_12px_#ec4899]"
-          }}
-        />
+    <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/5 border-b border-white/10">
+      <div className="container mx-auto px-4 py-4">
+        <div className="glass-panel !p-3">
+          <div className="flex justify-between items-center">
+            <Link href="/" className="text-2xl font-bold text-white hover:text-chiliz-primary transition-colors">
+              🌶️ Chiliz AI Explorer
+            </Link>
+
+            <div className="flex items-center space-x-6">
+              <Link href="/explorer" className="text-white/80 hover:text-chiliz-secondary transition-colors font-medium">
+                Explorer
+              </Link>
+              <Link href="/docs" className="text-white/80 hover:text-chiliz-secondary transition-colors font-medium">
+                Docs
+              </Link>
+              <div className="glass-panel !p-2 !rounded-xl">
+                <ConnectButton />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </nav>
-  )
+  );
 }
