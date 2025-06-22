@@ -1,6 +1,10 @@
 "use client";
 
-import Spline from '@splinetool/react-spline';
+import dynamic from 'next/dynamic';
+
+const Spline = dynamic(() => import('@splinetool/react-spline'), {
+  ssr: false,
+});
 import { useState } from 'react';
 import { Input } from '@/app/components/ui/input';
 import { Button } from '@/app/components/ui/button';
