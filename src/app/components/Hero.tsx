@@ -18,6 +18,8 @@ const blockchains = [{ id: '88888', name: 'Chiliz Chain' }];
 export function Hero() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedChain, setSelectedChain] = useState('');
+  const [splineLoaded, setSplineLoaded] = useState(false);
+  const [splineError, setSplineError] = useState(false);
   const router = useRouter();
 
   const handleSearch = () => {
@@ -32,13 +34,38 @@ export function Hero() {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-black">
-      {/* Spline Background */}
-      <div className="absolute top-0 left-0 w-full h-full z-0">
-        <Spline scene="https://prod.spline.design/CzpaWhZatxJIV-bg/scene.splinecode" />
+      {/* Spline Background - Fixed z-index and positioning */}
+      <div className="fixed top-0 left-0 w-full h-full" style={{ zIndex: -1 }}>
+        {!splineLoaded && !splineError && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black">
+            <div className="text-white/50 text-lg">Loading 3D Scene...</div>
+          </div>
+        )}
+        {splineError && (
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 to-pink-900/20" />
+        )}
+        <Spline 
+          scene="https://prod.spline.design/CzpaWhZatxJIV-bg/scene.splinecode"
+          onLoad={() => {
+            console.log('✅ Spline scene loaded successfully');
+            setSplineLoaded(true);
+          }}
+          onError={(error) => {
+            console.error('❌ Spline scene failed to load:', error);
+            setSplineError(true);
+          }}
+          style={{ 
+            width: '100%', 
+            height: '100%',
+            opacity: splineLoaded ? 1 : 0,
+            transition: 'opacity 0.5s ease-in-out',
+            zIndex: -1
+          }}
+        />
       </div>
 
-      {/* Foreground UI */}
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center text-white px-4">
+      {/* Foreground UI - Explicit high z-index */}
+      <div className="relative min-h-screen flex flex-col items-center justify-center text-white px-4" style={{ zIndex: 999 }}>
         {/* Search box */}
         <div className="glass-panel w-full sm:w-[700px] p-6 backdrop-blur-xl bg-white/5 rounded-2xl border border-white/10 shadow-xl">
           <div className="flex flex-col sm:flex-row gap-4 items-center">
