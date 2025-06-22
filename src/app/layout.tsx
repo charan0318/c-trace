@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Inter } from "next/font/google";
@@ -16,12 +15,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ThirdwebProvider>
-          <div className="min-h-screen chiliz-gradient">
-            <Navigation />
-            <div className="pt-20">
-              {children}
-            </div>
+        <ThirdwebProvider 
+          clientId="662a63dd0ecfac183d250631cc2138f5"
+        >
+          <Navigation />
+          <div className="pt-20">
+            {children}
           </div>
         </ThirdwebProvider>
       </body>

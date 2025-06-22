@@ -1,18 +1,11 @@
-
 'use client';
 
 import Link from 'next/link';
 import { ConnectButton } from "thirdweb/react";
 import { client } from "../client";
-import { createWallet } from "thirdweb/wallets";
+import { inAppWallet } from "thirdweb/wallets";
 
-const wallets = [
-  createWallet("io.metamask"),
-  createWallet("com.coinbase.wallet"),
-  createWallet("me.rainbow"),
-];
-
-export function Navigation() {
+export default function Navigation() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/5 border-b border-white/10">
       <div className="container mx-auto px-4 py-4">
@@ -30,13 +23,23 @@ export function Navigation() {
                 Docs
               </Link>
               <div className="glass-panel !p-2 !rounded-xl">
-                <ConnectButton 
+                <ConnectButton
                   client={client}
-                  wallets={wallets}
-                  connectModal={{
-                    size: "wide",
+                  wallets={[
+                    inAppWallet({
+                      auth: {
+                        options: ["email", "google", "apple", "facebook", "phone"],
+                      },
+                    }),
+                  ]}
+                  connectModal={{ 
+                    size: "compact",
+                    title: "Connect Wallet",
+                    titleIcon: "",
                   }}
-                  theme="dark"
+                  connectButton={{
+                    label: "Connect Wallet",
+                  }}
                 />
               </div>
             </div>
