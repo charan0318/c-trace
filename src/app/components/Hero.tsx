@@ -35,7 +35,7 @@ export function Hero() {
       {/* Spline Background */}
       <div className="absolute inset-0 z-0">
         <Spline 
-          scene="https://prod.spline.design/r4xbot-j18mmSGvHZoYHkC5n0B2EB0H/scene.splinecode"
+          scene="https://my.spline.design/r4xbot-j18mmSGvHZoYHkC5n0B2EB0H"
           onLoad={() => console.log('Spline loaded successfully')}
           onError={(error) => console.error('Spline loading error:', error)}
         />
