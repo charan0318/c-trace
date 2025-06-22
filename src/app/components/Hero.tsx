@@ -1,10 +1,6 @@
-"use client";
+'use client';
 
-import dynamic from 'next/dynamic';
-
-const Spline = dynamic(() => import('@splinetool/react-spline'), {
-  ssr: false,
-});
+import Spline from '@splinetool/react-spline/next';
 import { useState } from 'react';
 import { Input } from '@/app/components/ui/input';
 import { Button } from '@/app/components/ui/button';
@@ -37,12 +33,8 @@ export function Hero() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-black">
       {/* Spline Background */}
-      <div className="absolute inset-0 z-0">
-        <Spline 
-          scene="https://my.spline.design/r4xbot-j18mmSGvHZoYHkC5n0B2EB0H"
-          onLoad={() => console.log('Spline loaded successfully')}
-          onError={(error) => console.error('Spline loading error:', error)}
-        />
+      <div className="absolute top-0 left-0 w-full h-full z-0">
+        <Spline scene="https://prod.spline.design/CzpaWhZatxJIV-bg/scene.splinecode" />
       </div>
 
       {/* Foreground UI */}
@@ -101,7 +93,7 @@ export function Hero() {
           ))}
         </div>
 
-        {/* Footer Restored */}
+        {/* Footer */}
         <footer className="mt-24 text-sm text-white/40 text-center">
           &copy; {new Date().getFullYear()} Chiliz AI | Crafted with ❤️
         </footer>
