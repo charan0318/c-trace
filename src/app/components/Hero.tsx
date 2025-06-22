@@ -1,102 +1,53 @@
-
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Button } from "@/app/components/ui/button";
-import { Input } from "@/app/components/ui/input";
-import { SearchIcon } from "@/app/components/SearchIcon";
+import Spline from '@splinetool/react-spline';
+import { useState } from 'react';
+import { Input } from '@/app/components/ui/input';
+import { Button } from '@/app/components/ui/button';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/app/components/ui/select";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+} from '@/app/components/ui/select';
+import { useRouter } from 'next/navigation';
 
-const blockchains = [
-  { id: "88888", name: "Chiliz Chain" }, // Chiliz Mainnet
-];
+const blockchains = [{ id: '88888', name: 'Chiliz Chain' }];
 
 export function Hero() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedChain, setSelectedChain] = useState("");
-  const [typingText, setTypingText] = useState("");
-  const [textIndex, setTextIndex] = useState(0);
-  const [charIndex, setCharIndex] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedChain, setSelectedChain] = useState('');
   const router = useRouter();
-
-  const texts = [
-    'Explore Smart Contracts ⚙️',
-    'Check Token Balances 💰',
-    'Inspect Transactions 🔍',
-    'Query Blockchain Data 📊'
-  ];
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const currentText = texts[textIndex];
-      
-      if (!isDeleting) {
-        if (charIndex < currentText.length) {
-          setTypingText(currentText.substring(0, charIndex + 1));
-          setCharIndex(charIndex + 1);
-        } else {
-          setTimeout(() => setIsDeleting(true), 2000);
-        }
-      } else {
-        if (charIndex > 0) {
-          setTypingText(currentText.substring(0, charIndex - 1));
-          setCharIndex(charIndex - 1);
-        } else {
-          setIsDeleting(false);
-          setTextIndex((textIndex + 1) % texts.length);
-        }
-      }
-    }, isDeleting ? 50 : 100);
-
-    return () => clearTimeout(timer);
-  }, [charIndex, isDeleting, textIndex, texts]);
 
   const handleSearch = () => {
     if (!selectedChain || !searchTerm.trim()) {
-      alert("Please select a chain and enter a search term");
+      alert('Please select a chain and enter a search term');
       return;
     }
-    console.log("Searching:", searchTerm, "on chain:", selectedChain);
     router.push(
-      `/explorer?chainId=${selectedChain}&searchTerm=${encodeURIComponent(
-        searchTerm
-      )}`
+      `/explorer?chainId=${selectedChain}&searchTerm=${encodeURIComponent(searchTerm)}`
     );
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white font-sans p-4">
-      <main className="flex flex-col items-center mt-24 text-center">
-        <motion.h1
-          className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent drop-shadow-lg min-h-[80px]"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          {typingText}
-          <span className="animate-pulse">|</span>
-        </motion.h1>
-        <p className="text-lg text-white/70 mt-6 max-w-xl">
-          A sleek interface to query and explore Chiliz chain data with natural language.
-        </p>
+    <div className="relative min-h-screen overflow-hidden bg-black">
+      {/* Spline Background */}
+      <div className="absolute inset-0 z-0">
+        <Spline scene="https://my.spline.design/r4xbot-j18mmSGvHZoYHkC5n0B2EB0H"/>
+      </div>
 
-        <div className="mt-12 glass-panel w-full sm:w-[700px]">
+      {/* Foreground UI */}
+      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center text-white px-4">
+        {/* Search box */}
+        <div className="glass-panel w-full sm:w-[700px] p-6 backdrop-blur-xl bg-white/5 rounded-2xl border border-white/10 shadow-xl">
           <div className="flex flex-col sm:flex-row gap-4 items-center">
             <Input
               type="text"
               placeholder="Enter contract address or question..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full p-4 rounded-xl bg-white/5 border border-white/20 focus:outline-none focus:ring-2 focus:ring-chiliz-primary placeholder-white/50 text-white backdrop-blur-xl"
+              className="w-full p-4 rounded-xl bg-white/5 border border-white/20 text-white placeholder-white/50 backdrop-blur-xl"
             />
             <Select value={selectedChain} onValueChange={setSelectedChain}>
               <SelectTrigger className="w-full sm:w-[200px] bg-white/5 border border-white/20 text-white backdrop-blur-xl rounded-xl">
@@ -104,8 +55,8 @@ export function Hero() {
               </SelectTrigger>
               <SelectContent className="backdrop-blur-xl bg-chiliz-dark/90 border-white/10 rounded-xl">
                 {blockchains.map((chain) => (
-                  <SelectItem 
-                    key={chain.id} 
+                  <SelectItem
+                    key={chain.id}
                     value={chain.id}
                     className="text-white hover:bg-white/10 rounded-lg"
                   >
@@ -114,38 +65,39 @@ export function Hero() {
                 ))}
               </SelectContent>
             </Select>
-            <button 
+            <Button
               onClick={handleSearch}
-              className="btn-chiliz px-6 py-3 rounded-xl text-white font-semibold whitespace-nowrap"
+              className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-xl"
             >
               🔍 Search
-            </button>
+            </Button>
           </div>
         </div>
 
+        {/* Feature Cards */}
         <div className="mt-20 grid grid-cols-1 sm:grid-cols-3 gap-8 w-full max-w-6xl px-4">
           {[
             { title: 'Check Balance', desc: 'Explore token balances easily through AI prompts.' },
             { title: 'Get Contract Info', desc: 'Discover smart contract details and functions.' },
             { title: 'Decode Transaction', desc: 'Analyze transaction data with natural language.' }
           ].map((item, index) => (
-            <motion.div 
-              key={index} 
+            <div
+              key={index}
               className="glass-panel hover:scale-105 transition-all cursor-pointer group"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
             >
-              <h3 className="text-xl font-bold text-chiliz-primary mb-3 group-hover:text-glow transition-all">{item.title}</h3>
+              <h3 className="text-xl font-bold text-chiliz-primary mb-3 group-hover:text-glow transition-all">
+                {item.title}
+              </h3>
               <p className="text-white/80 leading-relaxed">{item.desc}</p>
-            </motion.div>
+            </div>
           ))}
         </div>
-      </main>
 
-      <footer className="mt-24 text-sm text-white/40 text-center">
-        &copy; {new Date().getFullYear()} Chiliz AI | Crafted with ❤️
-      </footer>
+        {/* Footer Restored */}
+        <footer className="mt-24 text-sm text-white/40 text-center">
+          &copy; {new Date().getFullYear()} Chiliz AI | Crafted with ❤️
+        </footer>
+      </div>
     </div>
   );
 }
