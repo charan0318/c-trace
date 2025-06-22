@@ -23,7 +23,7 @@ export function Navigation() {
                 Docs
               </Link>
               <div className="glass-panel !p-2 !rounded-xl">
-                <ConnectButton client={client} />
+                <ConnectButton />
               </div>
             </div>
           </div>
