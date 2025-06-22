@@ -17,7 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ThirdwebProvider>
-          <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black">
+          <div className="min-h-screen chiliz-gradient">
             <Navigation />
             {children}
           </div>

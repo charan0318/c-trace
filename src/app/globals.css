@@ -17,4 +17,72 @@
   font-variation-settings: "slnt" 0;
 }
 
+/* Chiliz-inspired gradient background */
+.chiliz-gradient {
+  background: radial-gradient(circle at 50% 30%, #1E1E2F 0%, #0B0C10 50%, #E50046 85%, #FF4EB5 100%);
+  position: relative;
+  overflow-x: hidden;
+}
+
+.chiliz-gradient::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(229, 0, 70, 0.3) 0%, transparent 50%),
+              radial-gradient(circle at 20% 80%, rgba(255, 78, 181, 0.2) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.chiliz-gradient > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Enhanced glass morphism effects */
+.glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(229, 0, 70, 0.3);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+/* Chiliz-themed text effects */
+.text-chiliz-primary {
+  color: #E50046;
+}
+
+.text-chiliz-secondary {
+  color: #FF4EB5;
+}
+
+.text-glow {
+  text-shadow: 0 0 20px rgba(229, 0, 70, 0.5);
+}
+
+/* Button enhancements */
+.btn-chiliz {
+  background: linear-gradient(135deg, #E50046 0%, #FF4EB5 100%);
+  border: none;
+  color: white;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-chiliz:hover {
+  background: linear-gradient(135deg, #FF4EB5 0%, #E50046 100%);
+  box-shadow: 0 0 20px rgba(229, 0, 70, 0.4);
+  transform: translateY(-2px);
+}
+
 

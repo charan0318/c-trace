@@ -129,13 +129,13 @@ export function Hero() {
           ].map((item, index) => (
             <motion.div 
               key={index} 
-              className="bg-white/5 rounded-2xl p-6 backdrop-blur-md shadow-lg border border-white/10 hover:scale-105 transition-all cursor-pointer"
+              className="glass-card rounded-2xl p-6 hover:scale-105 transition-all cursor-pointer"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
             >
-              <h3 className="text-xl font-bold text-pink-400 mb-2">{item.title}</h3>
-              <p className="text-white/60">{item.desc}</p>
+              <h3 className="text-xl font-bold text-chiliz-primary mb-2">{item.title}</h3>
+              <p className="text-white/70">{item.desc}</p>
             </motion.div>
           ))}
         </div>
