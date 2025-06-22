@@ -19,7 +19,9 @@ export default function RootLayout({
         <ThirdwebProvider>
           <div className="min-h-screen chiliz-gradient">
             <Navigation />
-            {children}
+            <div className="pt-20">
+              {children}
+            </div>
           </div>
         </ThirdwebProvider>
       </body>

@@ -1,9 +1,16 @@
+
 'use client';
 
-import Link from 'next/link'
-
+import Link from 'next/link';
 import { ConnectButton } from "thirdweb/react";
-import { client } from "../client"
+import { client } from "../client";
+import { createWallet } from "thirdweb/wallets";
+
+const wallets = [
+  createWallet("io.metamask"),
+  createWallet("com.coinbase.wallet"),
+  createWallet("me.rainbow"),
+];
 
 export function Navigation() {
   return (
@@ -23,7 +30,14 @@ export function Navigation() {
                 Docs
               </Link>
               <div className="glass-panel !p-2 !rounded-xl">
-                <ConnectButton client={client} />
+                <ConnectButton 
+                  client={client}
+                  wallets={wallets}
+                  connectModal={{
+                    size: "wide",
+                  }}
+                  theme="dark"
+                />
               </div>
             </div>
           </div>
