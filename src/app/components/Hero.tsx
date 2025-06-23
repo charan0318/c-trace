@@ -115,7 +115,7 @@ export default function Hero() {
             </h3>
             <p className="text-white/80 leading-relaxed">Explore token balances easily through AI prompts.</p>
           </div>
-          
+
           <div className="glass-panel hover:scale-105 transition-all duration-300 cursor-pointer group bg-gradient-to-br from-pink-900/20 to-red-900/20 border border-pink-400/30 hover:border-pink-400/50 w-80">
             <h3 className="text-xl font-bold text-pink-400 mb-3 group-hover:text-pink-300 transition-all">
               Get Contract Info
@@ -125,7 +125,7 @@ export default function Hero() {
         </div>
 
         </div>
-      
+
       {/* Footer */}
       <footer className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-sm text-white/40 text-center">
         &copy; {new Date().getFullYear()} c-trace | Crafted with ❤ from ch04niverse
