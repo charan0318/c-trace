@@ -66,12 +66,10 @@ export default function Hero() {
           zIndex: 0,
         }}
       />
-
-      {/* Foreground UI - Explicit high z-index */}
-      <div className="relative min-h-screen flex flex-col items-center justify-center text-white px-4" style={{ zIndex: 999 }}>
-        {/* Search box - moved higher */}
-        <div className="glass-panel w-full sm:w-[700px] p-6 backdrop-blur-xl bg-gradient-to-r from-purple-900/20 to-pink-900/20 rounded-2xl border border-purple-500/30 shadow-2xl mb-16">
-          <div className="flex flex-col sm:flex-row gap-4 items-center">
+            {/* Search box at top */}
+            <div className="absolute top-6 left-1/2 transform -translate-x-1/2" style={{ zIndex: 999 }}>
+              <div className="glass-panel w-[500px] p-4 backdrop-blur-xl bg-gradient-to-r from-purple-900/20 to-pink-900/20 rounded-2xl border border-purple-500/30 shadow-2xl">
+                <div className="flex gap-3 items-center">
             <Input
               type="text"
               placeholder="Enter contract address or question..."
