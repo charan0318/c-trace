@@ -1,7 +1,7 @@
 'use client';
 
 import Spline from '@splinetool/react-spline';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Input } from '@/app/components/ui/input';
 import { Button } from '@/app/components/ui/button';
 import {
@@ -22,7 +22,7 @@ export function Hero() {
   const [splineError, setSplineError] = useState(false);
   const router = useRouter();
 
-  const handleSearch = () => {
+  const handleSearch = useCallback(() => {
     if (!selectedChain || !searchTerm.trim()) {
       alert('Please select a chain and enter a search term');
       return;
@@ -35,7 +35,17 @@ export function Hero() {
       console.error('Navigation error:', error);
       alert('Failed to navigate to explorer');
     }
-  };
+  }, [selectedChain, searchTerm, router]);
+
+  const handleSplineLoad = useCallback(() => {
+    console.log('✅ Spline scene loaded successfully');
+    setSplineLoaded(true);
+  }, []);
+
+  const handleSplineError = useCallback((error: any) => {
+    console.error('❌ Spline scene failed to load:', error);
+    setSplineError(true);
+  }, []);
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-black">
@@ -51,14 +61,8 @@ export function Hero() {
         )}
         <Spline 
           scene="https://prod.spline.design/CzpaWhZatxJIV-bg/scene.splinecode"
-          onLoad={() => {
-            console.log('✅ Spline scene loaded successfully');
-            setSplineLoaded(true);
-          }}
-          onError={(error) => {
-            console.error('❌ Spline scene failed to load:', error);
-            setSplineError(true);
-          }}
+          onLoad={handleSplineLoad}
+          onError={handleSplineError}
           style={{ 
             width: '100%', 
             height: '100%',
