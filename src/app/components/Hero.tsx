@@ -1,7 +1,6 @@
-
 'use client';
 
-import Spline from '@splinetool/react-spline';
+import Spline from '@splinetool/react-spline/next';
 import { useState } from 'react';
 import { Input } from '@/app/components/ui/input';
 import { Button } from '@/app/components/ui/button';
@@ -35,6 +34,7 @@ export function Hero() {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-black">
+      {/* Spline Background - Fixed z-index and positioning */}
       <div className="fixed top-0 left-0 w-full h-full" style={{ zIndex: -1 }}>
         {!splineLoaded && !splineError && (
           <div className="absolute inset-0 flex items-center justify-center bg-black">
@@ -64,7 +64,9 @@ export function Hero() {
         />
       </div>
 
+      {/* Foreground UI - Explicit high z-index */}
       <div className="relative min-h-screen flex flex-col items-center justify-center text-white px-4" style={{ zIndex: 999 }}>
+        {/* Search box */}
         <div className="glass-panel w-full sm:w-[700px] p-6 backdrop-blur-xl bg-white/5 rounded-2xl border border-white/10 shadow-xl">
           <div className="flex flex-col sm:flex-row gap-4 items-center">
             <Input
@@ -99,6 +101,7 @@ export function Hero() {
           </div>
         </div>
 
+        {/* Feature Cards */}
         <div className="mt-20 grid grid-cols-1 sm:grid-cols-3 gap-8 w-full max-w-6xl px-4">
           {[
             { title: 'Check Balance', desc: 'Explore token balances easily through AI prompts.' },
@@ -117,8 +120,9 @@ export function Hero() {
           ))}
         </div>
 
+        {/* Footer */}
         <footer className="mt-24 text-sm text-white/40 text-center">
-          Copyright {new Date().getFullYear()} Chiliz AI | Crafted with love
+          &copy; {new Date().getFullYear()} Chiliz AI | Crafted with ❤️
         </footer>
       </div>
     </div>
