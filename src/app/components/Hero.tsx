@@ -45,6 +45,7 @@ export function Hero() {
   const handleSplineError = useCallback((error: any) => {
     console.error('❌ Spline scene failed to load:', error);
     setSplineError(true);
+    setSplineLoaded(false);
   }, []);
 
   return (
@@ -59,19 +60,21 @@ export function Hero() {
         {splineError && (
           <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 to-pink-900/20" />
         )}
-        <Spline 
-          scene="https://prod.spline.design/CzpaWhZatxJIV-bg/scene.splinecode"
-          onLoad={handleSplineLoad}
-          onError={handleSplineError}
-          style={{ 
-            width: '100%', 
-            height: '100%',
-            opacity: splineLoaded ? 1 : 0,
-            transition: 'opacity 0.5s ease-in-out',
-            zIndex: -1,
-            pointerEvents: 'none'
-          }}
-        />
+        {!splineError && (
+          <Spline 
+            scene="https://prod.spline.design/CzpaWhZatxJIV-bg/scene.splinecode"
+            onLoad={handleSplineLoad}
+            onError={handleSplineError}
+            style={{ 
+              width: '100%', 
+              height: '100%',
+              opacity: splineLoaded ? 1 : 0,
+              transition: 'opacity 0.5s ease-in-out',
+              zIndex: -1,
+              pointerEvents: 'none'
+            }}
+          />
+        )}
       </div>
 
       {/* Foreground UI - Explicit high z-index */}
