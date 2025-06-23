@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { ConnectButton } from "thirdweb/react";
 import { client } from "../client";
-import { inAppWallet } from "thirdweb/wallets";
+import { inAppWallet, createWallet } from "thirdweb/wallets";
 
 export default function Navigation() {
   return (
@@ -26,6 +26,11 @@ export default function Navigation() {
                 <ConnectButton
                   client={client}
                   wallets={[
+                    createWallet("io.metamask"),
+                    createWallet("com.coinbase.wallet"),
+                    createWallet("me.rainbow"),
+                    createWallet("io.rabby"),
+                    createWallet("io.wallethub"),
                     inAppWallet({
                       auth: {
                         options: ["email", "google", "apple", "facebook", "phone"],
