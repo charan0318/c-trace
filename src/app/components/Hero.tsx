@@ -1,137 +1,49 @@
-'use client';
+"use client";
 
-import Spline from '@splinetool/react-spline';
-import { useState, useCallback } from 'react';
-import { Input } from '@/app/components/ui/input';
-import { Button } from '@/app/components/ui/button';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/app/components/ui/select';
-import { useRouter } from 'next/navigation';
+import Spline from "@splinetool/react-spline";
 
-const blockchains = [{ id: '88888', name: 'Chiliz Chain' }];
-
-export function Hero() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedChain, setSelectedChain] = useState('');
-  const [splineLoaded, setSplineLoaded] = useState(false);
-  const [splineError, setSplineError] = useState(false);
-  const router = useRouter();
-
-  const handleSearch = useCallback(() => {
-    if (!selectedChain || !searchTerm.trim()) {
-      alert('Please select a chain and enter a search term');
-      return;
-    }
-    try {
-      router.push(
-        `/explorer?chainId=${selectedChain}&searchTerm=${encodeURIComponent(searchTerm)}`
-      );
-    } catch (error) {
-      console.error('Navigation error:', error);
-      alert('Failed to navigate to explorer');
-    }
-  }, [selectedChain, searchTerm, router]);
-
-  const handleSplineLoad = useCallback(() => {
-    console.log('✅ Spline scene loaded successfully');
-    setSplineLoaded(true);
-  }, []);
-
-  const handleSplineError = useCallback((error: any) => {
-    console.error('❌ Spline scene failed to load:', error);
-    setSplineError(true);
-    setSplineLoaded(false);
-  }, []);
-
+export default function Hero() {
   return (
-    <div className="relative min-h-screen overflow-hidden">
-      {/* Spline Scene */}
-      <Spline 
-        scene="https://prod.spline.design/CzpaWhZatxJIV-bg/scene.splinecode"
-        onLoad={handleSplineLoad}
-        onError={handleSplineError}
-        style={{ 
-          width: '100%', 
-          height: '100%',
-          minHeight: '100vh', // Ensure full screen height
-          objectFit: 'cover', // Cover the entire screen
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          zIndex: 0,
-        }}
-      />
+    <div className="relative h-screen w-full overflow-hidden">
+      {/* Interactive Spline Background */}
+      <div className="absolute inset-0 z-0">
+        <Spline scene="https://prod.spline.design/CzpaWhZatxJIV-bg/scene.splinecode" />
+      </div>
 
-      {/* Foreground UI - Explicit high z-index */}
-      <div className="relative min-h-screen flex flex-col items-center justify-center text-white px-4" style={{ zIndex: 999 }}>
-        {/* Search box */}
-        <div className="glass-panel w-full sm:w-[700px] p-6 backdrop-blur-xl bg-white/5 rounded-2xl border border-white/10 shadow-xl">
-          <div className="flex flex-col sm:flex-row gap-4 items-center">
-            <Input
+      {/* Foreground UI */}
+      <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 text-center">
+        {/* Search */}
+        <div className="w-full max-w-3xl mb-8 bg-white bg-opacity-20 backdrop-blur rounded-xl p-4 shadow-xl">
+          <div className="flex items-center gap-2">
+            <input
               type="text"
               placeholder="Enter contract address or question..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              onKeyPress={(e) => {
-                if (e.key === 'Enter') {
-                  handleSearch();
-                }
-              }}
-              className="w-full p-4 rounded-xl bg-white/5 border border-white/20 text-white placeholder-white/50 backdrop-blur-xl"
+              className="flex-1 px-4 py-2 rounded-md bg-white bg-opacity-10 text-white placeholder:text-gray-300"
             />
-            <Select value={selectedChain} onValueChange={setSelectedChain}>
-              <SelectTrigger className="w-full sm:w-[200px] bg-white/5 border border-white/20 text-white backdrop-blur-xl rounded-xl">
-                <SelectValue placeholder="Select chain" />
-              </SelectTrigger>
-              <SelectContent className="backdrop-blur-xl bg-chiliz-dark/90 border-white/10 rounded-xl">
-                {blockchains.map((chain) => (
-                  <SelectItem
-                    key={chain.id}
-                    value={chain.id}
-                    className="text-white hover:bg-white/10 rounded-lg"
-                  >
-                    {chain.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Button
-              onClick={handleSearch}
-              className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-xl"
-            >
-              🔍 Search
-            </Button>
+            <select className="px-4 py-2 rounded-md bg-white bg-opacity-10 text-white">
+              <option>Select chain</option>
+            </select>
+            <button className="px-4 py-2 bg-chiliz-primary rounded-md text-white shadow-glow">
+              Search
+            </button>
           </div>
         </div>
 
-        {/* Feature Cards */}
-        <div className="mt-20 grid grid-cols-1 sm:grid-cols-3 gap-8 w-full max-w-6xl px-4">
-          {[
-            { title: 'Check Balance', desc: 'Explore token balances easily through AI prompts.' },
-            { title: 'Get Contract Info', desc: 'Discover smart contract details and functions.' },
-            { title: 'Decode Transaction', desc: 'Analyze transaction data with natural language.' }
-          ].map((item, index) => (
-            <div
-              key={index}
-              className="glass-panel hover:scale-105 transition-all cursor-pointer group"
-            >
-              <h3 className="text-xl font-bold text-chiliz-primary mb-3 group-hover:text-glow transition-all">
-                {item.title}
-              </h3>
-              <p className="text-white/80 leading-relaxed">{item.desc}</p>
-            </div>
-          ))}
+        {/* Cards */}
+        <div className="flex flex-wrap justify-center gap-6 mt-4">
+          <div className="bg-white bg-opacity-20 backdrop-blur rounded-xl p-6 text-left max-w-xs shadow-glow text-white">
+            <h2 className="text-xl font-semibold text-chiliz-primary">Check Balance</h2>
+            <p className="text-sm mt-2 text-white/80">Explore token balances easily through AI prompts.</p>
+          </div>
+          <div className="bg-white bg-opacity-20 backdrop-blur rounded-xl p-6 text-left max-w-xs shadow-glow text-white">
+            <h2 className="text-xl font-semibold text-chiliz-primary">Get Contract Info</h2>
+            <p className="text-sm mt-2 text-white/80">Discover smart contract details and functions.</p>
+          </div>
+          <div className="bg-white bg-opacity-20 backdrop-blur rounded-xl p-6 text-left max-w-xs shadow-glow text-white">
+            <h2 className="text-xl font-semibold text-chiliz-primary">Decode Transaction</h2>
+            <p className="text-sm mt-2 text-white/80">Analyze transaction data with natural language.</p>
+          </div>
         </div>
-
-        {/* Footer */}
-        <footer className="mt-24 text-sm text-white/40 text-center">
-          &copy; {new Date().getFullYear()} Chiliz AI | Crafted with ❤️
-        </footer>
       </div>
     </div>
   );
