@@ -1,7 +1,6 @@
 
 'use client';
 
-import Spline from '@splinetool/react-spline/next';
 import { useState } from 'react';
 import { Input } from '@/app/components/ui/input';
 import { Button } from '@/app/components/ui/button';
@@ -13,6 +12,16 @@ import {
   SelectValue,
 } from '@/app/components/ui/select';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
+
+const Spline = dynamic(() => import('@splinetool/react-spline/next'), {
+  ssr: false,
+  loading: () => (
+    <div className="absolute inset-0 flex items-center justify-center bg-black">
+      <div className="text-white/50 text-lg">Loading 3D Scene...</div>
+    </div>
+  )
+});
 
 const blockchains = [{ id: '88888', name: 'Chiliz Chain' }];
 
@@ -36,22 +45,17 @@ export function Hero() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-black">
       <div className="fixed top-0 left-0 w-full h-full" style={{ zIndex: -1 }}>
-        {!splineLoaded && !splineError && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black">
-            <div className="text-white/50 text-lg">Loading 3D Scene...</div>
-          </div>
-        )}
         {splineError && (
           <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 to-pink-900/20" />
         )}
         <Spline 
           scene="https://prod.spline.design/CzpaWhZatxJIV-bg/scene.splinecode"
           onLoad={() => {
-            console.log('✅ Spline scene loaded successfully');
+            console.log('Spline scene loaded successfully');
             setSplineLoaded(true);
           }}
           onError={(error) => {
-            console.error('❌ Spline scene failed to load:', error);
+            console.error('Spline scene failed to load:', error);
             setSplineError(true);
           }}
           style={{ 
