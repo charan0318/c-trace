@@ -15,7 +15,7 @@ import { useRouter } from 'next/navigation';
 
 const blockchains = [{ id: '88888', name: 'Chiliz Chain' }];
 
-export function Hero() {
+export default function Hero() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedChain, setSelectedChain] = useState('');
   const [splineLoaded, setSplineLoaded] = useState(false);

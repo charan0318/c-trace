@@ -60,7 +60,7 @@ async function queryContract(contractAddress, chainId, sessionId) {
     message,
     session_id: sessionId,
     context_filter: {
-      chain_ids: [parseInt(chainId)], // Chain ID must be an integer
+      chain_ids: [chainId.toString()],
       contract_addresses: [contractAddress],
     },
   };
@@ -84,7 +84,7 @@ async function handleUserMessage(
     message: userMessage,
     session_id: sessionId,
     context_filter: {
-      chain_ids: [parseInt(chainId)], // Chain ID must be an integer
+      chain_ids: [chainId.toString()],
       contract_addresses: [contractAddress],
     },
   });
@@ -143,7 +143,7 @@ async function executeCommand(
       signer_wallet_address: signerWalletAddress,
     },
     context_filter: {
-      chain_ids: [parseInt(chainId)], // Chain ID must be an integer
+      chain_ids: [chainId.toString()],
       contract_addresses: [contractAddress],
     },
   };
