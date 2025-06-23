@@ -69,8 +69,8 @@ export default function Hero() {
 
       {/* Foreground UI - Explicit high z-index */}
       <div className="relative min-h-screen flex flex-col items-center justify-center text-white px-4" style={{ zIndex: 999 }}>
-        {/* Search box */}
-        <div className="glass-panel w-full sm:w-[700px] p-6 backdrop-blur-xl bg-white/5 rounded-2xl border border-white/10 shadow-xl">
+        {/* Search box - moved higher */}
+        <div className="glass-panel w-full sm:w-[700px] p-6 backdrop-blur-xl bg-gradient-to-r from-purple-900/20 to-pink-900/20 rounded-2xl border border-purple-500/30 shadow-2xl mb-16">
           <div className="flex flex-col sm:flex-row gap-4 items-center">
             <Input
               type="text"
@@ -82,18 +82,18 @@ export default function Hero() {
                   handleSearch();
                 }
               }}
-              className="w-full p-4 rounded-xl bg-white/5 border border-white/20 text-white placeholder-white/50 backdrop-blur-xl"
+              className="w-full p-4 rounded-xl bg-white/10 border border-purple-400/30 text-white placeholder-white/60 backdrop-blur-xl focus:border-pink-400/50 focus:ring-2 focus:ring-pink-400/20"
             />
             <Select value={selectedChain} onValueChange={setSelectedChain}>
-              <SelectTrigger className="w-full sm:w-[200px] bg-white/5 border border-white/20 text-white backdrop-blur-xl rounded-xl">
+              <SelectTrigger className="w-full sm:w-[200px] bg-white/10 border border-purple-400/30 text-white backdrop-blur-xl rounded-xl focus:border-pink-400/50">
                 <SelectValue placeholder="Select chain" />
               </SelectTrigger>
-              <SelectContent className="backdrop-blur-xl bg-chiliz-dark/90 border-white/10 rounded-xl">
+              <SelectContent className="backdrop-blur-xl bg-gray-900/95 border-purple-400/30 rounded-xl">
                 {blockchains.map((chain) => (
                   <SelectItem
                     key={chain.id}
                     value={chain.id}
-                    className="text-white hover:bg-white/10 rounded-lg"
+                    className="text-white hover:bg-purple-600/20 rounded-lg"
                   >
                     {chain.name}
                   </SelectItem>
@@ -102,30 +102,28 @@ export default function Hero() {
             </Select>
             <Button
               onClick={handleSearch}
-              className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-xl"
+              className="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl shadow-lg transition-all duration-300 hover:shadow-pink-500/25"
             >
               🔍 Search
             </Button>
           </div>
         </div>
 
-        {/* Feature Cards */}
-        <div className="mt-20 grid grid-cols-1 sm:grid-cols-3 gap-8 w-full max-w-6xl px-4">
-          {[
-            { title: 'Check Balance', desc: 'Explore token balances easily through AI prompts.' },
-            { title: 'Get Contract Info', desc: 'Discover smart contract details and functions.' },
-            { title: 'Decode Transaction', desc: 'Analyze transaction data with natural language.' }
-          ].map((item, index) => (
-            <div
-              key={index}
-              className="glass-panel hover:scale-105 transition-all cursor-pointer group"
-            >
-              <h3 className="text-xl font-bold text-chiliz-primary mb-3 group-hover:text-glow transition-all">
-                {item.title}
-              </h3>
-              <p className="text-white/80 leading-relaxed">{item.desc}</p>
-            </div>
-          ))}
+        {/* Feature Cards - Only 2 cards, positioned left and right */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 w-full max-w-4xl px-4">
+          <div className="glass-panel hover:scale-105 transition-all duration-300 cursor-pointer group bg-gradient-to-br from-blue-900/20 to-purple-900/20 border border-blue-400/30 hover:border-blue-400/50">
+            <h3 className="text-xl font-bold text-blue-400 mb-3 group-hover:text-blue-300 transition-all">
+              Check Balance
+            </h3>
+            <p className="text-white/80 leading-relaxed">Explore token balances easily through AI prompts.</p>
+          </div>
+          
+          <div className="glass-panel hover:scale-105 transition-all duration-300 cursor-pointer group bg-gradient-to-br from-pink-900/20 to-red-900/20 border border-pink-400/30 hover:border-pink-400/50">
+            <h3 className="text-xl font-bold text-pink-400 mb-3 group-hover:text-pink-300 transition-all">
+              Get Contract Info
+            </h3>
+            <p className="text-white/80 leading-relaxed">Discover smart contract details and functions.</p>
+          </div>
         </div>
 
         {/* Footer */}
