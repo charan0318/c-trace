@@ -1,6 +1,6 @@
 'use client';
 
-import Spline from '@splinetool/react-spline/next';
+import Spline from '@splinetool/react-spline';
 import { useState } from 'react';
 import { Input } from '@/app/components/ui/input';
 import { Button } from '@/app/components/ui/button';
