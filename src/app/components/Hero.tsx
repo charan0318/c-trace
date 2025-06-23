@@ -2,7 +2,7 @@
 import React, { useState, useCallback, useMemo } from 'react'
 import Spline from '@splinetool/react-spline'
 
-const Charan = () => {
+const Hero = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedChain, setSelectedChain] = useState('')
   const [splineLoaded, setSplineLoaded] = useState(false)
@@ -43,7 +43,7 @@ const Charan = () => {
 
     try {
       // Navigate to explorer (you can implement your routing logic here)
-      console.log(Searching for: ${searchTerm} on chain: ${selectedChain})
+      console.log(`Searching for: ${searchTerm} on chain: ${selectedChain}`)
       // router.push(/explorer?chainId=${selectedChain}&searchTerm=${encodeURIComponent(searchTerm)})
     } catch (error) {
       console.error('Navigation error:', error)
@@ -236,4 +236,4 @@ const Charan = () => {
   )
 }
 
-export default Charan
+export default Hero
