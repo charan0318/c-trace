@@ -29,7 +29,7 @@ export default function Hero() {
     }
     try {
       router.push(
-        '/explorer?chainId=${selectedChain}&searchTerm=${encodeURIComponent(searchTerm)}'
+        `/explorer?chainId=${selectedChain}&searchTerm=${encodeURIComponent(searchTerm)}`
       );
     } catch (error) {
       console.error('Navigation error:', error);
