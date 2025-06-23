@@ -27,9 +27,14 @@ export function Hero() {
       alert('Please select a chain and enter a search term');
       return;
     }
-    router.push(
-      `/explorer?chainId=${selectedChain}&searchTerm=${encodeURIComponent(searchTerm)}`
-    );
+    try {
+      router.push(
+        `/explorer?chainId=${selectedChain}&searchTerm=${encodeURIComponent(searchTerm)}`
+      );
+    } catch (error) {
+      console.error('Navigation error:', error);
+      alert('Failed to navigate to explorer');
+    }
   };
 
   return (
@@ -59,7 +64,8 @@ export function Hero() {
             height: '100%',
             opacity: splineLoaded ? 1 : 0,
             transition: 'opacity 0.5s ease-in-out',
-            zIndex: -1
+            zIndex: -1,
+            pointerEvents: 'none'
           }}
         />
       </div>
@@ -74,6 +80,11 @@ export function Hero() {
               placeholder="Enter contract address or question..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  handleSearch();
+                }
+              }}
               className="w-full p-4 rounded-xl bg-white/5 border border-white/20 text-white placeholder-white/50 backdrop-blur-xl"
             />
             <Select value={selectedChain} onValueChange={setSelectedChain}>
