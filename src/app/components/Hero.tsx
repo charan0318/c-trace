@@ -1,7 +1,7 @@
 'use client';
 
+import Spline from '@splinetool/react-spline/next';
 import { useState } from 'react';
-import dynamic from 'next/dynamic';
 import { Input } from '@/app/components/ui/input';
 import { Button } from '@/app/components/ui/button';
 import {
@@ -12,15 +12,6 @@ import {
   SelectValue,
 } from '@/app/components/ui/select';
 import { useRouter } from 'next/navigation';
-
-const Spline = dynamic(() => import('@splinetool/react-spline'), {
-  ssr: false,
-  loading: () => (
-    <div className="absolute inset-0 flex items-center justify-center bg-black">
-      <div className="text-white/50 text-lg">Loading 3D Scene...</div>
-    </div>
-  )
-});
 
 const blockchains = [{ id: '88888', name: 'Chiliz Chain' }];
 
