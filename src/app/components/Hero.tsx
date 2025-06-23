@@ -122,7 +122,7 @@ export function Hero() {
 
         {/* Footer */}
         <footer className="mt-24 text-sm text-white/40 text-center">
-          © {new Date().getFullYear()} Chiliz AI | Crafted with ❤️
+          Copyright {new Date().getFullYear()} Chiliz AI | Crafted with love
         </footer>
       </div>
     </div>
