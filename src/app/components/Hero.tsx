@@ -49,33 +49,23 @@ export function Hero() {
   }, []);
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-black">
-      {/* Spline Background - Fixed z-index and positioning */}
-      <div className="fixed top-0 left-0 w-full h-full" style={{ zIndex: -1 }}>
-        {!splineLoaded && !splineError && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black">
-            <div className="text-white/50 text-lg">Loading 3D Scene...</div>
-          </div>
-        )}
-        {splineError && (
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 to-pink-900/20" />
-        )}
-        {!splineError && (
-          <Spline 
-            scene="https://prod.spline.design/CzpaWhZatxJIV-bg/scene.splinecode"
-            onLoad={handleSplineLoad}
-            onError={handleSplineError}
-            style={{ 
-              width: '100%', 
-              height: '100%',
-              opacity: splineLoaded ? 1 : 0,
-              transition: 'opacity 0.5s ease-in-out',
-              zIndex: -1,
-              pointerEvents: 'none'
-            }}
-          />
-        )}
-      </div>
+    <div className="relative min-h-screen overflow-hidden">
+      {/* Spline Scene */}
+      <Spline 
+        scene="https://prod.spline.design/CzpaWhZatxJIV-bg/scene.splinecode"
+        onLoad={handleSplineLoad}
+        onError={handleSplineError}
+        style={{ 
+          width: '100%', 
+          height: '100%',
+          minHeight: '100vh', // Ensure full screen height
+          objectFit: 'cover', // Cover the entire screen
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          zIndex: 0,
+        }}
+      />
 
       {/* Foreground UI - Explicit high z-index */}
       <div className="relative min-h-screen flex flex-col items-center justify-center text-white px-4" style={{ zIndex: 999 }}>
