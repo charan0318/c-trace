@@ -1,0 +1,629 @@
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import { ArrowDown, Send, Mic, Paperclip, Flame, Wallet, FileText, Search, Copy, Edit } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+// Utility function
+function cn(...inputs: (string | undefined | null | boolean)[]): string {
+  return inputs.filter(Boolean).join(" ");
+}
+
+// Auto-scroll hook
+interface ScrollState {
+  isAtBottom: boolean;
+  autoScrollEnabled: boolean;
+}
+
+interface UseAutoScrollOptions {
+  offset?: number;
+  smooth?: boolean;
+  content?: React.ReactNode;
+}
+
+function useAutoScroll(options: UseAutoScrollOptions = {}) {
+  const { offset = 20, smooth = false, content } = options;
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const lastContentHeight = useRef(0);
+  const userHasScrolled = useRef(false);
+
+  const [scrollState, setScrollState] = useState<ScrollState>({
+    isAtBottom: true,
+    autoScrollEnabled: true,
+  });
+
+  const checkIsAtBottom = useCallback(
+    (element: HTMLElement) => {
+      const { scrollTop, scrollHeight, clientHeight } = element;
+      const distanceToBottom = Math.abs(
+        scrollHeight - scrollTop - clientHeight
+      );
+      return distanceToBottom <= offset;
+    },
+    [offset]
+  );
+
+  const scrollToBottom = useCallback(
+    (instant?: boolean) => {
+      if (!scrollRef.current) return;
+
+      const targetScrollTop =
+        scrollRef.current.scrollHeight - scrollRef.current.clientHeight;
+
+      if (instant) {
+        scrollRef.current.scrollTop = targetScrollTop;
+      } else {
+        scrollRef.current.scrollTo({
+          top: targetScrollTop,
+          behavior: smooth ? "smooth" : "auto",
+        });
+      }
+
+      setScrollState({
+        isAtBottom: true,
+        autoScrollEnabled: true,
+      });
+      userHasScrolled.current = false;
+    },
+    [smooth]
+  );
+
+  const handleScroll = useCallback(() => {
+    if (!scrollRef.current) return;
+
+    const atBottom = checkIsAtBottom(scrollRef.current);
+
+    setScrollState((prev) => ({
+      isAtBottom: atBottom,
+      autoScrollEnabled: atBottom ? true : prev.autoScrollEnabled,
+    }));
+  }, [checkIsAtBottom]);
+
+  useEffect(() => {
+    const element = scrollRef.current;
+    if (!element) return;
+
+    element.addEventListener("scroll", handleScroll, { passive: true });
+    return () => element.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
+
+  useEffect(() => {
+    const scrollElement = scrollRef.current;
+    if (!scrollElement) return;
+
+    const currentHeight = scrollElement.scrollHeight;
+    const hasNewContent = currentHeight !== lastContentHeight.current;
+
+    if (hasNewContent) {
+      if (scrollState.autoScrollEnabled) {
+        requestAnimationFrame(() => {
+          scrollToBottom(lastContentHeight.current === 0);
+        });
+      }
+      lastContentHeight.current = currentHeight;
+    }
+  }, [content, scrollState.autoScrollEnabled, scrollToBottom]);
+
+  const disableAutoScroll = useCallback(() => {
+    const atBottom = scrollRef.current
+      ? checkIsAtBottom(scrollRef.current)
+      : false;
+
+    if (!atBottom) {
+      userHasScrolled.current = true;
+      setScrollState((prev) => ({
+        ...prev,
+        autoScrollEnabled: false,
+      }));
+    }
+  }, [checkIsAtBottom]);
+
+  return {
+    scrollRef,
+    isAtBottom: scrollState.isAtBottom,
+    autoScrollEnabled: scrollState.autoScrollEnabled,
+    scrollToBottom: () => scrollToBottom(false),
+    disableAutoScroll,
+  };
+}
+
+// Background Pattern Component
+type BGVariantType = 'dots' | 'diagonal-stripes' | 'grid' | 'horizontal-lines' | 'vertical-lines' | 'checkerboard';
+type BGMaskType = 'fade-center' | 'fade-edges' | 'fade-top' | 'fade-bottom' | 'fade-left' | 'fade-right' | 'fade-x' | 'fade-y' | 'none';
+
+interface BGPatternProps extends React.ComponentProps<'div'> {
+  variant?: BGVariantType;
+  mask?: BGMaskType;
+  size?: number;
+  fill?: string;
+}
+
+const maskClasses: Record<BGMaskType, string> = {
+  'fade-edges': '[mask-image:radial-gradient(ellipse_at_center,var(--background),transparent)]',
+  'fade-center': '[mask-image:radial-gradient(ellipse_at_center,transparent,var(--background))]',
+  'fade-top': '[mask-image:linear-gradient(to_bottom,transparent,var(--background))]',
+  'fade-bottom': '[mask-image:linear-gradient(to_bottom,var(--background),transparent)]',
+  'fade-left': '[mask-image:linear-gradient(to_right,transparent,var(--background))]',
+  'fade-right': '[mask-image:linear-gradient(to_right,var(--background),transparent)]',
+  'fade-x': '[mask-image:linear-gradient(to_right,transparent,var(--background),transparent)]',
+  'fade-y': '[mask-image:linear-gradient(to_bottom,transparent,var(--background),transparent)]',
+  none: '',
+};
+
+function getBgImage(variant: BGVariantType, fill: string, size: number) {
+  switch (variant) {
+    case 'dots':
+      return `radial-gradient(${fill} 1px, transparent 1px)`;
+    case 'grid':
+      return `linear-gradient(to right, ${fill} 1px, transparent 1px), linear-gradient(to bottom, ${fill} 1px, transparent 1px)`;
+    case 'diagonal-stripes':
+      return `repeating-linear-gradient(45deg, ${fill}, ${fill} 1px, transparent 1px, transparent ${size}px)`;
+    case 'horizontal-lines':
+      return `linear-gradient(to bottom, ${fill} 1px, transparent 1px)`;
+    case 'vertical-lines':
+      return `linear-gradient(to right, ${fill} 1px, transparent 1px)`;
+    case 'checkerboard':
+      return `linear-gradient(45deg, ${fill} 25%, transparent 25%), linear-gradient(-45deg, ${fill} 25%, transparent 25%), linear-gradient(45deg, transparent 75%, ${fill} 75%), linear-gradient(-45deg, transparent 75%, ${fill} 75%)`;
+    default:
+      return undefined;
+  }
+}
+
+const BGPattern = ({
+  variant = 'grid',
+  mask = 'none',
+  size = 24,
+  fill = '#1a1a2e',
+  className,
+  style,
+  ...props
+}: BGPatternProps) => {
+  const bgSize = `${size}px ${size}px`;
+  const backgroundImage = getBgImage(variant, fill, size);
+
+  return (
+    <div
+      className={cn('absolute inset-0 z-[-10] size-full', maskClasses[mask], className)}
+      style={{
+        backgroundImage,
+        backgroundSize: bgSize,
+        ...style,
+      }}
+      {...props}
+    />
+  );
+};
+
+// Chat Message List Component
+interface ChatMessageListProps extends React.HTMLAttributes<HTMLDivElement> {
+  smooth?: boolean;
+}
+
+const ChatMessageList = React.forwardRef<HTMLDivElement, ChatMessageListProps>(
+  ({ className, children, smooth = false, ...props }, _ref) => {
+    const {
+      scrollRef,
+      isAtBottom,
+      scrollToBottom,
+      disableAutoScroll,
+    } = useAutoScroll({
+      smooth,
+      content: children,
+    });
+
+    return (
+      <div className="relative w-full h-full">
+        <div
+          className={cn("flex flex-col w-full h-full p-4 overflow-y-auto", className)}
+          ref={scrollRef}
+          onWheel={disableAutoScroll}
+          onTouchMove={disableAutoScroll}
+          {...props}
+        >
+          <div className="flex flex-col gap-6">{children}</div>
+        </div>
+
+        {!isAtBottom && (
+          <Button
+            onClick={() => {
+              scrollToBottom();
+            }}
+            size="icon"
+            variant="outline"
+            className="absolute bottom-2 left-1/2 transform -translate-x-1/2 inline-flex rounded-full shadow-md bg-background/80 backdrop-blur-sm border-border/50 hover:bg-accent/80"
+            aria-label="Scroll to bottom"
+          >
+            <ArrowDown className="h-4 w-4" />
+          </Button>
+        )}
+      </div>
+    );
+  }
+);
+
+ChatMessageList.displayName = "ChatMessageList";
+
+// Chat Bubble Components
+interface ChatBubbleProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: "sent" | "received";
+}
+
+const ChatBubble = React.forwardRef<HTMLDivElement, ChatBubbleProps>(
+  ({ className, variant = "received", children, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          "flex gap-3 max-w-[85%] group",
+          variant === "sent" ? "ml-auto flex-row-reverse" : "mr-auto",
+          className
+        )}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  }
+);
+
+ChatBubble.displayName = "ChatBubble";
+
+interface ChatBubbleAvatarProps extends React.HTMLAttributes<HTMLDivElement> {
+  src?: string;
+  fallback?: string;
+}
+
+const ChatBubbleAvatar = React.forwardRef<HTMLDivElement, ChatBubbleAvatarProps>(
+  ({ className, src, fallback, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          "flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-full bg-muted text-xs font-medium",
+          className
+        )}
+        {...props}
+      >
+        {src ? (
+          <img src={src} alt="Avatar" className="h-full w-full rounded-full object-cover" />
+        ) : (
+          <span className="text-muted-foreground">{fallback}</span>
+        )}
+      </div>
+    );
+  }
+);
+
+ChatBubbleAvatar.displayName = "ChatBubbleAvatar";
+
+interface ChatBubbleMessageProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: "sent" | "received";
+  isLoading?: boolean;
+}
+
+const ChatBubbleMessage = React.forwardRef<HTMLDivElement, ChatBubbleMessageProps>(
+  ({ className, variant = "received", isLoading = false, children, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          "relative rounded-2xl px-4 py-3 text-sm backdrop-blur-sm border transition-all duration-300 hover:shadow-lg group-hover:shadow-md",
+          variant === "sent"
+            ? "bg-gradient-to-br from-pink-500/20 to-purple-600/20 border-pink-500/30 text-foreground ml-auto"
+            : "bg-background/60 border-border/50 text-foreground",
+          className
+        )}
+        {...props}
+      >
+        {isLoading ? (
+          <div className="flex items-center gap-1">
+            <div className="flex gap-1">
+              <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-pulse" />
+              <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-pulse [animation-delay:0.2s]" />
+              <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-pulse [animation-delay:0.4s]" />
+            </div>
+          </div>
+        ) : (
+          <div className="relative">
+            {children}
+            <div className="absolute -right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+              <Button size="icon" variant="ghost" className="h-6 w-6 hover:bg-accent/80">
+                <Copy className="h-3 w-3" />
+              </Button>
+              <Button size="icon" variant="ghost" className="h-6 w-6 hover:bg-accent/80">
+                <Edit className="h-3 w-3" />
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+);
+
+ChatBubbleMessage.displayName = "ChatBubbleMessage";
+
+// Action Button Component
+interface ActionButtonProps {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  description: string;
+  onClick: () => void;
+}
+
+const ActionButton: React.FC<ActionButtonProps> = ({ icon: Icon, title, description, onClick }) => {
+  return (
+    <button
+      onClick={onClick}
+      className="group relative p-6 rounded-2xl bg-background/40 backdrop-blur-sm border border-border/50 hover:border-pink-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-pink-500/10 hover:bg-background/60 text-left w-full"
+    >
+      <div className="flex items-start gap-4">
+        <div className="p-3 rounded-xl bg-gradient-to-br from-pink-500/20 to-purple-600/20 border border-pink-500/30 group-hover:from-pink-500/30 group-hover:to-purple-600/30 transition-all duration-300">
+          <Icon className="h-6 w-6 text-pink-400" />
+        </div>
+        <div className="flex-1">
+          <h3 className="font-semibold text-foreground mb-1 group-hover:text-pink-400 transition-colors">
+            {title}
+          </h3>
+          <p className="text-sm text-muted-foreground group-hover:text-foreground/80 transition-colors">
+            {description}
+          </p>
+        </div>
+      </div>
+    </button>
+  );
+};
+
+// Main Dashboard Component
+interface Message {
+  id: number;
+  content: string;
+  sender: "user" | "ai";
+  timestamp: Date;
+}
+
+const AIDashboard: React.FC = () => {
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: 1,
+      content: "Welcome to your AI-powered Web3 dashboard! I'm here to help you navigate the decentralized world with ease. What would you like to explore today?",
+      sender: "ai",
+      timestamp: new Date(),
+    },
+  ]);
+
+  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
+
+  const actionButtons = [
+    {
+      icon: Search,
+      title: "Analyze Smart Contract",
+      description: "Deep dive into contract code, security, and functionality",
+      prompt: "Help me analyze a smart contract for security vulnerabilities and gas optimization opportunities."
+    },
+    {
+      icon: Wallet,
+      title: "Portfolio Analysis",
+      description: "Get insights on your DeFi positions and yield strategies",
+      prompt: "Analyze my DeFi portfolio and suggest optimization strategies for better yields."
+    },
+    {
+      icon: FileText,
+      title: "Market Research",
+      description: "Research tokens, protocols, and market trends",
+      prompt: "Provide a comprehensive analysis of the current DeFi market trends and emerging protocols."
+    },
+    {
+      icon: Flame,
+      title: "Gas Optimization",
+      description: "Optimize transaction costs and timing",
+      prompt: "Help me understand gas optimization techniques and when to execute transactions for lower fees."
+    },
+  ];
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+
+    const userMessage: Message = {
+      id: messages.length + 1,
+      content: input,
+      sender: "user",
+      timestamp: new Date(),
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setInput("");
+    setIsLoading(true);
+
+    // Simulate AI response
+    setTimeout(() => {
+      const aiMessage: Message = {
+        id: messages.length + 2,
+        content: "I understand your request. Let me analyze this for you and provide detailed insights based on the latest Web3 data and best practices.",
+        sender: "ai",
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, aiMessage]);
+      setIsLoading(false);
+    }, 1500);
+  };
+
+  const handleActionClick = (prompt: string) => {
+    setInput(prompt);
+  };
+
+  const handleConnectWallet = () => {
+    setIsConnected(!isConnected);
+  };
+
+  const suggestedActions = [
+    "Explain DeFi yield farming",
+    "Check gas prices",
+    "Analyze this transaction",
+    "Find arbitrage opportunities"
+  ];
+
+  return (
+    <div className="min-h-screen bg-background text-foreground relative overflow-hidden">
+      {/* Background Pattern */}
+      <BGPattern variant="dots" mask="fade-edges" size={32} fill="#1a1a2e" />
+      
+      {/* Header */}
+      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md">
+        <div className="container flex h-16 items-center justify-between px-6">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-gradient-to-br from-pink-500/20 to-purple-600/20 border border-pink-500/30">
+              <Flame className="h-6 w-6 text-pink-400" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+                Web3 AI
+              </h1>
+              <p className="text-xs text-muted-foreground">Intelligent DeFi Assistant</p>
+            </div>
+          </div>
+
+          <nav className="hidden md:flex items-center gap-6">
+            <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors relative group">
+              Docs
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-pink-400 to-purple-400 group-hover:w-full transition-all duration-300" />
+            </a>
+            <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors relative group">
+              Explorer
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-pink-400 to-purple-400 group-hover:w-full transition-all duration-300" />
+            </a>
+          </nav>
+
+          <Button
+            onClick={handleConnectWallet}
+            variant="outline"
+            className={cn(
+              "relative overflow-hidden border-border/50 hover:border-pink-500/50 transition-all duration-300",
+              isConnected && "border-pink-500/50 bg-pink-500/10"
+            )}
+          >
+            <span className="relative z-10 flex items-center gap-2">
+              <Wallet className="h-4 w-4" />
+              {isConnected ? "Connected" : "Connect Wallet"}
+            </span>
+            {!isConnected && (
+              <div className="absolute inset-0 bg-gradient-to-r from-pink-500/20 to-purple-600/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
+            )}
+          </Button>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <div className="container mx-auto px-6 py-8 max-w-4xl">
+        <div className="flex flex-col h-[calc(100vh-8rem)]">
+          {/* Chat Area */}
+          <div className="flex-1 mb-6">
+            <ChatMessageList>
+              {messages.map((message) => (
+                <div
+                  key={message.id}
+                  className="animate-in slide-in-from-bottom-2 duration-300"
+                >
+                  <ChatBubble variant={message.sender === "user" ? "sent" : "received"}>
+                    <ChatBubbleAvatar
+                      src={message.sender === "user" ? undefined : undefined}
+                      fallback={message.sender === "user" ? "U" : "AI"}
+                    />
+                    <ChatBubbleMessage variant={message.sender === "user" ? "sent" : "received"}>
+                      {message.content}
+                    </ChatBubbleMessage>
+                  </ChatBubble>
+                </div>
+              ))}
+
+              {isLoading && (
+                <div className="animate-in slide-in-from-bottom-2 duration-300">
+                  <ChatBubble variant="received">
+                    <ChatBubbleAvatar fallback="AI" />
+                    <ChatBubbleMessage isLoading />
+                  </ChatBubble>
+                </div>
+              )}
+
+              {/* Action Buttons - Show only when no user messages */}
+              {messages.length === 1 && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8 animate-in fade-in-0 duration-500">
+                  {actionButtons.map((action, index) => (
+                    <ActionButton
+                      key={index}
+                      icon={action.icon}
+                      title={action.title}
+                      description={action.description}
+                      onClick={() => handleActionClick(action.prompt)}
+                    />
+                  ))}
+                </div>
+              )}
+            </ChatMessageList>
+          </div>
+
+          {/* Suggested Actions */}
+          {messages.length > 1 && (
+            <div className="mb-4">
+              <div className="flex gap-2 overflow-x-auto pb-2">
+                {suggestedActions.map((action, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setInput(action)}
+                    className="flex-shrink-0 px-3 py-1.5 text-xs rounded-full bg-background/60 border border-border/50 hover:border-pink-500/30 hover:bg-background/80 transition-all duration-200 text-muted-foreground hover:text-foreground"
+                  >
+                    {action}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Chat Input */}
+          <div className="sticky bottom-0 bg-background/80 backdrop-blur-sm border-t border-border/40 pt-4 -mx-6 px-6">
+            <form onSubmit={handleSubmit} className="relative">
+              <div className="relative rounded-2xl border border-border/50 bg-background/60 backdrop-blur-sm focus-within:border-pink-500/30 focus-within:shadow-lg focus-within:shadow-pink-500/10 transition-all duration-300">
+                <Input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Ask about DeFi, smart contracts, or Web3 strategies..."
+                  className="border-0 bg-transparent px-4 py-4 pr-24 focus-visible:ring-0 text-foreground placeholder:text-muted-foreground"
+                />
+                <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="ghost"
+                    className="h-8 w-8 hover:bg-accent/80"
+                  >
+                    <Paperclip className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="ghost"
+                    className="h-8 w-8 hover:bg-accent/80"
+                  >
+                    <Mic className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    type="submit"
+                    size="icon"
+                    disabled={!input.trim()}
+                    className="h-8 w-8 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 border-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <Send className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AIDashboard;
