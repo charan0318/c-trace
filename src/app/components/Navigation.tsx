@@ -12,11 +12,6 @@ export default function Navigation() {
         <div className="glass-panel !p-3">
           <div className="flex justify-between items-center">
             <Link href="/" className="flex items-center space-x-2 text-2xl font-bold text-white hover:text-chiliz-primary transition-colors">
-              <img 
-                src="/chiliz-logo.png" 
-                alt="Chiliz Logo" 
-                className="w-8 h-8"
-              />
               <span> C- Trace </span>
             </Link>
 
