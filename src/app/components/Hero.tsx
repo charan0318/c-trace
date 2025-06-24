@@ -54,7 +54,7 @@ export default function Hero() {
     <div className="relative min-h-screen overflow-hidden">
       {/* Spline Scene */}
       <Spline 
-        scene="https://prod.spline.design/CzpaWhZatxJIV-bg/scene.splinecode"
+        scene="https://prod.spline.design/lX0ekK8OK9dc4DlA/scene.splinecode"
         onLoad={handleSplineLoad}
         onError={handleSplineError}
         style={{ 

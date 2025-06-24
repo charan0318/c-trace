@@ -17,13 +17,10 @@ export default function Navigation() {
                 alt="Chiliz Logo" 
                 className="w-8 h-8"
               />
-              <span>Chiliz AI Explorer</span>
+              <span> C- Trace </span>
             </Link>
 
             <div className="flex items-center space-x-6">
-              <Link href="/explorer" className="text-white/80 hover:text-chiliz-secondary transition-colors font-medium">
-                Explorer
-              </Link>
               <Link href="/docs" className="text-white/80 hover:text-chiliz-secondary transition-colors font-medium">
                 Docs
               </Link>
@@ -35,7 +32,6 @@ export default function Navigation() {
                     createWallet("com.coinbase.wallet"),
                     createWallet("me.rainbow"),
                     createWallet("io.rabby"),
-                    createWallet("io.wallethub"),
                     inAppWallet({
                       auth: {
                         options: ["email", "google", "apple", "facebook", "phone"],
