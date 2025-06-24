@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -185,62 +186,103 @@ export function BlockchainExplorer() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Left side - Chat interface */}
-      <div className="flex flex-col flex-grow p-4">
-        <div className="flex items-center mb-4">
-          <Search className="w-6 h-6 text-gray-500 mr-2" />
-          <h1 className="text-xl font-bold">Blockchain Explorer</h1>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 pt-20">
+      <div className="container mx-auto px-4 py-8 h-full">
+        {/* Header */}
+        <div className="flex items-center mb-6">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-chiliz-primary to-chiliz-secondary flex items-center justify-center shadow-lg shadow-chiliz-primary/25 mr-4">
+            <Search className="w-6 h-6 text-white" strokeWidth={2.5} />
+          </div>
+          <h1 className="text-3xl font-bold text-white">Blockchain Explorer</h1>
         </div>
-        <div className="flex-grow bg-white rounded-lg shadow-md p-4 mb-4 overflow-y-auto">
-          {messages.map((message, index) => (
-            <div
-              key={index}
-              className={`mb-2 ${
-                message.role === "user" ? "text-right" : "text-left"
-              }`}
-            >
-              {message.role === "system" ? (
-                <div className="bg-gray-200 text-gray-800 rounded-lg p-2">
-                  <ReactMarkdown>{message.content}</ReactMarkdown>
+
+        {/* Chat Interface */}
+        <div className="glass-panel h-[calc(100vh-200px)] flex flex-col">
+          {/* Messages Container */}
+          <div className="flex-grow overflow-y-auto p-6 space-y-4">
+            {messages.map((message, index) => (
+              <div
+                key={index}
+                className={`flex ${
+                  message.role === "user" ? "justify-end" : "justify-start"
+                }`}
+              >
+                {message.role === "system" ? (
+                  <div className="max-w-3xl bg-gradient-to-r from-gray-800/80 to-gray-700/80 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-xl">
+                    <div className="prose prose-invert prose-sm max-w-none">
+                      <ReactMarkdown
+                        components={{
+                          code: ({ children }) => (
+                            <code className="bg-black/40 text-chiliz-secondary px-2 py-1 rounded text-sm font-mono">
+                              {children}
+                            </code>
+                          ),
+                          pre: ({ children }) => (
+                            <pre className="bg-black/60 border border-white/10 rounded-lg p-4 overflow-x-auto">
+                              {children}
+                            </pre>
+                          ),
+                        }}
+                      >
+                        {message.content}
+                      </ReactMarkdown>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="max-w-md bg-gradient-to-r from-chiliz-primary to-chiliz-secondary rounded-2xl p-4 shadow-xl">
+                    <span className="text-white font-medium">{message.content}</span>
+                  </div>
+                )}
+              </div>
+            ))}
+            {isTyping && (
+              <div className="flex justify-start">
+                <div className="bg-gradient-to-r from-gray-800/80 to-gray-700/80 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-xl">
+                  <div className="flex items-center space-x-2">
+                    <div className="flex space-x-1">
+                      <div className="w-2 h-2 bg-chiliz-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                      <div className="w-2 h-2 bg-chiliz-secondary rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                      <div className="w-2 h-2 bg-chiliz-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                    </div>
+                    <span className="text-white/70 text-sm">AI is thinking...</span>
+                  </div>
                 </div>
-              ) : (
-                <span className="inline-block bg-blue-500 text-white rounded-lg p-2">
-                  {message.content}
-                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Input Area */}
+          <div className="border-t border-white/10 p-4">
+            <div className="flex items-center space-x-3">
+              <div className="flex-grow relative">
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Ask a question about this contract or execute a command..."
+                  className="w-full bg-black/40 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-chiliz-primary focus:border-transparent transition-all duration-200"
+                  onKeyPress={(e) => e.key === "Enter" && handleSend()}
+                />
+              </div>
+              
+              <button
+                onClick={handleSend}
+                className="bg-gradient-to-r from-chiliz-primary to-chiliz-secondary hover:from-chiliz-secondary hover:to-chiliz-primary text-white p-3 rounded-xl transition-all duration-200 hover:scale-105 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={!input.trim()}
+              >
+                <Send className="w-5 h-5" />
+              </button>
+              
+              {input.includes("execute") && (
+                <button
+                  onClick={handleExecute}
+                  className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-emerald-600 hover:to-green-600 text-white p-3 rounded-xl transition-all duration-200 hover:scale-105 shadow-lg hover:shadow-xl"
+                >
+                  <Terminal className="w-5 h-5" />
+                </button>
               )}
             </div>
-          ))}
-          {isTyping && (
-            <div className="text-left mb-2">
-              <span className="inline-block p-2 rounded-lg bg-gray-200 text-gray-800 animate-pulse">
-                Typing...
-              </span>
-            </div>
-          )}
-        </div>
-        <div className="flex">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask a question about this contract or execute a command..."
-            className="flex-grow p-2 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <button
-            onClick={handleSend}
-            className="bg-blue-500 text-white p-2 rounded-r-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <Send className="w-6 h-6" />
-          </button>
-          {input.includes("execute") && (
-            <button
-              onClick={handleExecute}
-              className="ml-2 bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
-            >
-              <Terminal className="w-6 h-6" />
-            </button>
-          )}
+          </div>
         </div>
       </div>
     </div>
