@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useCallback } from "react";
@@ -129,18 +130,17 @@ const SearchBar: React.FC<SearchBarProps> = ({
         {isDropdownOpen && (
           <div className="
             absolute top-full left-0 right-0 mt-1 z-50
-            bg-white/95 backdrop-blur-md border border-gray-600/40
+            bg-white/10 backdrop-blur-md border border-gray-600/40
             rounded-xl shadow-lg overflow-hidden
           ">
             {chains.map((option) => (
               <button
                 key={option.value}
-                type="button"
-                onClick={() => handleChainSelect(option.value)}
+                onClick={() => handleChainSelect(option)}
                 className="
-                  w-full px-4 py-3 text-left text-black 
-                  hover:bg-gray-100 transition-colors duration-150
-                  border-b border-gray-200 last:border-b-0
+                  w-full px-4 py-3 text-left text-white text-sm
+                  hover:bg-white/10 transition-colors duration-150
+                  first:rounded-t-xl last:rounded-b-xl
                 "
               >
                 {option.label}
