@@ -13,15 +13,26 @@ export default function Navigation() {
         <div className="glass-panel !p-3">
           <div className="flex justify-between items-center">
             <Link href="/" className="flex items-center space-x-2 text-2xl font-bold text-white hover:text-chiliz-primary transition-colors">
-              <img 
-                src="/chiliz-logo.png" 
-                alt="Chiliz Logo" 
-                className="w-8 h-8 object-contain"
-                onError={(e) => {
-                  console.error('Logo failed to load');
-                  e.currentTarget.style.display = 'none';
-                }}
-              />
+              <div className="w-8 h-8 flex items-center justify-center">
+                <img 
+                  src="/chiliz-logo.png" 
+                  alt="Chiliz Logo" 
+                  className="w-8 h-8 object-contain"
+                  onError={(e) => {
+                    console.error('Logo failed to load, using fallback');
+                    const target = e.currentTarget as HTMLImageElement;
+                    target.style.display = 'none';
+                    const fallback = target.nextElementSibling as HTMLElement;
+                    if (fallback) fallback.style.display = 'block';
+                  }}
+                />
+                <div 
+                  className="w-8 h-8 bg-gradient-to-r from-red-500 to-pink-500 rounded flex items-center justify-center text-white font-bold text-sm hidden"
+                  style={{ display: 'none' }}
+                >
+                  C
+                </div>
+              </div>
               <span>Chiliz AI Explorer</span>
             </Link>
 
