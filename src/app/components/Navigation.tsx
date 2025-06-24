@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ConnectButton } from "thirdweb/react";
 import { client } from "../client";
 import { inAppWallet, createWallet } from "thirdweb/wallets";
+import { GradientButton } from "./ui/gradient-button";
 
 export default function Navigation() {
   return (
@@ -27,31 +28,33 @@ export default function Navigation() {
               <Link href="/docs" className="text-white/80 hover:text-chiliz-secondary transition-colors font-medium">
                 Docs
               </Link>
-              <div className="glass-panel !p-2 !rounded-xl">
-                <ConnectButton
-                  client={client}
-                  wallets={[
-                    createWallet("io.metamask"),
-                    createWallet("com.coinbase.wallet"),
-                    createWallet("me.rainbow"),
-                    createWallet("io.rabby"),
-                    createWallet("io.wallethub"),
-                    inAppWallet({
-                      auth: {
-                        options: ["email", "google", "apple", "facebook", "phone"],
-                      },
-                    }),
-                  ]}
-                  connectModal={{ 
-                    size: "compact",
-                    title: "Connect Wallet",
-                    titleIcon: "",
-                  }}
-                  connectButton={{
-                    label: "Connect Wallet",
-                  }}
-                />
-              </div>
+              <ConnectButton
+                client={client}
+                wallets={[
+                  createWallet("io.metamask"),
+                  createWallet("com.coinbase.wallet"),
+                  createWallet("me.rainbow"),
+                  createWallet("io.rabby"),
+                  createWallet("io.wallethub"),
+                  inAppWallet({
+                    auth: {
+                      options: ["email", "google", "apple", "facebook", "phone"],
+                    },
+                  }),
+                ]}
+                connectModal={{ 
+                  size: "compact",
+                  title: "Connect Wallet",
+                  titleIcon: "",
+                }}
+                connectButton={{
+                  component: ({ connectModal }) => (
+                    <GradientButton onClick={connectModal?.open}>
+                      Connect Wallet
+                    </GradientButton>
+                  ),
+                }}
+              />
             </div>
           </div>
         </div>
