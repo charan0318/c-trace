@@ -452,12 +452,13 @@ export function BlockchainExplorer() {
           <div className="flex flex-col h-[calc(100vh-200px)]">
             
             {/* Chat Area */}
-            <div className="flex-1 mb-6 relative">
+            <div className="flex-1 mb-6 relative overflow-hidden">
               <div
-                className="flex flex-col w-full h-full p-4 overflow-y-auto"
+                className="flex flex-col w-full h-full p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent"
                 ref={scrollRef}
-              >
-                <div className="flex flex-col">
+                style={{ maxHeight: 'calc(100vh - 300px)' }}
+              ></div>
+                <div className="flex flex-col min-h-full pb-4">
                   {messages.map((message, index) => (
                     <div key={index} className="animate-in slide-in-from-bottom-2 duration-300">
                       <ChatBubble variant={message.role === "user" ? "sent" : "received"}>
@@ -545,7 +546,7 @@ export function BlockchainExplorer() {
             )}
 
             {/* Chat Input */}
-            <div className="sticky bottom-0 bg-gray-900/80 backdrop-blur-sm border-t border-white/20 pt-4">
+            <div className="mt-auto bg-gray-900/80 backdrop-blur-sm border-t border-white/20 pt-4">
               <form 
                 onSubmit={(e) => {
                   e.preventDefault();
