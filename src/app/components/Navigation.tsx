@@ -11,8 +11,13 @@ export default function Navigation() {
       <div className="container mx-auto px-4 py-4">
         <div className="glass-panel !p-3">
           <div className="flex justify-between items-center">
-            <Link href="/" className="text-2xl font-bold text-white hover:text-chiliz-primary transition-colors">
-              🌶️ Chiliz AI Explorer
+            <Link href="/" className="flex items-center space-x-2 text-2xl font-bold text-white hover:text-chiliz-primary transition-colors">
+              <img 
+                src="/chiliz-logo.png" 
+                alt="Chiliz Logo" 
+                className="w-8 h-8"
+              />
+              <span>Chiliz AI Explorer</span>
             </Link>
 
             <div className="flex items-center space-x-6">
