@@ -69,7 +69,7 @@ export default function Hero() {
         }}
       />
             {/* Search box at bottom */}
-      <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 w-full max-w-4xl px-4" style={{ zIndex: 999 }}>
+      <div className="absolute bottom-32 left-1/2 transform -translate-x-1/2 w-full max-w-4xl px-4" style={{ zIndex: 999 }}>
         <SearchBar
           contractAddress={searchTerm}
           selectedChain={selectedChain}
