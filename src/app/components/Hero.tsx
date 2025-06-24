@@ -106,6 +106,7 @@ export default function Hero() {
             </Button>
           </div>
         </div>
+      </div>
       {/* Footer */}
       <footer className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-sm text-white/40 text-center">
         &copy; {new Date().getFullYear()} c-trace | Crafted with ❤ from ch04niverse
