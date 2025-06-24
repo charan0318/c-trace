@@ -302,7 +302,7 @@ Ready to explore? Just type your question below! 👇`
                       <div className="w-2 h-2 bg-chiliz-secondary rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
                       <div className="w-2 h-2 bg-chiliz-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
                     </div>
-                    <span className="text-white/70 text-sm">AI is thinking...</span>
+                    <span className="text-white/70 text-sm"> C-Trace is thinking... </span>
                   </div>
                 </div>
               </div>
