@@ -137,15 +137,7 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Center content area */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white">
-          <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-white via-red-200 to-pink-200 bg-clip-text text-transparent">
-            Chiliz AI Explorer
-          </h1>
-          <p className="text-xl text-white/80 max-w-2xl mx-auto">
-            Explore the Chiliz blockchain with AI-powered insights and analytics
-          </p>
-        </div>
+        
 
         {/* Enhanced footer */}
         <footer className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-center">
