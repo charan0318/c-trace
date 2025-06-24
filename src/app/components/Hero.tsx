@@ -1,4 +1,3 @@
-
 'use client';
 
 import Spline from '@splinetool/react-spline';
@@ -59,19 +58,18 @@ export default function Hero() {
         style={{ 
           width: '100%', 
           height: '100%',
-          minHeight: '100vh',
-          objectFit: 'cover',
+          minHeight: '100vh', // Ensure full screen height
+          objectFit: 'cover', // Cover the entire screen
           position: 'absolute',
           top: 0,
           left: 0,
           zIndex: 0,
         }}
       />
-
-      {/* Search box at top */}
-      <div className="absolute top-6 left-1/2 transform -translate-x-1/2" style={{ zIndex: 999 }}>
-        <div className="glass-panel w-[500px] p-4 backdrop-blur-xl bg-gradient-to-r from-purple-900/20 to-pink-900/20 rounded-2xl border border-purple-500/30 shadow-2xl">
-          <div className="flex gap-3 items-center">
+            {/* Search box at top */}
+            <div className="absolute top-6 left-1/2 transform -translate-x-1/2" style={{ zIndex: 999 }}>
+              <div className="glass-panel w-[500px] p-4 backdrop-blur-xl bg-gradient-to-r from-purple-900/20 to-pink-900/20 rounded-2xl border border-purple-500/30 shadow-2xl">
+                <div className="flex gap-3 items-center">
             <Input
               type="text"
               placeholder="Enter contract address or question..."
@@ -108,24 +106,25 @@ export default function Hero() {
             </Button>
           </div>
         </div>
-      </div>
 
-      {/* Feature Cards - Positioned further apart */}
-      <div className="absolute top-1/2 left-0 right-0 transform -translate-y-1/2 flex justify-between items-center px-8 max-w-7xl mx-auto">
-        <div className="glass-panel hover:scale-105 transition-all duration-300 cursor-pointer group bg-gradient-to-br from-blue-900/20 to-purple-900/20 border border-blue-400/30 hover:border-blue-400/50 w-80">
-          <h3 className="text-xl font-bold text-blue-400 mb-3 group-hover:text-blue-300 transition-all">
-            Check Balance
-          </h3>
-          <p className="text-white/80 leading-relaxed">Explore token balances easily through AI prompts.</p>
+        {/* Feature Cards - Positioned further apart */}
+        <div className="absolute top-1/2 left-0 right-0 transform -translate-y-1/2 flex justify-between items-center px-8 max-w-7xl mx-auto">
+          <div className="glass-panel hover:scale-105 transition-all duration-300 cursor-pointer group bg-gradient-to-br from-blue-900/20 to-purple-900/20 border border-blue-400/30 hover:border-blue-400/50 w-80">
+            <h3 className="text-xl font-bold text-blue-400 mb-3 group-hover:text-blue-300 transition-all">
+              Check Balance
+            </h3>
+            <p className="text-white/80 leading-relaxed">Explore token balances easily through AI prompts.</p>
+          </div>
+
+          <div className="glass-panel hover:scale-105 transition-all duration-300 cursor-pointer group bg-gradient-to-br from-pink-900/20 to-red-900/20 border border-pink-400/30 hover:border-pink-400/50 w-80">
+            <h3 className="text-xl font-bold text-pink-400 mb-3 group-hover:text-pink-300 transition-all">
+              Get Contract Info
+            </h3>
+            <p className="text-white/80 leading-relaxed">Discover smart contract details and functions.</p>
+          </div>
         </div>
 
-        <div className="glass-panel hover:scale-105 transition-all duration-300 cursor-pointer group bg-gradient-to-br from-pink-900/20 to-red-900/20 border border-pink-400/30 hover:border-pink-400/50 w-80">
-          <h3 className="text-xl font-bold text-pink-400 mb-3 group-hover:text-pink-300 transition-all">
-            Get Contract Info
-          </h3>
-          <p className="text-white/80 leading-relaxed">Discover smart contract details and functions.</p>
         </div>
-      </div>
 
       {/* Footer */}
       <footer className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-sm text-white/40 text-center">

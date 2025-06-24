@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Hero from "./components/Hero";
-import { DemoOne } from "./components/demo";
 import LoadingScreen from "./components/LoadingScreen";
 
 export default function Home() {
@@ -18,7 +17,7 @@ export default function Home() {
 
   return (
     <main>
-      <DemoOne />
+      <Hero />
     </main>
   );
 }
