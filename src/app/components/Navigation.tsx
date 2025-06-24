@@ -16,7 +16,11 @@ export default function Navigation() {
               <img 
                 src="/chiliz-logo.png" 
                 alt="Chiliz Logo" 
-                className="w-8 h-8"
+                className="w-8 h-8 object-contain"
+                onError={(e) => {
+                  console.error('Logo failed to load');
+                  e.currentTarget.style.display = 'none';
+                }}
               />
               <span>Chiliz AI Explorer</span>
             </Link>
