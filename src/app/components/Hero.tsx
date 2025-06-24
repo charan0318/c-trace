@@ -68,19 +68,20 @@ export default function Hero() {
           zIndex: 0,
         }}
       />
-            {/* Search box at top */}
-            <div className="absolute top-16 left-1/2 transform -translate-x-1/2 w-full max-w-4xl px-4" style={{ zIndex: 999 }}>
-              <SearchBar
-                contractAddress={searchTerm}
-                selectedChain={selectedChain}
-                onSearch={handleSearch}
-                onAddressChange={handleAddressChange}
-                onChainChange={handleChainChange}
-                placeholder="Enter contract address or question..."
-                chains={blockchains}
-                className="w-full"
-              />
-            </div>
+            {/* Search box at bottom */}
+      <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-full max-w-4xl px-4" style={{ zIndex: 999 }}>
+        <SearchBar
+          contractAddress={searchTerm}
+          selectedChain={selectedChain}
+          onSearch={handleSearch}
+          onAddressChange={handleAddressChange}
+          onChainChange={handleChainChange}
+          placeholder="Enter contract address or question..."
+          chains={blockchains}
+          className="w-full"
+        />
+      </div>
+
       {/* Footer */}
       <footer className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-sm text-white/40 text-center">
         &copy; {new Date().getFullYear()} c-trace | Crafted with ❤ from ch04niverse
