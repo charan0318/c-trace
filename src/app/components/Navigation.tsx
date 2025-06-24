@@ -58,13 +58,13 @@ export default function Navigation() {
               {/* Enhanced Connect Wallet Button */}
               <div className="relative">
                 {/* Glow background */}
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-chiliz-primary/20 to-chiliz-secondary/20 blur-lg opacity-50"></div>
+                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-chiliz-primary/20 to-chiliz-secondary/20 blur-lg opacity-50"></div>
                 
-                <div className="relative overflow-hidden rounded-xl border border-white/20 bg-gradient-to-r from-gray-900/80 to-black/80 backdrop-blur-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                <div className="relative overflow-hidden rounded-full border border-white/20 bg-gradient-to-r from-gray-900/80 to-black/80 backdrop-blur-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
                   {/* Shimmer effect */}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-pulse duration-1000"></div>
                   
-                  <div className="relative px-4 py-2">
+                  <div className="relative px-6 py-3">
                     <ConnectButton
                       client={client}
                       wallets={[
@@ -93,6 +93,8 @@ export default function Navigation() {
                           fontSize: '14px',
                           padding: '0',
                           minWidth: 'auto',
+                          lineHeight: '1',
+                          whiteSpace: 'nowrap',
                         }
                       }}
                     />
