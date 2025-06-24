@@ -51,7 +51,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="fixed inset-0 min-h-screen overflow-hidden">
       {/* Spline Scene */}
       <Spline 
         scene="https://prod.spline.design/CzpaWhZatxJIV-bg/scene.splinecode"
@@ -60,27 +60,27 @@ export default function Hero() {
         style={{ 
           width: '100%', 
           height: '100%',
-          minHeight: '100vh', // Ensure full screen height
-          objectFit: 'cover', // Cover the entire screen
-          position: 'absolute',
+          minHeight: '100vh',
+          objectFit: 'cover',
+          position: 'fixed',
           top: 0,
           left: 0,
           zIndex: 0,
         }}
       />
-            {/* Search box at top */}
-            <div className="absolute top-16 left-1/2 transform -translate-x-1/2 w-full max-w-4xl px-4" style={{ zIndex: 999 }}>
-              <SearchBar
-                contractAddress={searchTerm}
-                selectedChain={selectedChain}
-                onSearch={handleSearch}
-                onAddressChange={handleAddressChange}
-                onChainChange={handleChainChange}
-                placeholder="Enter contract address or question..."
-                chains={blockchains}
-                className="w-full"
-              />
-            </div>
+      {/* Search box at top */}
+      <div className="absolute top-16 left-1/2 transform -translate-x-1/2 w-full max-w-4xl px-4" style={{ zIndex: 999 }}>
+        <SearchBar
+          contractAddress={searchTerm}
+          selectedChain={selectedChain}
+          onSearch={handleSearch}
+          onAddressChange={handleAddressChange}
+          onChainChange={handleChainChange}
+          placeholder="Enter contract address or question..."
+          chains={blockchains}
+          className="w-full"
+        />
+      </div>
       {/* Footer */}
       <footer className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-sm text-white/40 text-center">
         &copy; {new Date().getFullYear()} c-trace | Crafted with ❤ from ch04niverse
