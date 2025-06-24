@@ -71,39 +71,7 @@ export function BlockchainExplorer() {
           setMessages([
             {
               role: "system",
-              content: `# Welcome to C-TRACE Blockchain Explorer 🚀
-
-I'm your AI-powered blockchain assistant, ready to help you explore the **Chiliz Chain** ecosystem.
-
-## What can I help you with today?
-
-### 🔍 **Smart Contract Analysis**
-- Analyze any smart contract on Chiliz Chain
-- Get detailed function listings and explanations
-- Understand contract functionality and usage
-
-### 💡 **General Blockchain Questions**
-- Ask about Chiliz Chain features and capabilities
-- Learn about DeFi protocols and token mechanics
-- Get explanations about blockchain concepts
-
-### ⚡ **Interactive Contract Execution**
-- Execute read-only contract functions
-- Get real-time data from smart contracts
-- Interact with contracts safely (with wallet connected)
-
-## How to get started:
-
-1. **Ask me anything** about blockchain or Chiliz Chain
-2. **Paste a contract address** to analyze a specific smart contract
-3. **Connect your wallet** to interact with contracts
-
-**Example questions you can ask:**
-- "What is Chiliz Chain and how does it work?"
-- "Explain the latest DeFi trends"
-- "How do I interact with a specific token contract?"
-
-Ready to explore? Just type your question below! 👇`
+              content: "WELCOME_INTERACTIVE"
             },
           ]);
         }
@@ -162,6 +130,16 @@ Ready to explore? Just type your question below! 👇`
         },
       ]);
       setIsTyping(false);
+    }
+  };
+
+  const handleQuickAction = (prompt: string, autoSubmit: boolean = false) => {
+    setInput(prompt);
+    if (autoSubmit) {
+      // Auto-submit after a brief delay to allow input to update
+      setTimeout(() => {
+        handleSend();
+      }, 100);
     }
   };
 
@@ -266,26 +244,88 @@ Ready to explore? Just type your question below! 👇`
                 }`}
               >
                 {message.role === "system" ? (
-                  <div className="max-w-3xl bg-gradient-to-r from-gray-800/80 to-gray-700/80 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-xl">
-                    <div className="prose prose-invert prose-sm max-w-none">
-                      <ReactMarkdown
-                        components={{
-                          code: ({ children }) => (
-                            <code className="bg-black/40 text-chiliz-secondary px-2 py-1 rounded text-sm font-mono">
-                              {children}
-                            </code>
-                          ),
-                          pre: ({ children }) => (
-                            <pre className="bg-black/60 border border-white/10 rounded-lg p-4 overflow-x-auto">
-                              {children}
-                            </pre>
-                          ),
-                        }}
-                      >
-                        {message.content}
-                      </ReactMarkdown>
+                  message.content === "WELCOME_INTERACTIVE" ? (
+                    <div className="max-w-4xl bg-gradient-to-r from-gray-800/80 to-gray-700/80 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-xl">
+                      {/* Welcome Header */}
+                      <div className="text-center mb-8">
+                        <h2 className="text-2xl font-bold text-white mb-3">
+                          Welcome to C-TRACE Blockchain Explorer! 🚀
+                        </h2>
+                        <p className="text-white/80 text-lg mb-2">
+                          I'm your AI-powered blockchain assistant, ready to help you explore the{' '}
+                          <span className="text-chiliz-primary font-semibold">Chiliz Chain</span> ecosystem.
+                        </p>
+                        <p className="text-white/70">What can I help you with today?</p>
+                      </div>
+
+                      {/* Interactive Buttons */}
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {/* Smart Contract Analysis Button */}
+                        <button
+                          onClick={() => handleQuickAction("Analyze this smart contract on Chiliz Chain: [paste address]")}
+                          className="group bg-gradient-to-br from-blue-600/20 to-blue-500/20 hover:from-blue-600/30 hover:to-blue-500/30 border border-blue-400/20 hover:border-blue-400/40 rounded-xl p-6 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20"
+                        >
+                          <div className="text-3xl mb-3">🔍</div>
+                          <h3 className="text-white font-semibold text-lg mb-2">Smart Contract Analysis</h3>
+                          <p className="text-white/60 text-sm group-hover:text-white/80 transition-colors">
+                            Analyze smart contracts with detailed function listings and explanations
+                          </p>
+                        </button>
+
+                        {/* General Blockchain Questions Button */}
+                        <button
+                          onClick={() => handleQuickAction("What are the main features of the Chiliz Chain?", true)}
+                          className="group bg-gradient-to-br from-yellow-600/20 to-orange-500/20 hover:from-yellow-600/30 hover:to-orange-500/30 border border-yellow-400/20 hover:border-yellow-400/40 rounded-xl p-6 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-yellow-500/20"
+                        >
+                          <div className="text-3xl mb-3">💡</div>
+                          <h3 className="text-white font-semibold text-lg mb-2">General Blockchain Questions</h3>
+                          <p className="text-white/60 text-sm group-hover:text-white/80 transition-colors">
+                            Learn about Chiliz Chain features, DeFi protocols, and blockchain concepts
+                          </p>
+                        </button>
+
+                        {/* Interactive Contract Execution Button */}
+                        <button
+                          onClick={() => handleQuickAction("Help me interact with a smart contract on Chiliz (read-only functions).")}
+                          className="group bg-gradient-to-br from-purple-600/20 to-pink-500/20 hover:from-purple-600/30 hover:to-pink-500/30 border border-purple-400/20 hover:border-purple-400/40 rounded-xl p-6 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/20"
+                        >
+                          <div className="text-3xl mb-3">⚡</div>
+                          <h3 className="text-white font-semibold text-lg mb-2">Interactive Contract Execution</h3>
+                          <p className="text-white/60 text-sm group-hover:text-white/80 transition-colors">
+                            Execute read-only functions and get real-time data from smart contracts
+                          </p>
+                        </button>
+                      </div>
+
+                      {/* Quick Start Tips */}
+                      <div className="mt-8 pt-6 border-t border-white/10">
+                        <p className="text-white/60 text-sm text-center">
+                          <span className="text-chiliz-secondary font-medium">Quick tip:</span> You can also paste a contract address directly or ask any blockchain-related question!
+                        </p>
+                      </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div className="max-w-3xl bg-gradient-to-r from-gray-800/80 to-gray-700/80 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-xl">
+                      <div className="prose prose-invert prose-sm max-w-none">
+                        <ReactMarkdown
+                          components={{
+                            code: ({ children }) => (
+                              <code className="bg-black/40 text-chiliz-secondary px-2 py-1 rounded text-sm font-mono">
+                                {children}
+                              </code>
+                            ),
+                            pre: ({ children }) => (
+                              <pre className="bg-black/60 border border-white/10 rounded-lg p-4 overflow-x-auto">
+                                {children}
+                              </pre>
+                            ),
+                          }}
+                        >
+                          {message.content}
+                        </ReactMarkdown>
+                      </div>
+                    </div>
+                  )
                 ) : (
                   <div className="max-w-md bg-gradient-to-r from-chiliz-primary to-chiliz-secondary rounded-2xl p-4 shadow-xl">
                     <span className="text-white font-medium">{message.content}</span>
