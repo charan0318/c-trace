@@ -6,12 +6,7 @@ import SearchBar from '@/app/components/ui/SearchBar';
 import { useRouter } from 'next/navigation';
 
 const blockchains = [
-  { value: '88888', label: 'Chiliz Chain' },
-  { value: 'ethereum', label: 'Ethereum' },
-  { value: 'polygon', label: 'Polygon' },
-  { value: 'bsc', label: 'BSC' },
-  { value: 'arbitrum', label: 'Arbitrum' },
-  { value: 'optimism', label: 'Optimism' },
+  { value: '88888', label: 'Chiliz Chain' }
 ];
 
 export default function Hero() {
@@ -56,7 +51,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="fixed min-h-screen overflow-hidden">
       {/* Spline Scene */}
       <Spline 
         scene="https://prod.spline.design/CzpaWhZatxJIV-bg/scene.splinecode"
@@ -74,7 +69,7 @@ export default function Hero() {
         }}
       />
             {/* Search box at top */}
-            <div className="absolute top-6 left-1/2 transform -translate-x-1/2 w-full max-w-4xl px-4" style={{ zIndex: 999 }}>
+            <div className="absolute top-16 left-1/2 transform -translate-x-1/2 w-full max-w-4xl px-4" style={{ zIndex: 999 }}>
               <SearchBar
                 contractAddress={searchTerm}
                 selectedChain={selectedChain}
