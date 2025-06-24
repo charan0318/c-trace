@@ -162,7 +162,7 @@ const ChatBubbleMessage: React.FC<ChatBubbleMessageProps> = ({
             <div className="w-2 h-2 bg-chiliz-secondary rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
             <div className="w-2 h-2 bg-chiliz-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
           </div>
-          <span className="text-white/70 text-sm ml-2">C-Trace is thinking...</span>
+          <span className="text-white/70 text-sm ml-2">C-TRACE is analyzing...</span>
         </div>
       ) : (
         <div className="relative">
@@ -225,27 +225,27 @@ export function BlockchainExplorer() {
   const actionButtons = [
     {
       icon: Search,
-      title: "Analyze Smart Contract",
-      description: "Deep dive into contract code, security, and functionality",
+      title: "Analyze Chiliz Contract",
+      description: "Deep dive into Chiliz smart contracts and fan token functionality",
       prompt: "Analyze this smart contract on Chiliz Chain: [paste address]"
     },
     {
       icon: TrendingUp,
-      title: "Portfolio Analysis",
-      description: "Get insights on your DeFi positions and yield strategies",
-      prompt: "What are the main features of the Chiliz Chain?"
+      title: "Fan Token Analysis",
+      description: "Get insights on fan token performance and Chiliz ecosystem trends",
+      prompt: "What are the main features of the Chiliz Chain and fan tokens?"
     },
     {
       icon: FileText,
-      title: "Market Research",
-      description: "Research tokens, protocols, and market trends",
-      prompt: "Help me understand the Chiliz ecosystem and its use cases"
+      title: "Chiliz Research",
+      description: "Research Chiliz protocol, CHZ token, and sports partnerships",
+      prompt: "Help me understand the Chiliz ecosystem and its sports partnerships"
     },
     {
       icon: Zap,
-      title: "Interactive Contract Execution",
-      description: "Execute read-only functions and get real-time data from smart contracts",
-      prompt: "Help me interact with a smart contract on Chiliz (read-only functions)."
+      title: "Contract Interaction",
+      description: "Execute read-only functions on Chiliz contracts and fan tokens",
+      prompt: "Help me interact with a fan token contract on Chiliz Chain."
     },
   ];
 
@@ -274,7 +274,7 @@ export function BlockchainExplorer() {
           setMessages([
             {
               role: "system",
-              content: "Welcome to your AI-powered Web3 dashboard! I'm here to help you navigate the decentralized world with ease. What would you like to explore today?",
+              content: "Welcome to C-TRACE! I'm your AI assistant for exploring the Chiliz blockchain and ecosystem. What would you like to discover about Chiliz today?",
             },
           ]);
         }
@@ -283,7 +283,7 @@ export function BlockchainExplorer() {
         setMessages([
           {
             role: "system",
-            content: "Welcome to C-TRACE Explorer! I'm ready to help you explore blockchain data. What would you like to know?",
+            content: "Welcome to C-TRACE! I'm ready to help you explore Chiliz blockchain and fan token data. What would you like to discover?",
           },
         ]);
       }
@@ -415,10 +415,10 @@ export function BlockchainExplorer() {
   };
 
   const suggestedActions = [
-    "Explain DeFi yield farming",
-    "Check gas prices on Chiliz",
-    "Analyze this transaction",
-    "Find arbitrage opportunities"
+    "Explain fan token mechanics",
+    "Check CHZ gas prices",
+    "Analyze Chiliz transaction",
+    "Show sports partnerships"
   ];
 
   return (
@@ -443,7 +443,7 @@ export function BlockchainExplorer() {
             <h1 className="text-2xl font-bold bg-gradient-to-r from-chiliz-primary to-chiliz-secondary bg-clip-text text-transparent">
               C-TRACE AI
             </h1>
-            <p className="text-xs text-white/60">Intelligent DeFi Assistant</p>
+            <p className="text-xs text-white/60">Chiliz Blockchain Assistant</p>
           </div>
         </div>
 
@@ -559,8 +559,8 @@ export function BlockchainExplorer() {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder={hasContractToExplore 
-                      ? "Ask a question about this contract or execute a command..." 
-                      : "Ask about DeFi, smart contracts, or Web3 strategies..."}
+                      ? "Ask about this Chiliz contract or execute a command..." 
+                      : "Ask about Chiliz, fan tokens, or CHZ ecosystem..."}
                     className="w-full border-0 bg-transparent px-4 py-4 pr-16 focus:outline-none text-white placeholder:text-white/50"
                     onKeyPress={(e) => e.key === "Enter" && handleSend()}
                   />
