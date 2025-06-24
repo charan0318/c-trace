@@ -1,8 +1,8 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
-import { Search, Send, Terminal } from "lucide-react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { Search, Send, Terminal, ArrowDown, Copy, Edit, Zap, FileText, TrendingUp } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 
@@ -23,23 +23,231 @@ import {
 } from "thirdweb";
 import { client } from "../client";
 
+// Utility function
+function cn(...inputs: (string | undefined | null | boolean)[]): string {
+  return inputs.filter(Boolean).join(" ");
+}
+
+// Auto-scroll hook
+interface ScrollState {
+  isAtBottom: boolean;
+  autoScrollEnabled: boolean;
+}
+
+function useAutoScroll(content?: React.ReactNode) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const lastContentHeight = useRef(0);
+
+  const [scrollState, setScrollState] = useState<ScrollState>({
+    isAtBottom: true,
+    autoScrollEnabled: true,
+  });
+
+  const checkIsAtBottom = useCallback((element: HTMLElement) => {
+    const { scrollTop, scrollHeight, clientHeight } = element;
+    const distanceToBottom = Math.abs(scrollHeight - scrollTop - clientHeight);
+    return distanceToBottom <= 20;
+  }, []);
+
+  const scrollToBottom = useCallback((instant?: boolean) => {
+    if (!scrollRef.current) return;
+
+    const targetScrollTop = scrollRef.current.scrollHeight - scrollRef.current.clientHeight;
+    
+    if (instant) {
+      scrollRef.current.scrollTop = targetScrollTop;
+    } else {
+      scrollRef.current.scrollTo({
+        top: targetScrollTop,
+        behavior: "smooth",
+      });
+    }
+
+    setScrollState({
+      isAtBottom: true,
+      autoScrollEnabled: true,
+    });
+  }, []);
+
+  const handleScroll = useCallback(() => {
+    if (!scrollRef.current) return;
+    const atBottom = checkIsAtBottom(scrollRef.current);
+    setScrollState((prev) => ({
+      isAtBottom: atBottom,
+      autoScrollEnabled: atBottom ? true : prev.autoScrollEnabled,
+    }));
+  }, [checkIsAtBottom]);
+
+  useEffect(() => {
+    const element = scrollRef.current;
+    if (!element) return;
+
+    element.addEventListener("scroll", handleScroll, { passive: true });
+    return () => element.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
+
+  useEffect(() => {
+    const scrollElement = scrollRef.current;
+    if (!scrollElement) return;
+
+    const currentHeight = scrollElement.scrollHeight;
+    const hasNewContent = currentHeight !== lastContentHeight.current;
+
+    if (hasNewContent && scrollState.autoScrollEnabled) {
+      requestAnimationFrame(() => {
+        scrollToBottom(lastContentHeight.current === 0);
+      });
+      lastContentHeight.current = currentHeight;
+    }
+  }, [content, scrollState.autoScrollEnabled, scrollToBottom]);
+
+  return {
+    scrollRef,
+    isAtBottom: scrollState.isAtBottom,
+    scrollToBottom: () => scrollToBottom(false),
+  };
+}
+
+// Chat Bubble Components
+interface ChatBubbleProps {
+  variant?: "sent" | "received";
+  children: React.ReactNode;
+}
+
+const ChatBubble: React.FC<ChatBubbleProps> = ({ variant = "received", children }) => {
+  return (
+    <div className={cn(
+      "flex gap-3 max-w-[85%] group mb-6",
+      variant === "sent" ? "ml-auto flex-row-reverse" : "mr-auto"
+    )}>
+      {children}
+    </div>
+  );
+};
+
+interface ChatBubbleAvatarProps {
+  fallback: string;
+}
+
+const ChatBubbleAvatar: React.FC<ChatBubbleAvatarProps> = ({ fallback }) => {
+  return (
+    <div className="flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-full bg-gradient-to-br from-chiliz-primary to-chiliz-secondary text-xs font-medium text-white">
+      {fallback}
+    </div>
+  );
+};
+
+interface ChatBubbleMessageProps {
+  variant?: "sent" | "received";
+  isLoading?: boolean;
+  children?: React.ReactNode;
+}
+
+const ChatBubbleMessage: React.FC<ChatBubbleMessageProps> = ({ 
+  variant = "received", 
+  isLoading = false, 
+  children 
+}) => {
+  return (
+    <div className={cn(
+      "relative rounded-2xl px-4 py-3 text-sm backdrop-blur-sm border transition-all duration-300 hover:shadow-lg group-hover:shadow-md",
+      variant === "sent"
+        ? "bg-gradient-to-br from-chiliz-primary/20 to-chiliz-secondary/20 border-chiliz-primary/30 text-white ml-auto"
+        : "bg-gray-900/60 border-white/20 text-white"
+    )}>
+      {isLoading ? (
+        <div className="flex items-center gap-1">
+          <div className="flex gap-1">
+            <div className="w-2 h-2 bg-chiliz-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+            <div className="w-2 h-2 bg-chiliz-secondary rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+            <div className="w-2 h-2 bg-chiliz-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+          </div>
+          <span className="text-white/70 text-sm ml-2">C-Trace is thinking...</span>
+        </div>
+      ) : (
+        <div className="relative">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Action Button Component
+interface ActionButtonProps {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  description: string;
+  onClick: () => void;
+}
+
+const ActionButton: React.FC<ActionButtonProps> = ({ icon: Icon, title, description, onClick }) => {
+  return (
+    <button
+      onClick={onClick}
+      className="group relative p-6 rounded-2xl bg-gray-900/40 backdrop-blur-sm border border-white/20 hover:border-chiliz-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-chiliz-primary/20 hover:bg-gray-900/60 text-left w-full"
+    >
+      <div className="flex items-start gap-4">
+        <div className="p-3 rounded-xl bg-gradient-to-br from-chiliz-primary/20 to-chiliz-secondary/20 border border-chiliz-primary/30 group-hover:from-chiliz-primary/30 group-hover:to-chiliz-secondary/30 transition-all duration-300">
+          <Icon className="h-6 w-6 text-chiliz-primary" />
+        </div>
+        <div className="flex-1">
+          <h3 className="font-semibold text-white mb-1 group-hover:text-chiliz-primary transition-colors">
+            {title}
+          </h3>
+          <p className="text-sm text-white/60 group-hover:text-white/80 transition-colors">
+            {description}
+          </p>
+        </div>
+      </div>
+    </button>
+  );
+};
+
 export function BlockchainExplorer() {
   const searchParams = useSearchParams();
   const chainId = searchParams.get("chainId");
   const contractAddress = searchParams.get("searchTerm");
 
   const [sessionId, setSessionId] = useState<string | null>(null);
-  const [messages, setMessages] = useState<{ role: string; content: string }[]>(
-    []
-  );
+  const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
 
   const account = useActiveAccount();
-  const walletAddress = account?.address; // Get the wallet address
+  const walletAddress = account?.address;
 
   // Check if we have contract details to explore
   const hasContractToExplore = contractAddress && chainId;
+
+  const { scrollRef, isAtBottom, scrollToBottom } = useAutoScroll(messages);
+
+  const actionButtons = [
+    {
+      icon: Search,
+      title: "Analyze Smart Contract",
+      description: "Deep dive into contract code, security, and functionality",
+      prompt: "Analyze this smart contract on Chiliz Chain: [paste address]"
+    },
+    {
+      icon: TrendingUp,
+      title: "Portfolio Analysis",
+      description: "Get insights on your DeFi positions and yield strategies",
+      prompt: "What are the main features of the Chiliz Chain?"
+    },
+    {
+      icon: FileText,
+      title: "Market Research",
+      description: "Research tokens, protocols, and market trends",
+      prompt: "Help me understand the Chiliz ecosystem and its use cases"
+    },
+    {
+      icon: Zap,
+      title: "Interactive Contract Execution",
+      description: "Execute read-only functions and get real-time data from smart contracts",
+      prompt: "Help me interact with a smart contract on Chiliz (read-only functions)."
+    },
+  ];
 
   useEffect(() => {
     const initSession = async () => {
@@ -48,30 +256,25 @@ export function BlockchainExplorer() {
         setSessionId(newSessionId);
 
         if (hasContractToExplore) {
-          // Simulate typing animation
           setIsTyping(true);
-
           const contractDetails = await queryContract(
             contractAddress!,
             chainId!,
             newSessionId
           );
           setMessages([
-            { role: "system", content: "Welcome to the Blockchain Explorer." },
+            { role: "system", content: "Welcome to the C-TRACE Blockchain Explorer." },
             {
               role: "system",
-              content:
-                contractDetails || "No details available for this contract.",
+              content: contractDetails || "No details available for this contract.",
             },
           ]);
-
           setIsTyping(false);
         } else {
-          // Show welcome message when no contract is specified
           setMessages([
             {
               role: "system",
-              content: "WELCOME_INTERACTIVE"
+              content: "Welcome to your AI-powered Web3 dashboard! I'm here to help you navigate the decentralized world with ease. What would you like to explore today?",
             },
           ]);
         }
@@ -100,7 +303,6 @@ export function BlockchainExplorer() {
       setIsTyping(true);
       
       if (hasContractToExplore) {
-        // Handle contract-specific queries
         const response = await handleUserMessage(
           userMessage,
           sessionId,
@@ -109,12 +311,11 @@ export function BlockchainExplorer() {
         );
         setMessages((prev) => [...prev, { role: "system", content: response }]);
       } else {
-        // Handle general blockchain queries without contract context
         const response = await handleUserMessage(
           userMessage,
           sessionId,
-          "88888", // Default to Chiliz Chain
-          "" // No specific contract
+          "88888",
+          ""
         );
         setMessages((prev) => [...prev, { role: "system", content: response }]);
       }
@@ -136,7 +337,6 @@ export function BlockchainExplorer() {
   const handleQuickAction = (prompt: string, autoSubmit: boolean = false) => {
     setInput(prompt);
     if (autoSubmit) {
-      // Auto-submit after a brief delay to allow input to update
       setTimeout(() => {
         handleSend();
       }, 100);
@@ -147,49 +347,42 @@ export function BlockchainExplorer() {
     if (!account?.address || !input.includes("execute") || !hasContractToExplore) return;
 
     const executeMessage = input.trim();
-
-    // Add the "execute" message to the chat
     setMessages((prev) => [...prev, { role: "user", content: executeMessage }]);
     setInput("");
 
     try {
       setIsTyping(true);
 
-      // Execute the command with Nebula API
       const executeResponse = await executeCommand(
         executeMessage,
         account.address,
-        "default-user", // Optional user ID
-        false, // Stream option
+        "default-user",
+        false,
         chainId!,
         contractAddress!,
         sessionId
       );
 
-      // Check if the response contains actions and a transaction to sign
       const action = executeResponse.actions?.find(
         (a: { type: string; data: string }) => a.type === "sign_transaction"
       );
 
       if (action) {
-        const transactionData = JSON.parse(action.data); // Parse the transaction data
+        const transactionData = JSON.parse(action.data);
 
-        // Prepare the transaction using thirdweb's prepareTransaction
         const preparedTransaction = prepareTransaction({
           to: transactionData.to,
-          value: transactionData.value, // Value in hex
-          data: transactionData.data, // Encoded function call
-          chain: defineChain(transactionData.chainId), // Chain definition
-          client, // Pass the initialized Thirdweb client
+          value: transactionData.value,
+          data: transactionData.data,
+          chain: defineChain(transactionData.chainId),
+          client,
         });
 
-        // Send and confirm the transaction using thirdweb
         const receipt = await sendAndConfirmTransaction({
           transaction: preparedTransaction,
           account,
         });
 
-        // Add the transaction receipt hash to the chat
         setMessages((prev) => [
           ...prev,
           {
@@ -221,166 +414,176 @@ export function BlockchainExplorer() {
     }
   };
 
+  const suggestedActions = [
+    "Explain DeFi yield farming",
+    "Check gas prices on Chiliz",
+    "Analyze this transaction",
+    "Find arbitrage opportunities"
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 pt-20">
-      <div className="container mx-auto px-4 py-8 h-full">
-        {/* Header */}
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 pt-20 relative overflow-hidden">
+      {/* Background Pattern */}
+      <div 
+        className="absolute inset-0 z-[-10] opacity-20"
+        style={{
+          backgroundImage: `radial-gradient(#1a1a2e 1px, transparent 1px)`,
+          backgroundSize: '32px 32px',
+          maskImage: 'radial-gradient(ellipse at center, var(--tw-bg-opacity), transparent)'
+        }}
+      />
+
+      {/* Header */}
+      <div className="container mx-auto px-4 py-8">
         <div className="flex items-center mb-6">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-chiliz-primary to-chiliz-secondary flex items-center justify-center shadow-lg shadow-chiliz-primary/25 mr-4">
             <Search className="w-6 h-6 text-white" strokeWidth={2.5} />
           </div>
-          <h1 className="text-3xl font-bold text-white">Blockchain Explorer</h1>
+          <div>
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-chiliz-primary to-chiliz-secondary bg-clip-text text-transparent">
+              C-TRACE AI
+            </h1>
+            <p className="text-xs text-white/60">Intelligent DeFi Assistant</p>
+          </div>
         </div>
 
-        {/* Chat Interface */}
-        <div className="glass-panel h-[calc(100vh-200px)] flex flex-col">
-          {/* Messages Container */}
-          <div className="flex-grow overflow-y-auto p-6 space-y-4">
-            {messages.map((message, index) => (
+        {/* Main Content */}
+        <div className="max-w-4xl mx-auto">
+          <div className="flex flex-col h-[calc(100vh-200px)]">
+            
+            {/* Chat Area */}
+            <div className="flex-1 mb-6 relative">
               <div
-                key={index}
-                className={`flex ${
-                  message.role === "user" ? "justify-end" : "justify-start"
-                }`}
+                className="flex flex-col w-full h-full p-4 overflow-y-auto"
+                ref={scrollRef}
               >
-                {message.role === "system" ? (
-                  message.content === "WELCOME_INTERACTIVE" ? (
-                    <div className="max-w-4xl bg-gradient-to-r from-gray-800/80 to-gray-700/80 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-xl">
-                      {/* Welcome Header */}
-                      <div className="text-center mb-8">
-                        <h2 className="text-2xl font-bold text-white mb-3">
-                          Welcome to C-TRACE Blockchain Explorer! 🚀
-                        </h2>
-                        <p className="text-white/80 text-lg mb-2">
-                          I'm your AI-powered blockchain assistant, ready to help you explore the{' '}
-                          <span className="text-chiliz-primary font-semibold">Chiliz Chain</span> ecosystem.
-                        </p>
-                        <p className="text-white/70">What can I help you with today?</p>
-                      </div>
-
-                      {/* Interactive Buttons */}
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {/* Smart Contract Analysis Button */}
-                        <button
-                          onClick={() => handleQuickAction("Analyze this smart contract on Chiliz Chain: [paste address]")}
-                          className="group bg-gradient-to-br from-blue-600/20 to-blue-500/20 hover:from-blue-600/30 hover:to-blue-500/30 border border-blue-400/20 hover:border-blue-400/40 rounded-xl p-6 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20"
-                        >
-                          <div className="text-3xl mb-3">🔍</div>
-                          <h3 className="text-white font-semibold text-lg mb-2">Smart Contract Analysis</h3>
-                          <p className="text-white/60 text-sm group-hover:text-white/80 transition-colors">
-                            Analyze smart contracts with detailed function listings and explanations
-                          </p>
-                        </button>
-
-                        {/* General Blockchain Questions Button */}
-                        <button
-                          onClick={() => handleQuickAction("What are the main features of the Chiliz Chain?", true)}
-                          className="group bg-gradient-to-br from-yellow-600/20 to-orange-500/20 hover:from-yellow-600/30 hover:to-orange-500/30 border border-yellow-400/20 hover:border-yellow-400/40 rounded-xl p-6 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-yellow-500/20"
-                        >
-                          <div className="text-3xl mb-3">💡</div>
-                          <h3 className="text-white font-semibold text-lg mb-2">General Blockchain Questions</h3>
-                          <p className="text-white/60 text-sm group-hover:text-white/80 transition-colors">
-                            Learn about Chiliz Chain features, DeFi protocols, and blockchain concepts
-                          </p>
-                        </button>
-
-                        {/* Interactive Contract Execution Button */}
-                        <button
-                          onClick={() => handleQuickAction("Help me interact with a smart contract on Chiliz (read-only functions).")}
-                          className="group bg-gradient-to-br from-purple-600/20 to-pink-500/20 hover:from-purple-600/30 hover:to-pink-500/30 border border-purple-400/20 hover:border-purple-400/40 rounded-xl p-6 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/20"
-                        >
-                          <div className="text-3xl mb-3">⚡</div>
-                          <h3 className="text-white font-semibold text-lg mb-2">Interactive Contract Execution</h3>
-                          <p className="text-white/60 text-sm group-hover:text-white/80 transition-colors">
-                            Execute read-only functions and get real-time data from smart contracts
-                          </p>
-                        </button>
-                      </div>
-
-                      {/* Quick Start Tips */}
-                      <div className="mt-8 pt-6 border-t border-white/10">
-                        <p className="text-white/60 text-sm text-center">
-                          <span className="text-chiliz-secondary font-medium">Quick tip:</span> You can also paste a contract address directly or ask any blockchain-related question!
-                        </p>
-                      </div>
+                <div className="flex flex-col">
+                  {messages.map((message, index) => (
+                    <div key={index} className="animate-in slide-in-from-bottom-2 duration-300">
+                      <ChatBubble variant={message.role === "user" ? "sent" : "received"}>
+                        <ChatBubbleAvatar fallback={message.role === "user" ? "U" : "AI"} />
+                        <ChatBubbleMessage variant={message.role === "user" ? "sent" : "received"}>
+                          {message.role === "system" ? (
+                            <div className="prose prose-invert prose-sm max-w-none">
+                              <ReactMarkdown
+                                components={{
+                                  code: ({ children }) => (
+                                    <code className="bg-black/40 text-chiliz-secondary px-2 py-1 rounded text-sm font-mono">
+                                      {children}
+                                    </code>
+                                  ),
+                                  pre: ({ children }) => (
+                                    <pre className="bg-black/60 border border-white/10 rounded-lg p-4 overflow-x-auto">
+                                      {children}
+                                    </pre>
+                                  ),
+                                }}
+                              >
+                                {message.content}
+                              </ReactMarkdown>
+                            </div>
+                          ) : (
+                            message.content
+                          )}
+                        </ChatBubbleMessage>
+                      </ChatBubble>
                     </div>
-                  ) : (
-                    <div className="max-w-3xl bg-gradient-to-r from-gray-800/80 to-gray-700/80 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-xl">
-                      <div className="prose prose-invert prose-sm max-w-none">
-                        <ReactMarkdown
-                          components={{
-                            code: ({ children }) => (
-                              <code className="bg-black/40 text-chiliz-secondary px-2 py-1 rounded text-sm font-mono">
-                                {children}
-                              </code>
-                            ),
-                            pre: ({ children }) => (
-                              <pre className="bg-black/60 border border-white/10 rounded-lg p-4 overflow-x-auto">
-                                {children}
-                              </pre>
-                            ),
-                          }}
-                        >
-                          {message.content}
-                        </ReactMarkdown>
-                      </div>
+                  ))}
+
+                  {isTyping && (
+                    <div className="animate-in slide-in-from-bottom-2 duration-300">
+                      <ChatBubble variant="received">
+                        <ChatBubbleAvatar fallback="AI" />
+                        <ChatBubbleMessage isLoading />
+                      </ChatBubble>
                     </div>
-                  )
-                ) : (
-                  <div className="max-w-md bg-gradient-to-r from-chiliz-primary to-chiliz-secondary rounded-2xl p-4 shadow-xl">
-                    <span className="text-white font-medium">{message.content}</span>
-                  </div>
-                )}
+                  )}
+
+                  {/* Action Buttons - Show only when first message */}
+                  {messages.length === 1 && !hasContractToExplore && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8 animate-in fade-in-0 duration-500">
+                      {actionButtons.map((action, index) => (
+                        <ActionButton
+                          key={index}
+                          icon={action.icon}
+                          title={action.title}
+                          description={action.description}
+                          onClick={() => handleQuickAction(action.prompt)}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
-            ))}
-            {isTyping && (
-              <div className="flex justify-start">
-                <div className="bg-gradient-to-r from-gray-800/80 to-gray-700/80 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-xl">
-                  <div className="flex items-center space-x-2">
-                    <div className="flex space-x-1">
-                      <div className="w-2 h-2 bg-chiliz-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                      <div className="w-2 h-2 bg-chiliz-secondary rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                      <div className="w-2 h-2 bg-chiliz-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-                    </div>
-                    <span className="text-white/70 text-sm"> C-Trace is thinking... </span>
-                  </div>
+
+              {!isAtBottom && (
+                <button
+                  onClick={scrollToBottom}
+                  className="absolute bottom-2 left-1/2 transform -translate-x-1/2 inline-flex rounded-full shadow-md bg-gray-900/80 backdrop-blur-sm border border-white/20 hover:bg-gray-800/80 p-2 transition-all duration-200"
+                  aria-label="Scroll to bottom"
+                >
+                  <ArrowDown className="h-4 w-4 text-white" />
+                </button>
+              )}
+            </div>
+
+            {/* Suggested Actions */}
+            {messages.length > 1 && (
+              <div className="mb-4">
+                <div className="flex gap-2 overflow-x-auto pb-2">
+                  {suggestedActions.map((action, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setInput(action)}
+                      className="flex-shrink-0 px-3 py-1.5 text-xs rounded-full bg-gray-900/60 border border-white/20 hover:border-chiliz-primary/50 hover:bg-gray-900/80 transition-all duration-200 text-white/60 hover:text-white whitespace-nowrap"
+                    >
+                      {action}
+                    </button>
+                  ))}
                 </div>
               </div>
             )}
-          </div>
 
-          {/* Input Area */}
-          <div className="border-t border-white/10 p-4">
-            <div className="flex items-center space-x-3">
-              <div className="flex-grow relative">
-                <input
-                  type="text"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder={hasContractToExplore 
-                    ? "Ask a question about this contract or execute a command..." 
-                    : "Ask me anything about blockchain, Chiliz Chain, or paste a contract address to analyze..."}
-                  className="w-full bg-black/40 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-chiliz-primary focus:border-transparent transition-all duration-200"
-                  onKeyPress={(e) => e.key === "Enter" && handleSend()}
-                />
-              </div>
-              
-              <button
-                onClick={handleSend}
-                className="bg-gradient-to-r from-chiliz-primary to-chiliz-secondary hover:from-chiliz-secondary hover:to-chiliz-primary text-white p-3 rounded-xl transition-all duration-200 hover:scale-105 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={!input.trim()}
+            {/* Chat Input */}
+            <div className="sticky bottom-0 bg-gray-900/80 backdrop-blur-sm border-t border-white/20 pt-4">
+              <form 
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSend();
+                }} 
+                className="relative"
               >
-                <Send className="w-5 h-5" />
-              </button>
-              
-              {input.includes("execute") && hasContractToExplore && (
-                <button
-                  onClick={handleExecute}
-                  className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-emerald-600 hover:to-green-600 text-white p-3 rounded-xl transition-all duration-200 hover:scale-105 shadow-lg hover:shadow-xl"
-                >
-                  <Terminal className="w-5 h-5" />
-                </button>
-              )}
+                <div className="relative rounded-2xl border border-white/20 bg-gray-900/60 backdrop-blur-sm focus-within:border-chiliz-primary/50 focus-within:shadow-lg focus-within:shadow-chiliz-primary/20 transition-all duration-300">
+                  <input
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    placeholder={hasContractToExplore 
+                      ? "Ask a question about this contract or execute a command..." 
+                      : "Ask about DeFi, smart contracts, or Web3 strategies..."}
+                    className="w-full border-0 bg-transparent px-4 py-4 pr-16 focus:outline-none text-white placeholder:text-white/50"
+                    onKeyPress={(e) => e.key === "Enter" && handleSend()}
+                  />
+                  <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                    <button
+                      type="submit"
+                      disabled={!input.trim()}
+                      className="h-8 w-8 bg-gradient-to-r from-chiliz-primary to-chiliz-secondary hover:from-chiliz-secondary hover:to-chiliz-primary border-0 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-all duration-200"
+                    >
+                      <Send className="h-4 w-4 text-white" />
+                    </button>
+                    
+                    {input.includes("execute") && hasContractToExplore && (
+                      <button
+                        type="button"
+                        onClick={handleExecute}
+                        className="h-8 w-8 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-emerald-600 hover:to-green-600 text-white rounded-lg flex items-center justify-center transition-all duration-200"
+                      >
+                        <Terminal className="h-4 w-4" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>
