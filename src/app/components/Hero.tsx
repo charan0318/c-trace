@@ -51,7 +51,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <div className="fixed min-h-screen overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden">
       {/* Spline Scene */}
       <Spline 
         scene="https://prod.spline.design/CzpaWhZatxJIV-bg/scene.splinecode"
