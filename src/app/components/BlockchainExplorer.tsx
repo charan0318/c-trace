@@ -38,47 +38,91 @@ export function BlockchainExplorer() {
   const account = useActiveAccount();
   const walletAddress = account?.address; // Get the wallet address
 
+  // Check if we have contract details to explore
+  const hasContractToExplore = contractAddress && chainId;
+
   useEffect(() => {
     const initSession = async () => {
       try {
         const newSessionId = await createSession("Blockchain Explorer Session");
         setSessionId(newSessionId);
 
-        // Simulate typing animation
-        setIsTyping(true);
+        if (hasContractToExplore) {
+          // Simulate typing animation
+          setIsTyping(true);
 
-        const contractDetails = await queryContract(
-          contractAddress!,
-          chainId!,
-          newSessionId
-        );
-        setMessages([
-          { role: "system", content: "Welcome to the Blockchain Explorer." },
-          {
-            role: "system",
-            content:
-              contractDetails || "No details available for this contract.",
-          },
-        ]);
+          const contractDetails = await queryContract(
+            contractAddress!,
+            chainId!,
+            newSessionId
+          );
+          setMessages([
+            { role: "system", content: "Welcome to the Blockchain Explorer." },
+            {
+              role: "system",
+              content:
+                contractDetails || "No details available for this contract.",
+            },
+          ]);
 
-        setIsTyping(false);
+          setIsTyping(false);
+        } else {
+          // Show welcome message when no contract is specified
+          setMessages([
+            {
+              role: "system",
+              content: `# Welcome to C-TRACE Blockchain Explorer! 🚀
+
+I'm your AI-powered blockchain assistant, ready to help you explore the **Chiliz Chain** ecosystem.
+
+## What can I help you with today?
+
+### 🔍 **Smart Contract Analysis**
+- Analyze any smart contract on Chiliz Chain
+- Get detailed function listings and explanations
+- Understand contract functionality and usage
+
+### 💡 **General Blockchain Questions**
+- Ask about Chiliz Chain features and capabilities
+- Learn about DeFi protocols and token mechanics
+- Get explanations about blockchain concepts
+
+### ⚡ **Interactive Contract Execution**
+- Execute read-only contract functions
+- Get real-time data from smart contracts
+- Interact with contracts safely (with wallet connected)
+
+## How to get started:
+
+1. **Ask me anything** about blockchain or Chiliz Chain
+2. **Paste a contract address** to analyze a specific smart contract
+3. **Connect your wallet** to interact with contracts
+
+**Example questions you can ask:**
+- "What is Chiliz Chain and how does it work?"
+- "Explain the latest DeFi trends"
+- "How do I interact with a specific token contract?"
+
+Ready to explore? Just type your question below! 👇`
+            },
+          ]);
+        }
       } catch (error) {
-        console.error("Error creating session or querying contract:", error);
+        console.error("Error creating session:", error);
         setMessages([
           {
             role: "system",
-            content: "Failed to load contract details. Please try again.",
+            content: "Welcome to C-TRACE Explorer! I'm ready to help you explore blockchain data. What would you like to know?",
           },
         ]);
-        setIsTyping(false);
       }
     };
 
     initSession();
-  }, [contractAddress, chainId]);
+  }, [contractAddress, chainId, hasContractToExplore]);
 
   const handleSend = async () => {
-    if (!input.trim() || !sessionId || !chainId || !contractAddress) return;
+    if (!input.trim() || !sessionId) return;
 
     const userMessage = input.trim();
     setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
@@ -86,13 +130,27 @@ export function BlockchainExplorer() {
 
     try {
       setIsTyping(true);
-      const response = await handleUserMessage(
-        userMessage,
-        sessionId,
-        chainId,
-        contractAddress
-      );
-      setMessages((prev) => [...prev, { role: "system", content: response }]);
+      
+      if (hasContractToExplore) {
+        // Handle contract-specific queries
+        const response = await handleUserMessage(
+          userMessage,
+          sessionId,
+          chainId!,
+          contractAddress!
+        );
+        setMessages((prev) => [...prev, { role: "system", content: response }]);
+      } else {
+        // Handle general blockchain queries without contract context
+        const response = await handleUserMessage(
+          userMessage,
+          sessionId,
+          "88888", // Default to Chiliz Chain
+          "" // No specific contract
+        );
+        setMessages((prev) => [...prev, { role: "system", content: response }]);
+      }
+      
       setIsTyping(false);
     } catch (error) {
       console.error("Error handling user message:", error);
@@ -108,7 +166,7 @@ export function BlockchainExplorer() {
   };
 
   const handleExecute = async () => {
-    if (!account?.address || !input.includes("execute")) return;
+    if (!account?.address || !input.includes("execute") || !hasContractToExplore) return;
 
     const executeMessage = input.trim();
 
@@ -125,8 +183,8 @@ export function BlockchainExplorer() {
         account.address,
         "default-user", // Optional user ID
         false, // Stream option
-        chainId,
-        contractAddress,
+        chainId!,
+        contractAddress!,
         sessionId
       );
 
@@ -259,7 +317,9 @@ export function BlockchainExplorer() {
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask a question about this contract or execute a command..."
+                  placeholder={hasContractToExplore 
+                    ? "Ask a question about this contract or execute a command..." 
+                    : "Ask me anything about blockchain, Chiliz Chain, or paste a contract address to analyze..."}
                   className="w-full bg-black/40 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-chiliz-primary focus:border-transparent transition-all duration-200"
                   onKeyPress={(e) => e.key === "Enter" && handleSend()}
                 />
@@ -273,7 +333,7 @@ export function BlockchainExplorer() {
                 <Send className="w-5 h-5" />
               </button>
               
-              {input.includes("execute") && (
+              {input.includes("execute") && hasContractToExplore && (
                 <button
                   onClick={handleExecute}
                   className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-emerald-600 hover:to-green-600 text-white p-3 rounded-xl transition-all duration-200 hover:scale-105 shadow-lg hover:shadow-xl"
