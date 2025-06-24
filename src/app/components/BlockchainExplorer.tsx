@@ -457,7 +457,7 @@ export function BlockchainExplorer() {
                 className="flex flex-col w-full h-full p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent"
                 ref={scrollRef}
                 style={{ maxHeight: 'calc(100vh - 300px)' }}
-              ></div>
+              >
                 <div className="flex flex-col min-h-full pb-4">
                   {messages.map((message, index) => (
                     <div key={index} className="animate-in slide-in-from-bottom-2 duration-300">
