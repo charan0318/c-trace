@@ -101,8 +101,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
           placeholder={placeholder}
           className="
             w-full px-4 py-3 bg-transparent text-white placeholder-white/60
-            border border-purple-300/20 rounded-xl
-            focus:outline-none focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/20
+            border border-gray-600/40 rounded-xl
+            focus:outline-none focus:border-gray-500/70 focus:ring-2 focus:ring-gray-500/30
             transition-all duration-200
           "
         />
@@ -114,9 +114,9 @@ const SearchBar: React.FC<SearchBarProps> = ({
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           className="
             flex items-center justify-between min-w-[140px] px-4 py-3
-            bg-transparent text-white border border-purple-300/20 rounded-xl
-            hover:border-purple-400/50 focus:outline-none focus:border-purple-400/50
-            focus:ring-2 focus:ring-purple-400/20 transition-all duration-200
+            bg-transparent text-white border border-gray-600/40 rounded-xl
+            hover:border-gray-500/70 focus:outline-none focus:border-gray-500/70
+            focus:ring-2 focus:ring-gray-500/30 transition-all duration-200
           "
         >
           <span className="text-sm truncate">{selectedChainLabel}</span>
@@ -130,7 +130,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         {isDropdownOpen && (
           <div className="
             absolute top-full left-0 right-0 mt-1 z-50
-            bg-white/10 backdrop-blur-md border border-purple-300/30
+            bg-white/10 backdrop-blur-md border border-gray-600/40
             rounded-xl shadow-lg overflow-hidden
           ">
             {chains.map((option) => (
