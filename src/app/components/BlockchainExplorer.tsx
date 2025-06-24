@@ -71,7 +71,7 @@ export function BlockchainExplorer() {
           setMessages([
             {
               role: "system",
-              content: `# Welcome to C-TRACE Blockchain Explorer! 🚀
+              content: `# Welcome to C-TRACE Blockchain Explorer 🚀
 
 I'm your AI-powered blockchain assistant, ready to help you explore the **Chiliz Chain** ecosystem.
 
