@@ -49,7 +49,10 @@ export default function Navigation() {
                 }}
                 connectButton={{
                   component: ({ connectModal }) => (
-                    <GradientButton onClick={connectModal?.open}>
+                    <GradientButton 
+                      onClick={connectModal?.open}
+                      className="gradient-button"
+                    >
                       Connect Wallet
                     </GradientButton>
                   ),
