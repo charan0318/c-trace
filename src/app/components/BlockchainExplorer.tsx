@@ -546,27 +546,27 @@ export function BlockchainExplorer() {
         </div>
 
         {/* Input Area */}
-        <div className="border-t border-white/10">
-          <div className="max-w-4xl mx-auto">
-            {/* Suggested Actions */}
-            {messages.length > 1 && (
-              <div className="p-6 pb-2">
-                <div className="flex gap-2 overflow-x-auto pb-2">
-                  {suggestedActions.map((action, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setInput(action)}
-                      className="flex-shrink-0 px-3 py-1.5 text-xs rounded-full bg-transparent border border-white/10 hover:border-chiliz-primary/30 hover:bg-chiliz-primary/10 transition-all duration-200 text-white/50 hover:text-white whitespace-nowrap"
-                    >
-                      {action}
-                    </button>
-                  ))}
-                </div>
+        <div>
+          {/* Suggested Actions */}
+          {messages.length > 1 && (
+            <div className="max-w-4xl mx-auto p-6 pb-2">
+              <div className="flex gap-2 overflow-x-auto pb-2">
+                {suggestedActions.map((action, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setInput(action)}
+                    className="flex-shrink-0 px-3 py-1.5 text-xs rounded-full bg-transparent border border-white/10 hover:border-chiliz-primary/30 hover:bg-chiliz-primary/10 transition-all duration-200 text-white/50 hover:text-white whitespace-nowrap"
+                  >
+                    {action}
+                  </button>
+                ))}
               </div>
-            )}
+            </div>
+          )}
 
-            {/* Chat Input - Glass background only here */}
-            <div className="bg-gray-900/40 backdrop-blur-sm p-6">
+          {/* Chat Input - Full width glass background */}
+          <div className="bg-gray-900/40 backdrop-blur-sm p-6">
+            <div className="max-w-4xl mx-auto">
               <form 
                 onSubmit={(e) => {
                   e.preventDefault();
