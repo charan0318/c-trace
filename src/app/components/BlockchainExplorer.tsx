@@ -484,7 +484,7 @@ export function BlockchainExplorer() {
     "Explain fan token mechanics",
     "Check CHZ gas prices",
     "Analyze Chiliz transaction",
-    "Show sports partnerships"
+    "What is the Latest Block?",
   ];
 
   return (
