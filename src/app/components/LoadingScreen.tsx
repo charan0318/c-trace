@@ -11,15 +11,14 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
   const [loadingText, setLoadingText] = useState('[INFO] Loading 3D environment...');
   const [dots, setDots] = useState('');
 
-  const loadingSteps = [
-    '[INFO] Initializing C-TRACE Explorer...',
-    '[INFO] Connecting to Chiliz network...',
-    '[INFO] Loading AI assistant...',
-    '[INFO] Preparing blockchain interface...',
-    '[INFO] Starting explorer session...'
-  ];
-
   useEffect(() => {
+    const loadingSteps = [
+      '[INFO] Initializing C-TRACE Explorer...',
+      '[INFO] Connecting to Chiliz network...',
+      '[INFO] Loading AI assistant...',
+      '[INFO] Preparing blockchain interface...',
+      '[INFO] Starting explorer session...'
+    ];
     let stepIndex = 0;
     let dotCount = 0;
 
@@ -43,7 +42,7 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
     }, 400);
 
     return () => clearInterval(interval);
-  }, [onLoadingComplete, loadingSteps]);
+  }, [onLoadingComplete]);
 
   return (
     <div className="fixed inset-0 bg-black flex flex-col items-center justify-center z-50">
