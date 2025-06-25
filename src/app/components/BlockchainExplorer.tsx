@@ -218,7 +218,7 @@ const ChatBubbleMessage: React.FC<ChatBubbleMessageProps> = ({
               <div className="w-2 h-2 bg-red-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
               <div className="w-2 h-2 bg-chiliz-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
             </div>
-            <span className="text-white/70 text-xs">C-TRACE is analyzing...</span>
+            <span className="text-white/70 text-xs">C-TRACE is thinking...</span>
           </div>
         </div>
       ) : (
