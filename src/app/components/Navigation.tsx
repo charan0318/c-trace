@@ -117,19 +117,21 @@ export default function Navigation() {
                         titleIcon: "",
                       }}
                       connectButton={{
-                        label: "Connect",
+                        label: "Connect Wallet",
                         style: {
                           background: 'transparent',
                           border: 'none',
                           color: 'white',
                           fontWeight: '600',
                           fontSize: '14px',
-                          padding: '12px 16px',
-                          minWidth: 'auto',
+                          padding: '12px 20px',
+                          minWidth: '140px',
                           borderRadius: '12px',
                           display: 'block',
-                          width: '100%',
+                          width: 'auto',
                           textAlign: 'center',
+                          whiteSpace: 'nowrap',
+                          overflow: 'visible',
                         }
                       }}
                     />
@@ -201,12 +203,14 @@ export default function Navigation() {
                           fontWeight: '600',
                           fontSize: '16px',
                           padding: '16px 24px',
-                          minWidth: 'auto',
+                          minWidth: '160px',
                           borderRadius: '12px',
                           display: 'block',
                           width: '100%',
                           textAlign: 'center',
                           minHeight: '44px',
+                          whiteSpace: 'nowrap',
+                          overflow: 'visible',
                         }
                       }}
                     />
