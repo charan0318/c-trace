@@ -67,10 +67,10 @@ export default function Hero() {
           rotation={0}
         />
       </div>
-      
+
       {/* Fallback Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900/40 via-black/60 to-gray-900/40" style={{ zIndex: -5 }} />
-      
+
       {/* Spline Scene - Above Silk */}
       {!splineError && (
         <Spline 
@@ -89,13 +89,13 @@ export default function Hero() {
           }}
         />
       )}
-      
+
       {splineError && (
         <div className="absolute inset-0 bg-gradient-to-br from-gray-900/60 via-black/80 to-gray-900/60 flex items-center justify-center text-white/60" style={{ zIndex: 1 }}>
           <p>3D Scene unavailable - Using Silk background</p>
         </div>
       )}
-            
+
 
       {/* AI Meets Chiliz Banner */}
       <div className="absolute top-32 md:top-28 left-0 transform -translate-x-0 flex justify-center w-full px-4" style={{ zIndex: 9999 }}>
@@ -103,13 +103,12 @@ export default function Hero() {
           onClick={() => router.push('/explorer')}
           className="group relative px-4 md:px-6 py-2 md:py-3 rounded-2xl bg-transparent border-2 border-chiliz-primary hover:bg-chiliz-primary/10 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl backdrop-blur-md min-h-[44px] min-w-[44px] max-w-full"
           style={{
-            boxShadow: '0 0 20px rgba(255, 178, 102, 0.3), inset 0 0 20px rgba(255, 178, 102, 0.1)',
-            animation: 'neon-pulse 2s ease-in-out infinite alternate'
+            boxShadow: '0 0 20px rgba(255, 178, 102, 0.3), inset 0 0 20px rgba(255, 178, 102, 0.1)'
           }}
         >
           {/* Neon glow background */}
           <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-chiliz-primary/20 to-red-600/20 blur-lg opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
-          
+
           {/* Content */}
           <div className="relative z-10 flex items-center gap-2 md:gap-3 justify-center">
             <span className="font-semibold text-sm md:text-lg text-white transition-colors text-center leading-tight whitespace-nowrap">
@@ -117,9 +116,9 @@ export default function Hero() {
             </span>
             <div className="w-2 h-2 bg-chiliz-primary rounded-full animate-pulse flex-shrink-0"></div>
           </div>
-          
+
           {/* Animated border */}
-          <div className="absolute inset-0 rounded-2xl border-2 border-chiliz-primary opacity-0 group-hover:opacity-100 animate-pulse transition-all duration-300"></div>
+          <div className="absolute inset-0 rounded-2xl border-2 border-chiliz-primary opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
         </button>
       </div>
 
@@ -147,7 +146,7 @@ export default function Hero() {
         >
           {/* Gradient background on hover */}
           <div className="absolute inset-0 rounded-full bg-gradient-to-r from-chiliz-primary/20 to-red-600/20 opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
-          
+
           {/* Button content */}
           <span className="relative z-10 whitespace-nowrap group-hover:text-chiliz-primary transition-colors">Got Feedback?</span>
         </a>
