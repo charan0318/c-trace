@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${outfit.className} ${spaceGrotesk.variable}`}>
         <ThirdwebProvider 
-          clientId="662a63dd0ecfac183d250631cc2138f5"
+          clientId={process.env.THIRDWEB_CLIENT_ID}
         >
           <Navigation />
           <div className="pt-20">
