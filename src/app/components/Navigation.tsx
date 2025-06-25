@@ -7,6 +7,7 @@ import { ConnectButton } from "thirdweb/react";
 import { client } from "../client";
 import { inAppWallet, createWallet } from "thirdweb/wallets";
 import { Search, Zap, Globe, Menu, X } from "lucide-react";
+import { isFeatureEnabled } from "../lib/features";
 
 export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -89,53 +90,55 @@ export default function Navigation() {
               </Link>
 
               {/* Enhanced Connect Wallet Button */}
-              <div className="relative">
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-chiliz-primary/20 to-red-600/20 blur-lg opacity-50"></div>
+              {isFeatureEnabled('WALLET_CONNECTION') && (
+                <div className="relative">
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-chiliz-primary/20 to-red-600/20 blur-lg opacity-50"></div>
 
-                <div className="relative overflow-hidden rounded-xl border border-white/20 bg-gradient-to-r from-gray-900/80 to-black/80 backdrop-blur-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-pulse duration-1000"></div>
+                  <div className="relative overflow-hidden rounded-xl border border-white/20 bg-gradient-to-r from-gray-900/80 to-black/80 backdrop-blur-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-pulse duration-1000"></div>
 
-                  <div className="relative">
-                    <ConnectButton
-                      client={client}
-                      wallets={[
-                        createWallet("io.metamask"),
-                        createWallet("com.coinbase.wallet"),
-                        createWallet("me.rainbow"),
-                        createWallet("io.rabby"),
-                        inAppWallet({
-                          auth: {
-                            options: ["email", "google", "apple", "facebook", "phone"],
-                          },
-                        }),
-                      ]}
-                      connectModal={{ 
-                        size: "compact",
-                        title: "Connect to C-TRACE",
-                        titleIcon: "",
-                      }}
-                      connectButton={{
-                        label: "Connect Wallet",
-                        style: {
-                          background: 'transparent',
-                          border: 'none',
-                          color: 'white',
-                          fontWeight: '600',
-                          fontSize: '14px',
-                          padding: '12px 20px',
-                          minWidth: '140px',
-                          borderRadius: '12px',
-                          display: 'block',
-                          width: 'auto',
-                          textAlign: 'center',
-                          whiteSpace: 'nowrap',
-                          overflow: 'visible',
-                        }
-                      }}
-                    />
+                    <div className="relative">
+                      <ConnectButton
+                        client={client}
+                        wallets={[
+                          createWallet("io.metamask"),
+                          createWallet("com.coinbase.wallet"),
+                          createWallet("me.rainbow"),
+                          createWallet("io.rabby"),
+                          inAppWallet({
+                            auth: {
+                              options: ["email", "google", "apple", "facebook", "phone"],
+                            },
+                          }),
+                        ]}
+                        connectModal={{ 
+                          size: "compact",
+                          title: "Connect to C-TRACE",
+                          titleIcon: "",
+                        }}
+                        connectButton={{
+                          label: "Connect Wallet",
+                          style: {
+                            background: 'transparent',
+                            border: 'none',
+                            color: 'white',
+                            fontWeight: '600',
+                            fontSize: '14px',
+                            padding: '12px 20px',
+                            minWidth: '140px',
+                            borderRadius: '12px',
+                            display: 'block',
+                            width: 'auto',
+                            textAlign: 'center',
+                            whiteSpace: 'nowrap',
+                            overflow: 'visible',
+                          }
+                        }}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
 
             {/* Mobile Menu Button */}
@@ -172,48 +175,50 @@ export default function Navigation() {
                 </Link>
 
                 {/* Mobile Connect Wallet Button */}
-                <div className="relative">
-                  <div className="relative overflow-hidden rounded-xl border border-white/20 bg-gradient-to-r from-gray-900/80 to-black/80 backdrop-blur-xl">
-                    <ConnectButton
-                      client={client}
-                      wallets={[
-                        createWallet("io.metamask"),
-                        createWallet("com.coinbase.wallet"),
-                        createWallet("me.rainbow"),
-                        createWallet("io.rabby"),
-                        inAppWallet({
-                          auth: {
-                            options: ["email", "google", "apple", "facebook", "phone"],
-                          },
-                        }),
-                      ]}
-                      connectModal={{ 
-                        size: "compact",
-                        title: "Connect to C-TRACE",
-                        titleIcon: "",
-                      }}
-                      connectButton={{
-                        label: "Connect Wallet",
-                        style: {
-                          background: 'transparent',
-                          border: 'none',
-                          color: 'white',
-                          fontWeight: '600',
-                          fontSize: '16px',
-                          padding: '16px 24px',
-                          minWidth: '160px',
-                          borderRadius: '12px',
-                          display: 'block',
-                          width: '100%',
-                          textAlign: 'center',
-                          minHeight: '44px',
-                          whiteSpace: 'nowrap',
-                          overflow: 'visible',
-                        }
-                      }}
-                    />
+                {isFeatureEnabled('WALLET_CONNECTION') && (
+                  <div className="relative">
+                    <div className="relative overflow-hidden rounded-xl border border-white/20 bg-gradient-to-r from-gray-900/80 to-black/80 backdrop-blur-xl">
+                      <ConnectButton
+                        client={client}
+                        wallets={[
+                          createWallet("io.metamask"),
+                          createWallet("com.coinbase.wallet"),
+                          createWallet("me.rainbow"),
+                          createWallet("io.rabby"),
+                          inAppWallet({
+                            auth: {
+                              options: ["email", "google", "apple", "facebook", "phone"],
+                            },
+                          }),
+                        ]}
+                        connectModal={{ 
+                          size: "compact",
+                          title: "Connect to C-TRACE",
+                          titleIcon: "",
+                        }}
+                        connectButton={{
+                          label: "Connect Wallet",
+                          style: {
+                            background: 'transparent',
+                            border: 'none',
+                            color: 'white',
+                            fontWeight: '600',
+                            fontSize: '16px',
+                            padding: '16px 24px',
+                            minWidth: '160px',
+                            borderRadius: '12px',
+                            display: 'block',
+                            width: '100%',
+                            textAlign: 'center',
+                            minHeight: '44px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'visible',
+                          }
+                        }}
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           )}
