@@ -58,16 +58,16 @@ export default function Hero() {
       {/* Silk Background - Bottom Layer */}
       <div className="absolute inset-0" style={{ zIndex: -10 }}>
         <Silk
-          speed={3}
-          scale={2}
-          color="#1a1a2e"
-          noiseIntensity={0.8}
+          speed={2}
+          scale={1.5}
+          color="#2a2a4e"
+          noiseIntensity={0.6}
           rotation={0}
         />
       </div>
       
       {/* Fallback Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900/60 via-black/80 to-gray-900/60" style={{ zIndex: -1 }} />
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-900/40 via-black/60 to-gray-900/40" style={{ zIndex: -5 }} />
       
       {/* Spline Scene - Above Silk */}
       {!splineError && (
