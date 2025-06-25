@@ -336,7 +336,7 @@ export function BlockchainExplorer() {
           setMessages([
             {
               role: "system",
-              content: "Welcome to C-TRACE! I'm your AI assistant for exploring the Chiliz blockchain and ecosystem. What would you like to discover about Chiliz today?",
+              content: "Welcome to C-TRACE 🚀 I'm your AI assistant for exploring the Chiliz blockchain and ecosystem. What would you like to discover about Chiliz today?",
             },
           ]);
         }
@@ -345,7 +345,7 @@ export function BlockchainExplorer() {
         setMessages([
           {
             role: "system",
-            content: "Welcome to C-TRACE! I'm ready to help you explore Chiliz blockchain and fan token data. What would you like to discover?",
+            content: "Welcome to C-TRACE 🚀 I'm ready to help you explore Chiliz blockchain and fan token data. What would you like to discover?",
           },
         ]);
         setIsTyping(false);
