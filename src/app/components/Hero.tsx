@@ -83,6 +83,25 @@ export default function Hero() {
       )}
             
 
+      {/* AI Meets Chiliz Banner */}
+      <div className="absolute top-8 left-1/2 transform -translate-x-1/2 flex justify-center w-full" style={{ zIndex: 999 }}>
+        <button
+          onClick={() => router.push('/explorer')}
+          className="group relative px-6 py-3 rounded-2xl bg-transparent border border-white/20 hover:border-chiliz-primary/60 transition-all duration-300 hover:shadow-lg hover:shadow-chiliz-primary/20 backdrop-blur-sm"
+        >
+          {/* Gradient background on hover */}
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-chiliz-primary/10 to-red-600/10 opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+          
+          {/* Content */}
+          <div className="relative flex items-center gap-3">
+            <span className="font-semibold text-lg text-white/90 group-hover:text-white transition-colors">
+              AI Meets Chiliz: C-TRACE is Live
+            </span>
+            <div className="w-2 h-2 bg-chiliz-primary rounded-full animate-pulse"></div>
+          </div>
+        </button>
+      </div>
+
       {/* Search box at bottom */}
       <div className="absolute bottom-32 left-1/2 transform -translate-x-1/2 w-full max-w-4xl px-4" style={{ zIndex: 999 }}>
         <SearchBar
