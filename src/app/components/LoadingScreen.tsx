@@ -16,12 +16,12 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
           clearInterval(timer);
           setTimeout(() => {
             onLoadingComplete?.();
-          }, 500);
+          }, 300);
           return 100;
         }
-        return prev + 2;
+        return prev + 4; // Faster increment
       });
-    }, 100);
+    }, 50); // Faster updates
 
     return () => clearInterval(timer);
   }, [onLoadingComplete]);
@@ -34,10 +34,16 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
         {/* Animated HUD GIF */}
         <div className="relative mb-8">
           <img 
-            src="/attached_assets/original-b3d5d666729bb0b3f8ca0bdae7936251_1750872466898.gif"
+            src="/loading-animation.gif"
             alt="Loading Animation"
             className="w-96 h-64 md:w-[600px] md:h-96 object-contain"
+            loading="eager"
+            fetchPriority="high"
+            onLoad={() => {
+              console.log('✅ Loading GIF loaded successfully');
+            }}
             onError={(e) => {
+              console.error('❌ Loading GIF failed to load');
               // Fallback if GIF doesn't load
               const target = e.target as HTMLImageElement;
               target.style.display = 'none';
