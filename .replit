@@ -5,8 +5,9 @@ run = "yarn run dev"
 channel = "stable-24_05"
 
 [deployment]
-run = ["sh", "-c", "yarn run dev"]
+run = ["sh", "-c", "yarn run start"]
 deploymentTarget = "cloudrun"
+build = ["sh", "-c", "yarn run build"]
 
 [workflows]
 runButton = "Run"
