@@ -80,7 +80,7 @@ export default function Hero() {
         </div>
       )}
             {/* Explorer Button - Below Navigation */}
-      <div className="absolute top-20 left-1/2 transform -translate-x-1/2" style={{ zIndex: 999 }}>
+      <div className="absolute top-12 left-1/2 transform -translate-x-1/2" style={{ zIndex: 999 }}>
         <button
           onClick={() => router.push('/explorer')}
           className="group relative px-8 py-4 rounded-2xl bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-500 text-white font-semibold text-lg shadow-2xl hover:shadow-red-500/50 transition-all duration-300 hover:scale-105 border border-white/20 backdrop-blur-sm"
