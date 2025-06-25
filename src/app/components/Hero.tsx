@@ -8,25 +8,29 @@ import Silk from '@/app/components/ui/Silk';
 import { useRouter } from 'next/navigation';
 
 const blockchains = [
-  { value: '88888', label: 'Chiliz Chain' }
+  { value: '88888', label: 'Chiliz Chain' },
+  { value: '88888', label: 'CHZ Mainnet' },
+  { value: '88882', label: 'Chiliz Spicy Testnet' }
 ];
 
 export default function Hero() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedChain, setSelectedChain] = useState('');
+  const [selectedChain, setSelectedChain] = useState('88888'); // Default to Chiliz Chain
   const [splineLoaded, setSplineLoaded] = useState(false);
   const [splineError, setSplineError] = useState(false);
   const [sceneVersion, setSceneVersion] = useState(Date.now());
   const router = useRouter();
 
   const handleSearch = useCallback((address: string, chain: string) => {
-    if (!chain || !address.trim()) {
-      alert('Please select a chain and enter a search term');
+    const finalChain = chain || '88888'; // Default to Chiliz Chain if no chain selected
+    if (!address.trim()) {
+      alert('Please enter a contract address or search term');
       return;
     }
     try {
+      console.log('Navigating to explorer with:', { address, chain: finalChain });
       router.push(
-        `/explorer?chainId=${chain}&searchTerm=${encodeURIComponent(address)}`
+        `/explorer?chainId=${finalChain}&searchTerm=${encodeURIComponent(address.trim())}`
       );
     } catch (error) {
       console.error('Navigation error:', error);

@@ -21,12 +21,12 @@ interface SearchBarProps {
 }
 
 const defaultChains: Option[] = [
+  { value: "88888", label: "Chiliz Chain" },
+  { value: "88882", label: "Chiliz Spicy Testnet" },
   { value: "ethereum", label: "Ethereum" },
   { value: "polygon", label: "Polygon" },
   { value: "bsc", label: "BSC" },
   { value: "arbitrum", label: "Arbitrum" },
-  { value: "optimism", label: "Optimism" },
-  { value: "avalanche", label: "Avalanche" },
 ];
 
 const SearchBar: React.FC<SearchBarProps> = ({

@@ -311,6 +311,8 @@ export function BlockchainExplorer() {
     const initSession = async () => {
       try {
         console.log("🔄 Initializing session...");
+        console.log("📋 URL Parameters:", { contractAddress, chainId, hasContractToExplore });
+        
         const newSessionId = await createSession("Blockchain Explorer Session");
         console.log("✅ Session created:", newSessionId);
         setSessionId(newSessionId);
