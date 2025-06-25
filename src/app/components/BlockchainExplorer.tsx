@@ -53,23 +53,27 @@ function useAutoScroll(contentLength?: number) {
 
   const scrollToBottom = useCallback((instant?: boolean) => {
     const element = scrollRef.current;
-    if (!element || !element.parentNode) return;
+    if (!element || !document.contains(element)) return;
 
-    const targetScrollTop = element.scrollHeight - element.clientHeight;
+    try {
+      const targetScrollTop = element.scrollHeight - element.clientHeight;
 
-    if (instant) {
-      element.scrollTop = targetScrollTop;
-    } else {
-      element.scrollTo({
-        top: targetScrollTop,
-        behavior: "smooth",
+      if (instant) {
+        element.scrollTop = targetScrollTop;
+      } else {
+        element.scrollTo({
+          top: targetScrollTop,
+          behavior: "smooth",
+        });
+      }
+
+      setScrollState({
+        isAtBottom: true,
+        autoScrollEnabled: true,
       });
+    } catch (error) {
+      console.warn("Scroll operation failed:", error);
     }
-
-    setScrollState({
-      isAtBottom: true,
-      autoScrollEnabled: true,
-    });
   }, []);
 
   const handleScroll = useCallback(() => {
@@ -92,19 +96,23 @@ function useAutoScroll(contentLength?: number) {
 
     return () => {
       // Clean up safely
-      if (element && element.parentNode && scrollHandler) {
-        try {
+      try {
+        if (element && scrollHandler) {
           element.removeEventListener("scroll", scrollHandler);
-        } catch (error) {
-          // Ignore removal errors
         }
+      } catch (error) {
+        // Ignore removal errors during cleanup
+        console.warn("Scroll event cleanup warning:", error);
       }
     };
   }, [handleScroll]);
 
   useEffect(() => {
     const scrollElement = scrollRef.current;
-    if (!scrollElement || !scrollElement.parentNode) return;
+    if (!scrollElement) return;
+
+    // Check if element is still connected to DOM
+    if (!document.contains(scrollElement)) return;
 
     const currentHeight = scrollElement.scrollHeight;
     const hasNewContent = currentHeight !== lastContentHeight.current;
@@ -113,14 +121,17 @@ function useAutoScroll(contentLength?: number) {
       // Cancel any pending animations
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
       }
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
       }
 
-      // Use timeout instead of requestAnimationFrame for better stability
+      // Use timeout with additional DOM safety check
       timeoutRef.current = setTimeout(() => {
-        if (scrollRef.current && scrollRef.current.parentNode) {
+        const currentScrollElement = scrollRef.current;
+        if (currentScrollElement && document.contains(currentScrollElement)) {
           scrollToBottom(lastContentHeight.current === 0);
         }
       }, 50);
@@ -134,9 +145,11 @@ function useAutoScroll(contentLength?: number) {
     return () => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
       }
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
       }
     };
   }, []);
