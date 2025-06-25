@@ -546,11 +546,11 @@ export function BlockchainExplorer() {
         </div>
 
         {/* Input Area */}
-        <div className="bg-gray-900/40 backdrop-blur-sm border-t border-white/10 p-6">
+        <div className="border-t border-white/10">
           <div className="max-w-4xl mx-auto">
             {/* Suggested Actions */}
             {messages.length > 1 && (
-              <div className="mb-4">
+              <div className="p-6 pb-2">
                 <div className="flex gap-2 overflow-x-auto pb-2">
                   {suggestedActions.map((action, index) => (
                     <button
@@ -565,14 +565,15 @@ export function BlockchainExplorer() {
               </div>
             )}
 
-            {/* Chat Input */}
-            <form 
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSend();
-              }} 
-              className="relative"
-            >
+            {/* Chat Input - Glass background only here */}
+            <div className="bg-gray-900/40 backdrop-blur-sm p-6">
+              <form 
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSend();
+                }} 
+                className="relative"
+              >
               <div className="relative rounded-2xl border border-white/20 bg-gray-900/80 backdrop-blur-sm focus-within:border-chiliz-primary/60 focus-within:shadow-lg focus-within:shadow-chiliz-primary/20 transition-all duration-300 hover:border-white/30">
                 <input
                   value={input}
@@ -605,11 +606,12 @@ export function BlockchainExplorer() {
               </div>
             </form>
 
-            {/* Footer moved inside input area */}
-            <div className="mt-4 text-center">
-              <span className="text-xs text-white/30">
-                &copy; {new Date().getFullYear()} c-trace | Crafted with ❤ from ch04niverse
-              </span>
+              {/* Footer moved inside input area */}
+              <div className="mt-4 text-center">
+                <span className="text-xs text-white/30">
+                  &copy; {new Date().getFullYear()} c-trace | Crafted with ❤ from ch04niverse
+                </span>
+              </div>
             </div>
           </div>
         </div>
