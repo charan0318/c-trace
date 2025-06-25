@@ -98,7 +98,7 @@ export default function Hero() {
             
 
       {/* AI Meets Chiliz Banner */}
-      <div className="absolute top-16 md:top-28 left-0 transform -translate-x-0 flex justify-center w-full px-4" style={{ zIndex: 9999 }}>
+      <div className="absolute top-32 md:top-28 left-0 transform -translate-x-0 flex justify-center w-full px-4" style={{ zIndex: 9999 }}>
         <button
           onClick={() => router.push('/explorer')}
           className="group relative px-4 md:px-6 py-2 md:py-3 rounded-2xl bg-transparent border-2 border-chiliz-primary hover:bg-chiliz-primary/10 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl backdrop-blur-md min-h-[44px] min-w-[44px] max-w-full"
@@ -138,7 +138,7 @@ export default function Hero() {
       </div>
 
       {/* Got Feedback Button - Fixed Position */}
-      <div className="fixed bottom-6 left-6 z-50">
+      <div className="fixed bottom-6 right-6 z-50">
         <a
           href="https://t.me/ch04niverse"
           target="_blank"
