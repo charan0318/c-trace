@@ -14,11 +14,6 @@ export default function Navigation() {
   const [isVisible, setIsVisible] = useState(true);
   const pathname = usePathname();
 
-  // Hide navigation on explorer page
-  if (pathname === '/explorer') {
-    return null;
-  }
-
   useEffect(() => {
     let lastScrollY = window.pageYOffset;
 
@@ -38,6 +33,11 @@ export default function Navigation() {
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Hide navigation on explorer page
+  if (pathname === '/explorer') {
+    return null;
+  }
 
 
   return (
