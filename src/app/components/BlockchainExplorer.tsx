@@ -33,7 +33,7 @@ interface ScrollState {
   autoScrollEnabled: boolean;
 }
 
-function useAutoScroll(content?: React.ReactNode) {
+function useAutoScroll(contentLength?: number) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const lastContentHeight = useRef(0);
   const animationFrameRef = useRef<number | null>(null);
@@ -127,7 +127,7 @@ function useAutoScroll(content?: React.ReactNode) {
 
       lastContentHeight.current = currentHeight;
     }
-  }, [content, scrollState.autoScrollEnabled, scrollToBottom]);
+  }, [contentLength, scrollState.autoScrollEnabled, scrollToBottom]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -254,7 +254,7 @@ export function BlockchainExplorer() {
   const contractAddress = searchParams.get("searchTerm");
 
   const [sessionId, setSessionId] = useState<string | null>(null);
-  const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
+  const [messages, setMessages] = useState<Array<{ role: string; content: string }>>([]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
 
@@ -264,7 +264,7 @@ export function BlockchainExplorer() {
   // Check if we have contract details to explore
   const hasContractToExplore = contractAddress && chainId;
 
-  const { scrollRef, isAtBottom, scrollToBottom } = useAutoScroll(messages);
+  const { scrollRef, isAtBottom, scrollToBottom } = useAutoScroll(messages.length);
 
   const actionButtons = [
     {
