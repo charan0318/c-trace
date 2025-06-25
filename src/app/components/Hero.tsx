@@ -84,7 +84,7 @@ export default function Hero() {
             
 
       {/* AI Meets Chiliz Banner */}
-      <div className="absolute top-8 left-1/2 transform -translate-x-1/2 flex justify-center w-full" style={{ zIndex: 999 }}>
+      <div className="absolute top-12 left-1/2 transform -translate-x-1/2 flex justify-center w-full" style={{ zIndex: 999 }}>
         <button
           onClick={() => router.push('/explorer')}
           className="group relative px-6 py-3 rounded-2xl bg-transparent border border-white/20 hover:border-chiliz-primary/60 transition-all duration-300 hover:shadow-lg hover:shadow-chiliz-primary/20 backdrop-blur-sm"
