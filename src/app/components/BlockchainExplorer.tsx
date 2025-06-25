@@ -158,7 +158,7 @@ interface ChatBubbleProps {
 const ChatBubble: React.FC<ChatBubbleProps> = ({ variant = "received", children }) => {
   return (
     <div className={cn(
-      "flex gap-3 max-w-[85%] group mb-6",
+      "flex gap-4 max-w-[85%] group",
       variant === "sent" ? "ml-auto flex-row-reverse" : "mr-auto"
     )}>
       {children}
@@ -480,76 +480,59 @@ export function BlockchainExplorer() {
         }}
       />
 
-      {/* Header */}
+      {/* Main Content */}
       <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center mb-6">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-chiliz-primary to-chiliz-secondary flex items-center justify-center shadow-lg shadow-chiliz-primary/25 mr-4">
-            <Search className="w-6 h-6 text-white" strokeWidth={2.5} />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-chiliz-primary to-chiliz-secondary bg-clip-text text-transparent">
-              C-TRACE AI
-            </h1>
-            <p className="text-xs text-white/60">Chiliz Blockchain Assistant</p>
-          </div>
-        </div>
-
-        {/* Main Content */}
         <div className="max-w-4xl mx-auto">
-          <div className="flex flex-col h-[calc(100vh-200px)]">
+          <div className="flex flex-col h-[calc(100vh-120px)]">
             
             {/* Chat Area */}
-            <div className="flex-1 mb-6 relative overflow-hidden">
+            <div className="flex-1 mb-6 overflow-hidden">
               <div
-                className="flex flex-col w-full h-full p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent"
+                className="flex flex-col w-full h-full p-6 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent hover:scrollbar-thumb-white/20 transition-colors"
                 ref={scrollRef}
-                style={{ maxHeight: 'calc(100vh - 300px)' }}
+                style={{ maxHeight: 'calc(100vh - 220px)' }}
               >
-                <div className="flex flex-col min-h-full pb-4">
+                <div className="flex flex-col min-h-full pb-6 space-y-6">
                   {messages.map((message, index) => (
-                    <div key={index} className="animate-in slide-in-from-bottom-2 duration-300">
-                      <ChatBubble variant={message.role === "user" ? "sent" : "received"}>
-                        <ChatBubbleAvatar fallback={message.role === "user" ? "U" : "AI"} />
-                        <ChatBubbleMessage variant={message.role === "user" ? "sent" : "received"}>
-                          {message.role === "system" ? (
-                            <div className="prose prose-invert prose-sm max-w-none">
-                              <ReactMarkdown
-                                components={{
-                                  code: ({ children }) => (
-                                    <code className="bg-black/40 text-chiliz-secondary px-2 py-1 rounded text-sm font-mono">
-                                      {children}
-                                    </code>
-                                  ),
-                                  pre: ({ children }) => (
-                                    <pre className="bg-black/60 border border-white/10 rounded-lg p-4 overflow-x-auto">
-                                      {children}
-                                    </pre>
-                                  ),
-                                }}
-                              >
-                                {message.content}
-                              </ReactMarkdown>
-                            </div>
-                          ) : (
-                            message.content
-                          )}
-                        </ChatBubbleMessage>
-                      </ChatBubble>
-                    </div>
+                    <ChatBubble key={index} variant={message.role === "user" ? "sent" : "received"}>
+                      <ChatBubbleAvatar fallback={message.role === "user" ? "U" : "AI"} />
+                      <ChatBubbleMessage variant={message.role === "user" ? "sent" : "received"}>
+                        {message.role === "system" ? (
+                          <div className="prose prose-invert prose-sm max-w-none">
+                            <ReactMarkdown
+                              components={{
+                                code: ({ children }) => (
+                                  <code className="bg-black/40 text-chiliz-secondary px-2 py-1 rounded text-sm font-mono">
+                                    {children}
+                                  </code>
+                                ),
+                                pre: ({ children }) => (
+                                  <pre className="bg-black/60 border border-white/10 rounded-lg p-4 overflow-x-auto">
+                                    {children}
+                                  </pre>
+                                ),
+                              }}
+                            >
+                              {message.content}
+                            </ReactMarkdown>
+                          </div>
+                        ) : (
+                          message.content
+                        )}
+                      </ChatBubbleMessage>
+                    </ChatBubble>
                   ))}
 
                   {isTyping && (
-                    <div className="animate-in slide-in-from-bottom-2 duration-300">
-                      <ChatBubble variant="received">
-                        <ChatBubbleAvatar fallback="AI" />
-                        <ChatBubbleMessage isLoading />
-                      </ChatBubble>
-                    </div>
+                    <ChatBubble variant="received">
+                      <ChatBubbleAvatar fallback="AI" />
+                      <ChatBubbleMessage isLoading />
+                    </ChatBubble>
                   )}
 
                   {/* Action Buttons - Show only when first message */}
                   {messages.length === 1 && !hasContractToExplore && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8 animate-in fade-in-0 duration-500">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
                       {actionButtons.map((action, index) => (
                         <ActionButton
                           key={index}
@@ -563,16 +546,6 @@ export function BlockchainExplorer() {
                   )}
                 </div>
               </div>
-
-              {!isAtBottom && (
-                <button
-                  onClick={scrollToBottom}
-                  className="absolute bottom-2 left-1/2 transform -translate-x-1/2 inline-flex rounded-full shadow-md bg-gray-900/80 backdrop-blur-sm border border-white/20 hover:bg-gray-800/80 p-2 transition-all duration-200"
-                  aria-label="Scroll to bottom"
-                >
-                  <ArrowDown className="h-4 w-4 text-white" />
-                </button>
-              )}
             </div>
 
             {/* Suggested Actions */}
@@ -593,7 +566,7 @@ export function BlockchainExplorer() {
             )}
 
             {/* Chat Input */}
-            <div className="mt-auto bg-gray-900/80 backdrop-blur-sm border-t border-white/20 pt-4">
+            <div className="mt-auto bg-gray-900/40 backdrop-blur-sm rounded-t-2xl border-t border-white/10 pt-6 px-2">
               <form 
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -601,32 +574,32 @@ export function BlockchainExplorer() {
                 }} 
                 className="relative"
               >
-                <div className="relative rounded-2xl border border-white/20 bg-gray-900/60 backdrop-blur-sm focus-within:border-chiliz-primary/50 focus-within:shadow-lg focus-within:shadow-chiliz-primary/20 transition-all duration-300">
+                <div className="relative rounded-2xl border border-white/20 bg-gray-900/80 backdrop-blur-sm focus-within:border-chiliz-primary/60 focus-within:shadow-lg focus-within:shadow-chiliz-primary/20 transition-all duration-300 hover:border-white/30">
                   <input
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder={hasContractToExplore 
                       ? "Ask about this Chiliz contract or execute a command..." 
                       : "Ask about Chiliz, fan tokens, or CHZ ecosystem..."}
-                    className="w-full border-0 bg-transparent px-4 py-4 pr-16 focus:outline-none text-white placeholder:text-white/50"
+                    className="w-full border-0 bg-transparent px-6 py-4 pr-20 focus:outline-none text-white placeholder:text-white/50 text-base"
                     onKeyPress={(e) => e.key === "Enter" && handleSend()}
                   />
-                  <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
                     <button
                       type="submit"
                       disabled={!input.trim()}
-                      className="h-8 w-8 bg-gradient-to-r from-chiliz-primary to-chiliz-secondary hover:from-chiliz-secondary hover:to-chiliz-primary border-0 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-all duration-200"
+                      className="h-10 w-10 bg-gradient-to-r from-chiliz-primary to-chiliz-secondary hover:from-chiliz-secondary hover:to-chiliz-primary border-0 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl flex items-center justify-center transition-all duration-200 shadow-lg hover:shadow-xl disabled:shadow-none"
                     >
-                      <Send className="h-4 w-4 text-white" />
+                      <Send className="h-5 w-5 text-white" />
                     </button>
                     
                     {input.includes("execute") && hasContractToExplore && (
                       <button
                         type="button"
                         onClick={handleExecute}
-                        className="h-8 w-8 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-emerald-600 hover:to-green-600 text-white rounded-lg flex items-center justify-center transition-all duration-200"
+                        className="h-10 w-10 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-emerald-600 hover:to-green-600 text-white rounded-xl flex items-center justify-center transition-all duration-200 shadow-lg hover:shadow-xl"
                       >
-                        <Terminal className="h-4 w-4" />
+                        <Terminal className="h-5 w-5" />
                       </button>
                     )}
                   </div>
