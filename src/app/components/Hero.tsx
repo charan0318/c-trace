@@ -3,6 +3,7 @@
 import Spline from '@splinetool/react-spline';
 import { useState, useCallback } from 'react';
 import SearchBar from '@/app/components/ui/SearchBar';
+import Silk from '@/app/components/ui/Silk';
 
 import { useRouter } from 'next/navigation';
 
@@ -54,10 +55,19 @@ export default function Hero() {
 
   return (
     <div className="relative min-h-screen overflow-hidden pt-20">
-      {/* Fallback Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900" style={{ zIndex: -1 }} />
+      {/* Silk Background - Bottom Layer */}
+      <Silk
+        speed={3}
+        scale={2}
+        color="#1a1a2e"
+        noiseIntensity={0.8}
+        rotation={0}
+      />
       
-      {/* Spline Scene */}
+      {/* Fallback Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-900/60 via-black/80 to-gray-900/60" style={{ zIndex: -1 }} />
+      
+      {/* Spline Scene - Above Silk */}
       {!splineError && (
         <Spline 
           scene={`https://prod.spline.design/lX0ekK8OK9dc4DlA/scene.splinecode?v=${sceneVersion}`}
@@ -66,19 +76,19 @@ export default function Hero() {
           style={{ 
             width: '100%', 
             height: '100%',
-            minHeight: '100vh', // Ensure full screen height
-            objectFit: 'cover', // Cover the entire screen
+            minHeight: '100vh',
+            objectFit: 'cover',
             position: 'absolute',
             top: 0,
             left: 0,
-            zIndex: 0,
+            zIndex: 1,
           }}
         />
       )}
       
       {splineError && (
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center text-white/60" style={{ zIndex: 0 }}>
-          <p>3D Scene unavailable - Using fallback background</p>
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900/60 via-black/80 to-gray-900/60 flex items-center justify-center text-white/60" style={{ zIndex: 1 }}>
+          <p>3D Scene unavailable - Using Silk background</p>
         </div>
       )}
             

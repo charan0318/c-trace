@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Search, Send, Terminal, ArrowDown, Copy, Edit, Zap, FileText, TrendingUp } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import ReactMarkdown from "react-markdown";
+import Silk from '@/app/components/ui/Silk';
 
 // Import script to interact with Nebula API
 import {
@@ -485,10 +486,19 @@ export function BlockchainExplorer() {
   ];
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900 pt-16 md:pt-20 overflow-hidden">
+    <div className="fixed inset-0 bg-gradient-to-br from-gray-900/60 via-black/80 to-gray-900/60 pt-16 md:pt-20 overflow-hidden">
+      {/* Silk Background */}
+      <Silk
+        speed={2}
+        scale={1.5}
+        color="#2a2a4e"
+        noiseIntensity={0.6}
+        rotation={0}
+      />
+      
       {/* Background Pattern */}
       <div 
-        className="absolute inset-0 z-[-10] opacity-20"
+        className="absolute inset-0 z-[-5] opacity-10"
         style={{
           backgroundImage: `radial-gradient(#1a1a2e 1px, transparent 1px)`,
           backgroundSize: '32px 32px',
