@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
@@ -57,7 +56,7 @@ function useAutoScroll(content?: React.ReactNode) {
     if (!element || !element.parentNode) return;
 
     const targetScrollTop = element.scrollHeight - element.clientHeight;
-    
+
     if (instant) {
       element.scrollTop = targetScrollTop;
     } else {
@@ -76,7 +75,7 @@ function useAutoScroll(content?: React.ReactNode) {
   const handleScroll = useCallback(() => {
     const element = scrollRef.current;
     if (!element || !element.parentNode) return;
-    
+
     const atBottom = checkIsAtBottom(element);
     setScrollState((prev) => ({
       isAtBottom: atBottom,
@@ -125,7 +124,7 @@ function useAutoScroll(content?: React.ReactNode) {
           scrollToBottom(lastContentHeight.current === 0);
         }
       }, 50);
-      
+
       lastContentHeight.current = currentHeight;
     }
   }, [content, scrollState.autoScrollEnabled, scrollToBottom]);
@@ -196,8 +195,8 @@ const ChatBubbleMessage: React.FC<ChatBubbleMessageProps> = ({
         ? "bg-gradient-to-br from-chiliz-primary/20 to-red-600/20 border-chiliz-primary/30 text-white ml-auto px-4 py-3"
         : "bg-transparent border-transparent text-white p-0"
     )}>
-      
-      
+
+
       {isLoading ? (
         <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/40 p-3 rounded-xl border border-white/10 backdrop-blur-sm">
           <div className="flex items-center gap-2">
@@ -352,7 +351,7 @@ export function BlockchainExplorer() {
 
     try {
       setIsTyping(true);
-      
+
       if (hasContractToExplore) {
         const response = await handleUserMessage(
           userMessage,
@@ -370,7 +369,7 @@ export function BlockchainExplorer() {
         );
         setMessages((prev) => [...prev, { role: "system", content: response }]);
       }
-      
+
       setIsTyping(false);
     } catch (error) {
       console.error("Error handling user message:", error);
@@ -486,7 +485,7 @@ export function BlockchainExplorer() {
 
       {/* Main Content */}
       <div className="h-full flex flex-col">
-        
+
         {/* Chat Area */}
         <div className="flex-1 overflow-hidden">
           <div
@@ -504,18 +503,18 @@ export function BlockchainExplorer() {
                           <ReactMarkdown 
                             className="prose prose-invert max-w-none"
                             components={{
-                              h1: ({ children }) => <h1 className="text-xl font-bold text-chiliz-primary mb-4">{children}</h1>,
-                              h2: ({ children }) => <h2 className="text-lg font-semibold text-white mb-3">{children}</h2>,
-                              h3: ({ children }) => <h3 className="text-md font-medium text-white/90 mb-2">{children}</h3>,
-                              p: ({ children }) => <p className="text-white/80 mb-2 leading-relaxed">{children}</p>,
+                              h1: ({ children }) => <h1 className="font-bold text-lg text-chiliz-primary mb-4">{children}</h1>,
+                              h2: ({ children }) => <h2 className="font-bold text-lg text-white mb-3">{children}</h2>,
+                              h3: ({ children }) => <h3 className="font-bold text-lg text-white/90 mb-2">{children}</h3>,
+                              p: ({ children }) => <p className="font-normal text-white/80 mb-2 leading-relaxed">{children}</p>,
                               ul: ({ children }) => <ul className="space-y-1 mb-4">{children}</ul>,
-                              li: ({ children }) => <li className="text-white/70 text-sm">{children}</li>,
+                              li: ({ children }) => <li className="font-normal text-white/70 text-sm">{children}</li>,
                               code: ({ children }) => (
                                 <code className="bg-gray-800/60 px-2 py-1 rounded text-chiliz-primary text-sm font-mono">
                                   {children}
                                 </code>
                               ),
-                              strong: ({ children }) => <strong className="text-white font-semibold">{children}</strong>,
+                              strong: ({ children }) => <strong className="text-white font-bold">{children}</strong>,
                             }}
                           >
                             {message.content}
@@ -526,18 +525,18 @@ export function BlockchainExplorer() {
                           <ReactMarkdown 
                             className="prose prose-invert max-w-none"
                             components={{
-                              h1: ({ children }) => <h1 className="text-xl font-bold text-chiliz-primary mb-4">{children}</h1>,
-                              h2: ({ children }) => <h2 className="text-lg font-semibold text-white mb-3">{children}</h2>,
-                              h3: ({ children }) => <h3 className="text-md font-medium text-white/90 mb-2">{children}</h3>,
-                              p: ({ children }) => <p className="text-white/80 mb-2 leading-relaxed">{children}</p>,
+                              h1: ({ children }) => <h1 className="font-bold text-lg text-chiliz-primary mb-4">{children}</h1>,
+                              h2: ({ children }) => <h2 className="font-bold text-lg text-white mb-3">{children}</h2>,
+                              h3: ({ children }) => <h3 className="font-bold text-lg text-white/90 mb-2">{children}</h3>,
+                              p: ({ children }) => <p className="font-normal text-white/80 mb-2 leading-relaxed">{children}</p>,
                               ul: ({ children }) => <ul className="space-y-1 mb-4">{children}</ul>,
-                              li: ({ children }) => <li className="text-white/70 text-sm">{children}</li>,
+                              li: ({ children }) => <li className="font-normal text-white/70 text-sm">{children}</li>,
                               code: ({ children }) => (
                                 <code className="bg-gray-800/60 px-2 py-1 rounded text-chiliz-primary text-sm font-mono">
                                   {children}
                                 </code>
                               ),
-                              strong: ({ children }) => <strong className="text-white font-semibold">{children}</strong>,
+                              strong: ({ children }) => <strong className="text-white font-bold">{children}</strong>,
                             }}
                           >
                             {message.content}
@@ -623,7 +622,7 @@ export function BlockchainExplorer() {
                   >
                     <Send className="h-5 w-5 text-white" />
                   </button>
-                  
+
                   {input.includes("execute") && hasContractToExplore && (
                     <button
                       type="button"

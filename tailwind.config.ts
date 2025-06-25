@@ -10,6 +10,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         'sans': ['Outfit', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        'space-grotesk': ['Space Grotesk', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       colors: {
         chiliz: {
