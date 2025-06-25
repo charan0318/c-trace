@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -29,176 +28,45 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
 
   return (
     <div data-loading-screen className="fixed inset-0 bg-black flex items-center justify-center z-50 overflow-hidden">
-      {/* Main HUD Container */}
-      <div className="relative w-full h-full max-w-6xl max-h-4xl flex items-center justify-center">
-        {/* Animated HUD Interface */}
-        <div className="relative w-full h-full scale-75 md:scale-90 lg:scale-100">
-          {/* Central Circle */}
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <div className="w-32 h-32 border-2 border-cyan-400 rounded-full relative animate-pulse">
-              <div className="absolute inset-4 border border-cyan-400/50 rounded-full"></div>
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 border border-cyan-400/30 rounded-full"></div>
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-cyan-400 rounded-full animate-ping"></div>
-            </div>
+      {/* Main Container */}
+      <div className="relative w-full h-full flex flex-col items-center justify-center">
+
+        {/* Animated HUD GIF */}
+        <div className="relative mb-8">
+          <img 
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+            alt="Loading Animation"
+            className="w-96 h-64 md:w-[600px] md:h-96 object-contain"
+            style={{
+              background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3Crect width='800' height='600' fill='%23000000'/%3E%3Cg stroke='%2300bcd4' stroke-width='2' fill='none'%3E%3C!-- Central hexagonal pattern --%3E%3Cpolygon points='400,250 450,275 450,325 400,350 350,325 350,275' stroke-width='3'/%3E%3Ccircle cx='400' cy='300' r='15' fill='%2300bcd4' opacity='0.8'/%3E%3C!-- Corner brackets --%3E%3Cpath d='M100,100 L100,150 M100,100 L150,100' stroke-width='3'/%3E%3Cpath d='M700,100 L700,150 M700,100 L650,100' stroke-width='3'/%3E%3Cpath d='M100,500 L100,450 M100,500 L150,500' stroke-width='3'/%3E%3Cpath d='M700,500 L700,450 M700,500 L650,500' stroke-width='3'/%3E%3C!-- Side panels --%3E%3Crect x='150' y='220' width='80' height='160' stroke-width='1' fill='%2300bcd4' fill-opacity='0.1'/%3E%3Crect x='570' y='220' width='80' height='160' stroke-width='1' fill='%2300bcd4' fill-opacity='0.1'/%3E%3C!-- Connection lines --%3E%3Cline x1='230' y1='300' x2='350' y2='300' stroke-width='1' opacity='0.6'/%3E%3Cline x1='450' y1='300' x2='570' y2='300' stroke-width='1' opacity='0.6'/%3E%3C!-- Data displays --%3E%3Ctext x='190' y='250' fill='%2300bcd4' font-family='monospace' font-size='12'%3E28900%3C/text%3E%3Ctext x='590' y='250' fill='%2300bcd4' font-family='monospace' font-size='12'%3E49300%3C/text%3E%3C/g%3E%3C/svg%3E")`,
+              backgroundSize: 'contain',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center'
+            }}
+          />
+        </div>
+
+        {/* Loading Text and Progress */}
+        <div className="text-center">
+          <div className="text-cyan-400 text-3xl md:text-4xl font-bold mb-4 animate-pulse">
+            C-TRACE
+          </div>
+          <div className="text-cyan-400/80 text-sm font-mono mb-6">
+            INITIALIZING BLOCKCHAIN INTERFACE...
           </div>
 
-          {/* Corner Brackets */}
-          <div className="absolute top-20 left-20">
-            <div className="w-20 h-20 border-l-2 border-t-2 border-cyan-400 animate-fade-in-out"></div>
-          </div>
-          <div className="absolute top-20 right-20">
-            <div className="w-20 h-20 border-r-2 border-t-2 border-cyan-400 animate-fade-in-out" style={{ animationDelay: '0.5s' }}></div>
-          </div>
-          <div className="absolute bottom-20 left-20">
-            <div className="w-20 h-20 border-l-2 border-b-2 border-cyan-400 animate-fade-in-out" style={{ animationDelay: '1s' }}></div>
-          </div>
-          <div className="absolute bottom-20 right-20">
-            <div className="w-20 h-20 border-r-2 border-b-2 border-cyan-400 animate-fade-in-out" style={{ animationDelay: '1.5s' }}></div>
-          </div>
-
-          {/* Triangular Elements */}
-          <div className="absolute top-40 left-1/2 transform -translate-x-1/2">
-            <div className="w-0 h-0 border-l-8 border-r-8 border-b-16 border-l-transparent border-r-transparent border-b-cyan-400 animate-pulse"></div>
-          </div>
-          <div className="absolute bottom-40 left-1/2 transform -translate-x-1/2">
-            <div className="w-0 h-0 border-l-8 border-r-8 border-t-16 border-l-transparent border-r-transparent border-t-cyan-400 animate-pulse" style={{ animationDelay: '0.8s' }}></div>
-          </div>
-
-          {/* Side Panels */}
-          <div className="absolute left-32 top-1/2 transform -translate-y-1/2">
-            <div className="w-32 h-48 border border-cyan-400/50 bg-cyan-400/5 backdrop-blur-sm animate-slide-in-left">
-              <div className="p-4 space-y-2">
-                <div className="h-1 bg-cyan-400 w-3/4 animate-pulse"></div>
-                <div className="h-1 bg-cyan-400/60 w-1/2"></div>
-                <div className="h-1 bg-cyan-400/40 w-2/3"></div>
-                <div className="mt-4 text-xs text-cyan-400 font-mono">SYS</div>
-                <div className="text-xs text-cyan-400/80 font-mono">28900</div>
-              </div>
-            </div>
-          </div>
-          <div className="absolute right-32 top-1/2 transform -translate-y-1/2">
-            <div className="w-32 h-48 border border-cyan-400/50 bg-cyan-400/5 backdrop-blur-sm animate-slide-in-right">
-              <div className="p-4 space-y-2">
-                <div className="h-1 bg-cyan-400 w-3/4 animate-pulse" style={{ animationDelay: '0.3s' }}></div>
-                <div className="h-1 bg-cyan-400/60 w-1/2"></div>
-                <div className="h-1 bg-cyan-400/40 w-2/3"></div>
-                <div className="mt-4 text-xs text-cyan-400 font-mono">DAT</div>
-                <div className="text-xs text-cyan-400/80 font-mono">49300</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Connecting Lines */}
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <svg width="800" height="600" className="animate-draw-lines">
-              <defs>
-                <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="transparent" />
-                  <stop offset="50%" stopColor="#00bcd4" />
-                  <stop offset="100%" stopColor="transparent" />
-                </linearGradient>
-              </defs>
-              
-              {/* Connecting lines to corners */}
-              <line x1="300" y1="300" x2="100" y2="100" stroke="url(#lineGradient)" strokeWidth="1" opacity="0.6" />
-              <line x1="300" y1="300" x2="500" y2="100" stroke="url(#lineGradient)" strokeWidth="1" opacity="0.6" />
-              <line x1="300" y1="300" x2="100" y2="500" stroke="url(#lineGradient)" strokeWidth="1" opacity="0.6" />
-              <line x1="300" y1="300" x2="500" y2="500" stroke="url(#lineGradient)" strokeWidth="1" opacity="0.6" />
-              
-              {/* Grid pattern */}
-              <g opacity="0.3">
-                {Array.from({ length: 10 }, (_, i) => (
-                  <line key={i} x1={50 + i * 50} y1="50" x2={50 + i * 50} y2="550" stroke="#00bcd4" strokeWidth="0.5" />
-                ))}
-                {Array.from({ length: 10 }, (_, i) => (
-                  <line key={i} x1="50" y1={50 + i * 50} x2="550" y2={50 + i * 50} stroke="#00bcd4" strokeWidth="0.5" />
-                ))}
-              </g>
-            </svg>
-          </div>
-
-          {/* Loading Text */}
-          <div className="absolute bottom-32 left-1/2 transform -translate-x-1/2 text-center">
-            <div className="text-cyan-400 text-2xl md:text-3xl font-bold mb-4 animate-glow">
-              C-TRACE
-            </div>
-            <div className="text-cyan-400/80 text-sm font-mono mb-4">
-              INITIALIZING BLOCKCHAIN INTERFACE...
-            </div>
-            
-            {/* Progress Bar */}
-            <div className="w-64 h-2 bg-gray-800 border border-cyan-400/50 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-gradient-to-r from-cyan-400 to-blue-500 transition-all duration-300 ease-out"
-                style={{ width: `${progress}%` }}
-              ></div>
-            </div>
-            <div className="text-cyan-400/60 text-xs font-mono mt-2">
-              {progress}% COMPLETE
-            </div>
-          </div>
-
-          {/* Floating particles */}
-          {Array.from({ length: 20 }, (_, i) => (
-            <div
-              key={i}
-              className="absolute w-1 h-1 bg-cyan-400 rounded-full animate-float"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${3 + Math.random() * 2}s`
-              }}
+          {/* Progress Bar */}
+          <div className="w-64 h-2 bg-gray-800 border border-cyan-400/50 rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-gradient-to-r from-cyan-400 to-blue-500 transition-all duration-300 ease-out"
+              style={{ width: `${progress}%` }}
             ></div>
-          ))}
+          </div>
+          <div className="text-cyan-400/60 text-xs font-mono mt-2">
+            {progress}% COMPLETE
+          </div>
         </div>
       </div>
-
-      {/* Custom CSS animations */}
-      <style jsx>{`
-        @keyframes fade-in-out {
-          0%, 100% { opacity: 0.3; }
-          50% { opacity: 1; }
-        }
-        @keyframes slide-in-left {
-          0% { transform: translateX(-100px) translateY(-50%); opacity: 0; }
-          100% { transform: translateX(0) translateY(-50%); opacity: 1; }
-        }
-        @keyframes slide-in-right {
-          0% { transform: translateX(100px) translateY(-50%); opacity: 0; }
-          100% { transform: translateX(0) translateY(-50%); opacity: 1; }
-        }
-        @keyframes draw-lines {
-          0% { stroke-dasharray: 1000; stroke-dashoffset: 1000; }
-          100% { stroke-dasharray: 1000; stroke-dashoffset: 0; }
-        }
-        @keyframes glow {
-          0%, 100% { text-shadow: 0 0 5px #00bcd4; }
-          50% { text-shadow: 0 0 20px #00bcd4, 0 0 30px #00bcd4; }
-        }
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); opacity: 0.3; }
-          50% { transform: translateY(-20px); opacity: 1; }
-        }
-        .animate-fade-in-out {
-          animation: fade-in-out 2s ease-in-out infinite;
-        }
-        .animate-slide-in-left {
-          animation: slide-in-left 1s ease-out;
-        }
-        .animate-slide-in-right {
-          animation: slide-in-right 1s ease-out;
-        }
-        .animate-draw-lines {
-          animation: draw-lines 3s ease-out;
-        }
-        .animate-glow {
-          animation: glow 2s ease-in-out infinite;
-        }
-        .animate-float {
-          animation: float 4s ease-in-out infinite;
-        }
-      `}</style>
     </div>
   );
 }
