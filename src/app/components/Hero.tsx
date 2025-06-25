@@ -15,6 +15,7 @@ export default function Hero() {
   const [selectedChain, setSelectedChain] = useState('');
   const [splineLoaded, setSplineLoaded] = useState(false);
   const [splineError, setSplineError] = useState(false);
+  const [sceneVersion, setSceneVersion] = useState(Date.now());
   const router = useRouter();
 
   const handleSearch = useCallback((address: string, chain: string) => {
@@ -59,7 +60,7 @@ export default function Hero() {
       {/* Spline Scene */}
       {!splineError && (
         <Spline 
-          scene="https://prod.spline.design/lX0ekK8OK9dc4DlA/scene.splinecode"
+          scene={`https://prod.spline.design/lX0ekK8OK9dc4DlA/scene.splinecode?v=${sceneVersion}`}
           onLoad={handleSplineLoad}
           onError={handleSplineError}
           style={{ 
