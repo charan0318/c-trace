@@ -53,21 +53,21 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
 
         {/* Loading Text and Progress */}
         <div className="text-center">
-          <div className="text-cyan-400 text-3xl md:text-4xl font-bold mb-4 animate-pulse">
+          <div className="text-chiliz-primary text-3xl md:text-4xl font-bold mb-4 animate-pulse">
             C-TRACE
           </div>
-          <div className="text-cyan-400/80 text-sm font-mono mb-6">
+          <div className="text-chiliz-primary/80 text-sm font-mono mb-6">
             INITIALIZING BLOCKCHAIN INTERFACE...
           </div>
 
           {/* Progress Bar */}
-          <div className="w-64 h-2 bg-gray-800 border border-cyan-400/50 rounded-full overflow-hidden">
+          <div className="w-64 h-2 bg-gray-800 border border-chiliz-primary/50 rounded-full overflow-hidden">
             <div 
-              className="h-full bg-gradient-to-r from-cyan-400 to-blue-500 transition-all duration-300 ease-out"
+              className="h-full bg-gradient-to-r from-chiliz-primary to-red-500 transition-all duration-300 ease-out"
               style={{ width: `${progress}%` }}
             ></div>
           </div>
-          <div className="text-cyan-400/60 text-xs font-mono mt-2">
+          <div className="text-chiliz-primary/60 text-xs font-mono mt-2">
             {progress}% COMPLETE
           </div>
         </div>
