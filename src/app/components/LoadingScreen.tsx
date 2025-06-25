@@ -34,14 +34,13 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
         {/* Animated HUD GIF */}
         <div className="relative mb-8">
           <img 
-            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+            src="/attached_assets/original-b3d5d666729bb0b3f8ca0bdae7936251_1750872466898.gif"
             alt="Loading Animation"
             className="w-96 h-64 md:w-[600px] md:h-96 object-contain"
-            style={{
-              background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3Crect width='800' height='600' fill='%23000000'/%3E%3Cg stroke='%2300bcd4' stroke-width='2' fill='none'%3E%3C!-- Central hexagonal pattern --%3E%3Cpolygon points='400,250 450,275 450,325 400,350 350,325 350,275' stroke-width='3'/%3E%3Ccircle cx='400' cy='300' r='15' fill='%2300bcd4' opacity='0.8'/%3E%3C!-- Corner brackets --%3E%3Cpath d='M100,100 L100,150 M100,100 L150,100' stroke-width='3'/%3E%3Cpath d='M700,100 L700,150 M700,100 L650,100' stroke-width='3'/%3E%3Cpath d='M100,500 L100,450 M100,500 L150,500' stroke-width='3'/%3E%3Cpath d='M700,500 L700,450 M700,500 L650,500' stroke-width='3'/%3E%3C!-- Side panels --%3E%3Crect x='150' y='220' width='80' height='160' stroke-width='1' fill='%2300bcd4' fill-opacity='0.1'/%3E%3Crect x='570' y='220' width='80' height='160' stroke-width='1' fill='%2300bcd4' fill-opacity='0.1'/%3E%3C!-- Connection lines --%3E%3Cline x1='230' y1='300' x2='350' y2='300' stroke-width='1' opacity='0.6'/%3E%3Cline x1='450' y1='300' x2='570' y2='300' stroke-width='1' opacity='0.6'/%3E%3C!-- Data displays --%3E%3Ctext x='190' y='250' fill='%2300bcd4' font-family='monospace' font-size='12'%3E28900%3C/text%3E%3Ctext x='590' y='250' fill='%2300bcd4' font-family='monospace' font-size='12'%3E49300%3C/text%3E%3C/g%3E%3C/svg%3E")`,
-              backgroundSize: 'contain',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center'
+            onError={(e) => {
+              // Fallback if GIF doesn't load
+              const target = e.target as HTMLImageElement;
+              target.style.display = 'none';
             }}
           />
         </div>
