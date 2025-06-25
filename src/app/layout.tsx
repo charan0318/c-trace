@@ -3,7 +3,6 @@
 import { Outfit, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { ThirdwebProvider } from "thirdweb/react";
-import { client } from "./client";
 import Navigation from "./components/Navigation";
 
 const outfit = Outfit({ subsets: ["latin"] });
@@ -20,9 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${outfit.className} ${spaceGrotesk.variable}`}>
-        <ThirdwebProvider 
-          client={client}
-        >
+        <ThirdwebProvider>
           <Navigation />
           <div className="pt-20">
             {children}
