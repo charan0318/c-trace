@@ -5,7 +5,6 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Search, Send, Terminal, ArrowDown, Copy, Edit, Zap, FileText, TrendingUp } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import ReactMarkdown from "react-markdown";
-import BeautifiedResponse from "./ui/BeautifiedResponse";
 
 // Import script to interact with Nebula API
 import {
@@ -197,12 +196,7 @@ const ChatBubbleMessage: React.FC<ChatBubbleMessageProps> = ({
         ? "bg-gradient-to-br from-chiliz-primary/20 to-red-600/20 border-chiliz-primary/30 text-white ml-auto px-4 py-3"
         : "bg-transparent border-transparent text-white p-0"
     )}>
-      {/* Branded AI Avatar Bubble - Only for AI responses */}
-      {variant === "received" && (
-        <div className="absolute -top-4 left-4 w-8 h-8 rounded-full bg-gradient-to-br from-chiliz-primary to-red-600 text-white flex items-center justify-center font-bold text-sm shadow-lg border-2 border-white/20">
-          C
-        </div>
-      )}
+      
       
       {isLoading ? (
         <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/40 p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
@@ -505,11 +499,7 @@ export function BlockchainExplorer() {
                   <ChatBubble variant={message.role === "user" ? "sent" : "received"}>
                     <ChatBubbleAvatar fallback={message.role === "user" ? "U" : "C"} />
                     <ChatBubbleMessage variant={message.role === "user" ? "sent" : "received"}>
-                      {message.role === "system" ? (
-                        <BeautifiedResponse text={message.content} />
-                      ) : (
-                        message.content
-                      )}
+                      {message.content}
                     </ChatBubbleMessage>
                   </ChatBubble>
                 </div>
