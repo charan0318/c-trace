@@ -21,9 +21,7 @@ export default function RootLayout({
       <body className={`${outfit.className} ${spaceGrotesk.variable}`}>
         <ThirdwebProvider>
           <Navigation />
-          <div className="pt-20">
-            {children}
-          </div>
+          {children}
         </ThirdwebProvider>
       </body>
     </html>

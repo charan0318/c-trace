@@ -53,7 +53,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden pt-20">
       {/* Fallback Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900" style={{ zIndex: -1 }} />
       
