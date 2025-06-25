@@ -71,7 +71,8 @@ html, body {
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  border-radius: 1.5rem;
+  border-radius: 1rem;
+  padding: 0.75rem;
 }
 
 .glass-card:hover {
@@ -79,6 +80,17 @@ html, body {
   border-color: rgba(229, 0, 70, 0.3);
   transform: translateY(-2px);
   transition: all 0.3s ease;
+}
+
+/* Adaptive text containers */
+.adaptive-text-container {
+  padding: clamp(0.5rem, 2vw, 1rem);
+  margin: clamp(0.25rem, 1vw, 0.75rem) 0;
+}
+
+.compact-glass {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
 }
 
 /* Mobile optimizations */
