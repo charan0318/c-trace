@@ -170,7 +170,7 @@ interface ChatBubbleProps {
 const ChatBubble: React.FC<ChatBubbleProps> = ({ variant = "received", children }) => {
   return (
     <div className={cn(
-      "flex gap-4 max-w-[85%] group",
+      "flex gap-2 md:gap-4 max-w-full sm:max-w-[90%] md:max-w-[85%] group",
       variant === "sent" ? "ml-auto flex-row-reverse" : "mr-auto"
     )}>
       {children}
@@ -242,17 +242,17 @@ const ActionButton: React.FC<ActionButtonProps> = ({ icon: Icon, title, descript
   return (
     <button
       onClick={onClick}
-      className="group relative p-6 rounded-2xl bg-gray-900/40 backdrop-blur-sm border border-white/20 hover:border-chiliz-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-chiliz-primary/20 hover:bg-gray-900/60 text-left w-full"
+      className="group relative p-4 md:p-6 rounded-2xl bg-gray-900/40 backdrop-blur-sm border border-white/20 hover:border-chiliz-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-chiliz-primary/20 hover:bg-gray-900/60 text-left w-full min-h-[88px] touch-manipulation"
     >
-      <div className="flex items-start gap-4">
-        <div className="p-3 rounded-xl bg-gradient-to-br from-chiliz-primary/20 to-red-600/20 border border-chiliz-primary/30 group-hover:from-chiliz-primary/30 group-hover:to-red-600/30 transition-all duration-300">
-          <Icon className="h-6 w-6 text-chiliz-primary" />
+      <div className="flex items-start gap-3 md:gap-4">
+        <div className="p-2 md:p-3 rounded-xl bg-gradient-to-br from-chiliz-primary/20 to-red-600/20 border border-chiliz-primary/30 group-hover:from-chiliz-primary/30 group-hover:to-red-600/30 transition-all duration-300 flex-shrink-0">
+          <Icon className="h-5 w-5 md:h-6 md:w-6 text-chiliz-primary" />
         </div>
-        <div className="flex-1">
-          <h3 className="font-semibold text-white mb-1 group-hover:text-chiliz-primary transition-colors">
+        <div className="flex-1 min-w-0">
+          <h3 className="font-semibold text-sm md:text-base text-white mb-1 group-hover:text-chiliz-primary transition-colors line-clamp-2">
             {title}
           </h3>
-          <p className="text-sm text-white/60 group-hover:text-white/80 transition-colors">
+          <p className="text-xs md:text-sm text-white/60 group-hover:text-white/80 transition-colors leading-relaxed line-clamp-3">
             {description}
           </p>
         </div>
@@ -485,7 +485,7 @@ export function BlockchainExplorer() {
   ];
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900 pt-20 overflow-hidden">
+    <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900 pt-16 md:pt-20 overflow-hidden">
       {/* Background Pattern */}
       <div 
         className="absolute inset-0 z-[-10] opacity-20"
@@ -502,28 +502,28 @@ export function BlockchainExplorer() {
         {/* Chat Area */}
         <div className="flex-1 overflow-hidden">
           <div
-            className="flex flex-col w-full h-full px-6 py-4 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent hover:scrollbar-thumb-white/20 transition-colors"
+            className="flex flex-col w-full h-full px-4 md:px-6 py-2 md:py-4 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent hover:scrollbar-thumb-white/20 transition-colors"
             ref={scrollRef}
           >
-            <div className="flex flex-col min-h-full pb-6 space-y-4 max-w-4xl mx-auto w-full">
+            <div className="flex flex-col min-h-full pb-6 space-y-3 md:space-y-4 max-w-full md:max-w-3xl lg:max-w-4xl mx-auto w-full">
               {messages.map((message, index) => (
-                <div key={index} className={message.role === "system" ? "mt-2" : ""}>
+                <div key={index} className={message.role === "system" ? "mt-1 md:mt-2" : ""}>
                   <ChatBubble variant={message.role === "user" ? "sent" : "received"}>
                     <ChatBubbleAvatar fallback={message.role === "user" ? "U" : "C"} />
                     <ChatBubbleMessage variant={message.role === "user" ? "sent" : "received"}>
                       {message.role === "system" && message.content.includes("Contract Details") ? (
-                        <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/40 p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
+                        <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/40 p-3 md:p-6 rounded-2xl border border-white/10 backdrop-blur-sm overflow-x-auto">
                           <ReactMarkdown 
-                            className="prose prose-invert max-w-none"
+                            className="prose prose-invert max-w-none text-sm md:text-base"
                             components={{
-                              h1: ({ children }) => <h1 className="font-bold text-lg text-chiliz-primary mb-4">{children}</h1>,
-                              h2: ({ children }) => <h2 className="font-bold text-lg text-white mb-3">{children}</h2>,
-                              h3: ({ children }) => <h3 className="font-bold text-lg text-white/90 mb-2">{children}</h3>,
-                              p: ({ children }) => <p className="font-normal text-white/80 mb-2 leading-relaxed">{children}</p>,
-                              ul: ({ children }) => <ul className="space-y-1 mb-4">{children}</ul>,
-                              li: ({ children }) => <li className="font-normal text-white/70 text-sm">{children}</li>,
+                              h1: ({ children }) => <h1 className="font-bold text-base md:text-lg text-chiliz-primary mb-3 md:mb-4">{children}</h1>,
+                              h2: ({ children }) => <h2 className="font-bold text-base md:text-lg text-white mb-2 md:mb-3">{children}</h2>,
+                              h3: ({ children }) => <h3 className="font-bold text-base md:text-lg text-white/90 mb-1 md:mb-2">{children}</h3>,
+                              p: ({ children }) => <p className="font-normal text-white/80 mb-2 leading-relaxed text-sm md:text-base">{children}</p>,
+                              ul: ({ children }) => <ul className="space-y-1 mb-3 md:mb-4">{children}</ul>,
+                              li: ({ children }) => <li className="font-normal text-white/70 text-xs md:text-sm">{children}</li>,
                               code: ({ children }) => (
-                                <code className="bg-gray-800/60 px-2 py-1 rounded text-chiliz-primary text-sm font-mono">
+                                <code className="bg-gray-800/60 px-1 md:px-2 py-1 rounded text-chiliz-primary text-xs md:text-sm font-mono break-all">
                                   {children}
                                 </code>
                               ),
@@ -534,18 +534,18 @@ export function BlockchainExplorer() {
                           </ReactMarkdown>
                         </div>
                       ) : (
-                        <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/40 p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
+                        <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/40 p-3 md:p-6 rounded-2xl border border-white/10 backdrop-blur-sm overflow-x-auto">
                           <ReactMarkdown 
-                            className="prose prose-invert max-w-none"
+                            className="prose prose-invert max-w-none text-sm md:text-base"
                             components={{
-                              h1: ({ children }) => <h1 className="font-bold text-lg text-chiliz-primary mb-4">{children}</h1>,
-                              h2: ({ children }) => <h2 className="font-bold text-lg text-white mb-3">{children}</h2>,
-                              h3: ({ children }) => <h3 className="font-bold text-lg text-white/90 mb-2">{children}</h3>,
-                              p: ({ children }) => <p className="font-normal text-white/80 mb-2 leading-relaxed">{children}</p>,
-                              ul: ({ children }) => <ul className="space-y-1 mb-4">{children}</ul>,
-                              li: ({ children }) => <li className="font-normal text-white/70 text-sm">{children}</li>,
+                              h1: ({ children }) => <h1 className="font-bold text-base md:text-lg text-chiliz-primary mb-3 md:mb-4">{children}</h1>,
+                              h2: ({ children }) => <h2 className="font-bold text-base md:text-lg text-white mb-2 md:mb-3">{children}</h2>,
+                              h3: ({ children }) => <h3 className="font-bold text-base md:text-lg text-white/90 mb-1 md:mb-2">{children}</h3>,
+                              p: ({ children }) => <p className="font-normal text-white/80 mb-2 leading-relaxed text-sm md:text-base">{children}</p>,
+                              ul: ({ children }) => <ul className="space-y-1 mb-3 md:mb-4">{children}</ul>,
+                              li: ({ children }) => <li className="font-normal text-white/70 text-xs md:text-sm">{children}</li>,
                               code: ({ children }) => (
-                                <code className="bg-gray-800/60 px-2 py-1 rounded text-chiliz-primary text-sm font-mono">
+                                <code className="bg-gray-800/60 px-1 md:px-2 py-1 rounded text-chiliz-primary text-xs md:text-sm font-mono break-all">
                                   {children}
                                 </code>
                               ),
@@ -562,7 +562,7 @@ export function BlockchainExplorer() {
               ))}
 
               {isTyping && (
-                <div className="mt-2">
+                <div className="mt-1 md:mt-2">
                   <ChatBubble variant="received">
                     <ChatBubbleAvatar fallback="C" />
                     <ChatBubbleMessage isLoading />
@@ -572,7 +572,7 @@ export function BlockchainExplorer() {
 
               {/* Action Buttons - Show only when first message */}
               {messages.length === 1 && !hasContractToExplore && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mt-6 md:mt-8">
                   {actionButtons.map((action, index) => (
                     <ActionButton
                       key={index}
@@ -589,16 +589,16 @@ export function BlockchainExplorer() {
         </div>
 
         {/* Input Area */}
-        <div>
+        <div className="flex-shrink-0">
           {/* Suggested Actions */}
           {messages.length > 1 && (
-            <div className="max-w-4xl mx-auto p-6 pb-2">
-              <div className="flex gap-2 overflow-x-auto pb-2">
+            <div className="max-w-full md:max-w-3xl lg:max-w-4xl mx-auto p-3 md:p-6 pb-2">
+              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
                 {suggestedActions.map((action, index) => (
                   <button
                     key={index}
                     onClick={() => setInput(action)}
-                    className="flex-shrink-0 px-3 py-1.5 text-xs rounded-full bg-transparent border border-white/10 hover:border-chiliz-primary/30 hover:bg-chiliz-primary/10 transition-all duration-200 text-white/50 hover:text-white whitespace-nowrap"
+                    className="flex-shrink-0 px-3 py-1.5 text-xs rounded-full bg-transparent border border-white/10 hover:border-chiliz-primary/30 hover:bg-chiliz-primary/10 transition-all duration-200 text-white/50 hover:text-white whitespace-nowrap min-h-[32px]"
                   >
                     {action}
                   </button>
@@ -608,8 +608,8 @@ export function BlockchainExplorer() {
           )}
 
           {/* Chat Input - Full width glass background */}
-          <div className="bg-gray-900/40 backdrop-blur-sm p-6">
-            <div className="max-w-4xl mx-auto">
+          <div className="bg-gray-900/40 backdrop-blur-sm p-3 md:p-6 safe-area-inset-bottom">
+            <div className="max-w-full md:max-w-3xl lg:max-w-4xl mx-auto">
               <form 
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -622,27 +622,27 @@ export function BlockchainExplorer() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder={hasContractToExplore 
-                    ? "Ask about this Chiliz contract or execute a command..." 
-                    : "Ask about Chiliz, fan tokens, or CHZ ecosystem..."}
-                  className="w-full border-0 bg-transparent px-6 py-4 pr-20 focus:outline-none text-white placeholder:text-white/50 text-base"
+                    ? "Ask about this Chiliz contract..." 
+                    : "Ask about Chiliz, fan tokens, or CHZ..."}
+                  className="w-full border-0 bg-transparent px-4 md:px-6 py-3 md:py-4 pr-16 md:pr-20 focus:outline-none text-white placeholder:text-white/50 text-sm md:text-base min-h-[48px]"
                   onKeyPress={(e) => e.key === "Enter" && handleSend()}
                 />
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                <div className="absolute right-2 md:right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 md:gap-2">
                   <button
                     type="submit"
                     disabled={!input.trim()}
-                    className="h-10 w-10 bg-gradient-to-r from-chiliz-primary to-red-600 hover:from-red-600 hover:to-chiliz-primary border-0 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl flex items-center justify-center transition-all duration-200 shadow-lg hover:shadow-xl disabled:shadow-none"
+                    className="h-8 w-8 md:h-10 md:w-10 bg-gradient-to-r from-chiliz-primary to-red-600 hover:from-red-600 hover:to-chiliz-primary border-0 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl flex items-center justify-center transition-all duration-200 shadow-lg hover:shadow-xl disabled:shadow-none min-h-[44px] min-w-[44px]"
                   >
-                    <Send className="h-5 w-5 text-white" />
+                    <Send className="h-4 w-4 md:h-5 md:w-5 text-white" />
                   </button>
 
                   {input.includes("execute") && walletAddress && (
                     <button
                       type="button"
                       onClick={handleExecute}
-                      className="h-10 w-10 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-emerald-600 hover:to-green-600 text-white rounded-xl flex items-center justify-center transition-all duration-200 shadow-lg hover:shadow-xl"
+                      className="h-8 w-8 md:h-10 md:w-10 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-emerald-600 hover:to-green-600 text-white rounded-xl flex items-center justify-center transition-all duration-200 shadow-lg hover:shadow-xl min-h-[44px] min-w-[44px]"
                     >
-                      <Terminal className="h-5 w-5" />
+                      <Terminal className="h-4 w-4 md:h-5 md:w-5" />
                     </button>
                   )}
                 </div>
@@ -650,7 +650,7 @@ export function BlockchainExplorer() {
             </form>
 
               {/* Footer moved inside input area */}
-              <div className="mt-4 text-center">
+              <div className="mt-3 md:mt-4 text-center">
                 <span className="text-xs text-white/30">
                   &copy; {new Date().getFullYear()} c-trace | Crafted with ❤ from ch04niverse
                 </span>

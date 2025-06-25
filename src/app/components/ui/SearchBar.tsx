@@ -81,7 +81,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   return (
     <div
       className={`
-        relative flex items-stretch w-full max-w-4xl mx-auto
+        relative flex flex-col sm:flex-row items-stretch w-full max-w-4xl mx-auto
         bg-white/10 backdrop-blur-md border border-red-400/40
         rounded-2xl shadow-lg p-2 gap-2
         shadow-red-500/20 shadow-2xl
@@ -92,7 +92,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
       `}
     >
       {/* Input Field */}
-      <div className="flex-1 relative">
+      <div className="flex-1 relative order-1 sm:order-1">
         <input
           type="text"
           value={address}
@@ -100,77 +100,83 @@ const SearchBar: React.FC<SearchBarProps> = ({
           onKeyPress={handleKeyPress}
           placeholder={placeholder}
           className="
-            w-full px-4 py-3 bg-transparent text-white placeholder-white/60
-            border border-red-400/40 rounded-xl
+            w-full px-3 md:px-4 py-3 bg-transparent text-white placeholder-white/60
+            border border-red-400/40 rounded-xl text-sm md:text-base
             focus:outline-none focus:border-red-500/70 focus:ring-2 focus:ring-red-500/30
-            transition-all duration-200 min-h-[48px]
+            transition-all duration-200 min-h-[44px]
             shadow-inner shadow-red-500/10
           "
         />
       </div>
 
-      {/* Dropdown */}
-      <div className="relative">
+      {/* Mobile-first layout: Chain selector and search button on same row */}
+      <div className="flex gap-2 order-2 sm:order-2">
+        {/* Dropdown */}
+        <div className="relative flex-1 sm:flex-none">
+          <button
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            className="
+              flex items-center justify-between w-full sm:min-w-[120px] md:min-w-[140px] px-3 md:px-4 py-3
+              bg-transparent text-white border border-red-400/40 rounded-xl
+              hover:border-red-500/70 focus:outline-none focus:border-red-500/70
+              focus:ring-2 focus:ring-red-500/30 transition-all duration-200 min-h-[44px]
+              shadow-inner shadow-red-500/10 text-sm md:text-base
+            "
+          >
+            <span className="truncate">{selectedChainLabel}</span>
+            <ChevronDown
+              className={`ml-1 md:ml-2 h-4 w-4 flex-shrink-0 transition-transform duration-200 ${
+                isDropdownOpen ? "rotate-180" : ""
+              }`}
+            />
+          </button>
+
+          {isDropdownOpen && (
+            <div className="
+              absolute top-full left-0 right-0 mt-1 z-50
+              bg-white/10 backdrop-blur-md border border-red-400/40
+              rounded-xl shadow-lg shadow-red-500/20 overflow-hidden
+              min-w-max
+            ">
+              {chains.map((option) => (
+                <button
+                  key={option.value}
+                  onClick={() => handleChainSelect(option)}
+                  className="
+                    w-full px-3 md:px-4 py-3 text-left text-white text-sm md:text-base
+                    hover:bg-white/10 transition-colors duration-150
+                    first:rounded-t-xl last:rounded-b-xl
+                    whitespace-nowrap
+                  "
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Search Button */}
         <button
-          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          onClick={handleSearch}
+          disabled={!address.trim() || !chain}
           className="
-            flex items-center justify-between min-w-[140px] px-4 py-3
-            bg-transparent text-white border border-red-400/40 rounded-xl
-            hover:border-red-500/70 focus:outline-none focus:border-red-500/70
-            focus:ring-2 focus:ring-red-500/30 transition-all duration-200 min-h-[48px]
-            shadow-inner shadow-red-500/10
+            flex items-center justify-center px-4 md:px-6 py-3 flex-shrink-0
+            bg-gradient-to-r from-red-500 to-red-600
+            hover:from-red-600 hover:to-red-700
+            disabled:from-gray-500 disabled:to-gray-600
+            disabled:opacity-50 disabled:cursor-not-allowed
+            text-white font-medium rounded-xl
+            transition-all duration-200 transform
+            hover:scale-105 active:scale-95
+            focus:outline-none focus:ring-2 focus:ring-red-400/50
+            min-h-[44px] min-w-[44px] text-sm md:text-base
           "
         >
-          <span className="text-sm truncate">{selectedChainLabel}</span>
-          <ChevronDown
-            className={`ml-2 h-4 w-4 transition-transform duration-200 ${
-              isDropdownOpen ? "rotate-180" : ""
-            }`}
-          />
+          <Search className="h-4 w-4 text-cyan-300" />
+          <span className="ml-1 md:ml-2 hidden sm:inline">Search</span>
         </button>
-
-        {isDropdownOpen && (
-          <div className="
-            absolute top-full left-0 right-0 mt-1 z-50
-            bg-white/10 backdrop-blur-md border border-red-400/40
-            rounded-xl shadow-lg shadow-red-500/20 overflow-hidden
-          ">
-            {chains.map((option) => (
-              <button
-                key={option.value}
-                onClick={() => handleChainSelect(option)}
-                className="
-                  w-full px-4 py-3 text-left text-white text-sm
-                  hover:bg-white/10 transition-colors duration-150
-                  first:rounded-t-xl last:rounded-b-xl
-                "
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
-        )}
       </div>
-
-      {/* Search Button */}
-      <button
-        onClick={handleSearch}
-        disabled={!address.trim() || !chain}
-        className="
-          flex items-center justify-center px-6 py-3
-          bg-gradient-to-r from-red-500 to-red-600
-          hover:from-red-600 hover:to-red-700
-          disabled:from-gray-500 disabled:to-gray-600
-          disabled:opacity-50 disabled:cursor-not-allowed
-          text-white font-medium rounded-xl
-          transition-all duration-200 transform
-          hover:scale-105 active:scale-95
-          focus:outline-none focus:ring-2 focus:ring-red-400/50
-        "
-      >
-        <Search className="h-4 w-4 mr-2 text-cyan-300" />
-        Search
-      </button>
 
       {/* Click outside handler */}
       {isDropdownOpen && (
