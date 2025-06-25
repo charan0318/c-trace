@@ -6,11 +6,20 @@
 @tailwind utilities;
 
 @keyframes neon-pulse {
-  0% {
-    box-shadow: 0 0 20px rgba(255, 178, 102, 0.3), inset 0 0 20px rgba(255, 178, 102, 0.1);
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(255, 178, 102, 0.5), 0 0 10px rgba(255, 178, 102, 0.3), 0 0 15px rgba(255, 178, 102, 0.2);
   }
-  100% {
-    box-shadow: 0 0 30px rgba(255, 178, 102, 0.6), inset 0 0 20px rgba(255, 178, 102, 0.2);
+  50% {
+    box-shadow: 0 0 10px rgba(255, 178, 102, 0.7), 0 0 20px rgba(255, 178, 102, 0.5), 0 0 30px rgba(255, 178, 102, 0.3);
+  }
+}
+
+@keyframes subtle-neon-pulse {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(255, 178, 102, 0.1), inset 0 0 8px rgba(255, 178, 102, 0.03);
+  }
+  50% {
+    box-shadow: 0 0 12px rgba(255, 178, 102, 0.15), inset 0 0 12px rgba(255, 178, 102, 0.05);
   }
 }
 
@@ -207,5 +216,3 @@ html, body {
   box-shadow: 0 0 20px rgba(229, 0, 70, 0.4);
   transform: translateY(-2px);
 }
-
-
