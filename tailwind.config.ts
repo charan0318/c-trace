@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'sans': ['Outfit', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      },
       colors: {
         chiliz: {
           primary: '#E50046',

@@ -1,11 +1,11 @@
 "use client";
 
-import { Inter } from "next/font/google";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 import { ThirdwebProvider } from "thirdweb/react";
 import Navigation from "./components/Navigation";
 
-const inter = Inter({ subsets: ["latin"] });
+const outfit = Outfit({ subsets: ["latin"] });
 
 export default function RootLayout({
   children,
@@ -14,7 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={outfit.className}>
         <ThirdwebProvider 
           clientId="662a63dd0ecfac183d250631cc2138f5"
         >

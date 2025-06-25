@@ -422,6 +422,11 @@
   dependencies:
     glob "10.3.10"
 
+"@next/font@^14.2.15":
+  version "14.2.15"
+  resolved "https://registry.npmjs.org/@next/font/-/font-14.2.15.tgz"
+  integrity sha512-QopYhBmCDDrNDynbi+ZD1hDZXmQXVFo7TmAFp4DQgO/kogz1OLbQ92hPigJbj572eZ3GaaVxNIyYVn3/eAsehg==
+
 "@next/swc-linux-x64-gnu@15.3.4":
   version "15.3.4"
   resolved "https://registry.npmjs.org/@next/swc-linux-x64-gnu/-/swc-linux-x64-gnu-15.3.4.tgz"
@@ -5036,7 +5041,7 @@ neo-async@^2.6.2:
   resolved "https://registry.npmjs.org/neo-async/-/neo-async-2.6.2.tgz"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
-next@^15.3.4, next@>=14.2.0:
+next@*, next@^15.3.4, next@>=14.2.0:
   version "15.3.4"
   resolved "https://registry.npmjs.org/next/-/next-15.3.4.tgz"
   integrity sha512-mHKd50C+mCjam/gcnwqL1T1vPx/XQNFlXqFIVdgQdVAFY9iIQtY0IfaVflEYzKiqjeA7B0cYYMaCrmAYFjs4rA==
