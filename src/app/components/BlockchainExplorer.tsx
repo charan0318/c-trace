@@ -488,13 +488,15 @@ export function BlockchainExplorer() {
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-gray-900/60 via-black/80 to-gray-900/60 pt-16 md:pt-20 overflow-hidden">
       {/* Silk Background */}
-      <Silk
-        speed={2}
-        scale={1.5}
-        color="#2a2a4e"
-        noiseIntensity={0.6}
-        rotation={0}
-      />
+      <div className="absolute inset-0" style={{ zIndex: -10 }}>
+        <Silk
+          speed={2}
+          scale={1.5}
+          color="#2a2a4e"
+          noiseIntensity={0.6}
+          rotation={0}
+        />
+      </div>
       
       {/* Background Pattern */}
       <div 

@@ -56,13 +56,15 @@ export default function Hero() {
   return (
     <div className="relative min-h-screen overflow-hidden pt-20">
       {/* Silk Background - Bottom Layer */}
-      <Silk
-        speed={3}
-        scale={2}
-        color="#1a1a2e"
-        noiseIntensity={0.8}
-        rotation={0}
-      />
+      <div className="absolute inset-0" style={{ zIndex: -10 }}>
+        <Silk
+          speed={3}
+          scale={2}
+          color="#1a1a2e"
+          noiseIntensity={0.8}
+          rotation={0}
+        />
+      </div>
       
       {/* Fallback Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900/60 via-black/80 to-gray-900/60" style={{ zIndex: -1 }} />
