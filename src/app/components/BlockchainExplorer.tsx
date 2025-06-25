@@ -293,16 +293,20 @@ export function BlockchainExplorer() {
   useEffect(() => {
     const initSession = async () => {
       try {
+        console.log("🔄 Initializing session...");
         const newSessionId = await createSession("Blockchain Explorer Session");
+        console.log("✅ Session created:", newSessionId);
         setSessionId(newSessionId);
 
         if (hasContractToExplore) {
+          console.log("🔍 Contract to explore:", contractAddress, "on chain:", chainId);
           setIsTyping(true);
           const contractDetails = await queryContract(
             contractAddress!,
             chainId!,
             newSessionId
           );
+          console.log("📄 Contract details received");
           setMessages([
             { role: "system", content: "Welcome to the C-TRACE Blockchain Explorer." },
             {
@@ -312,6 +316,7 @@ export function BlockchainExplorer() {
           ]);
           setIsTyping(false);
         } else {
+          console.log("💬 Loading default welcome message");
           setMessages([
             {
               role: "system",
@@ -320,13 +325,14 @@ export function BlockchainExplorer() {
           ]);
         }
       } catch (error) {
-        console.error("Error creating session:", error);
+        console.error("❌ Error in session initialization:", error);
         setMessages([
           {
             role: "system",
             content: "Welcome to C-TRACE! I'm ready to help you explore Chiliz blockchain and fan token data. What would you like to discover?",
           },
         ]);
+        setIsTyping(false);
       }
     };
 
