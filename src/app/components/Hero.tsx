@@ -101,18 +101,25 @@ export default function Hero() {
       <div className="absolute top-16 md:top-28 left-0 transform -translate-x-0 flex justify-center w-full px-4" style={{ zIndex: 9999 }}>
         <button
           onClick={() => router.push('/explorer')}
-          className="group relative px-4 md:px-6 py-2 md:py-3 rounded-2xl bg-gray-900/80 border border-white/30 hover:border-chiliz-primary/60 transition-all duration-300 hover:shadow-lg hover:shadow-chiliz-primary/20 backdrop-blur-md min-h-[44px] min-w-[44px] max-w-full"
+          className="group relative px-4 md:px-6 py-2 md:py-3 rounded-2xl bg-transparent border-2 border-chiliz-primary hover:bg-chiliz-primary/10 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl backdrop-blur-md min-h-[44px] min-w-[44px] max-w-full"
+          style={{
+            boxShadow: '0 0 20px rgba(255, 178, 102, 0.3), inset 0 0 20px rgba(255, 178, 102, 0.1)',
+            animation: 'neon-pulse 2s ease-in-out infinite alternate'
+          }}
         >
-          {/* Gradient background on hover */}
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-chiliz-primary/20 to-red-600/20 opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+          {/* Neon glow background */}
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-chiliz-primary/20 to-red-600/20 blur-lg opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
           
           {/* Content */}
-          <div className="relative flex items-center gap-2 md:gap-3 justify-center">
-            <span className="font-semibold text-sm md:text-lg text-white group-hover:text-chiliz-primary transition-colors text-center leading-tight">
+          <div className="relative z-10 flex items-center gap-2 md:gap-3 justify-center">
+            <span className="font-semibold text-sm md:text-lg text-white transition-colors text-center leading-tight whitespace-nowrap">
               <span className="hidden sm:inline">AI Meets Chiliz: </span>C-TRACE is Live
             </span>
             <div className="w-2 h-2 bg-chiliz-primary rounded-full animate-pulse flex-shrink-0"></div>
           </div>
+          
+          {/* Animated border */}
+          <div className="absolute inset-0 rounded-2xl border-2 border-chiliz-primary opacity-0 group-hover:opacity-100 animate-pulse transition-all duration-300"></div>
         </button>
       </div>
 
@@ -136,20 +143,13 @@ export default function Hero() {
           href="https://t.me/ch04niverse"
           target="_blank"
           rel="noopener noreferrer"
-          className="group relative inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white bg-transparent border-2 border-chiliz-primary rounded-full hover:bg-chiliz-primary/10 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
-          style={{
-            boxShadow: '0 0 20px rgba(255, 178, 102, 0.3), inset 0 0 20px rgba(255, 178, 102, 0.1)',
-            animation: 'neon-pulse 2s ease-in-out infinite alternate'
-          }}
+          className="group relative inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white bg-gray-900/80 border border-white/30 hover:border-chiliz-primary/60 transition-all duration-300 hover:shadow-lg hover:shadow-chiliz-primary/20 rounded-full backdrop-blur-md"
         >
-          {/* Neon glow background */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-chiliz-primary/20 to-red-600/20 blur-lg opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
+          {/* Gradient background on hover */}
+          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-chiliz-primary/20 to-red-600/20 opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
           
           {/* Button content */}
-          <span className="relative z-10 whitespace-nowrap">Got Feedback?</span>
-          
-          {/* Animated border */}
-          <div className="absolute inset-0 rounded-full border-2 border-chiliz-primary opacity-0 group-hover:opacity-100 animate-pulse transition-all duration-300"></div>
+          <span className="relative z-10 whitespace-nowrap group-hover:text-chiliz-primary transition-colors">Got Feedback?</span>
         </a>
       </div>
 
