@@ -3,6 +3,7 @@
 import Spline from '@splinetool/react-spline';
 import { useState, useCallback } from 'react';
 import SearchBar from '@/app/components/ui/SearchBar';
+import { StarBorder } from '@/app/components/ui/star-border';
 import { useRouter } from 'next/navigation';
 
 const blockchains = [
@@ -81,16 +82,18 @@ export default function Hero() {
       )}
             {/* Explorer Button - Below Navigation */}
       <div className="absolute top-8 left-1/2 transform -translate-x-1/2 flex justify-center w-full" style={{ zIndex: 999 }}>
-        <button
+        <StarBorder
           onClick={() => router.push('/explorer')}
-          className="group relative px-8 py-4 rounded-2xl bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-500 text-white font-semibold text-lg shadow-2xl hover:shadow-red-500/50 transition-all duration-300 hover:scale-105 border border-white/20 backdrop-blur-sm"
+          color="#E50046"
+          speed="4s"
+          className="group shadow-2xl hover:shadow-red-500/50"
         >
           <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-red-500 to-red-600 opacity-0 group-hover:opacity-30 blur-xl transition-all duration-300"></div>
-          <span className="relative flex items-center gap-3">
+          <span className="relative flex items-center gap-3 font-semibold text-lg">
             AI Meets Chiliz: C-TRACE is Live
             <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
           </span>
-        </button>
+        </StarBorder>
       </div>
 
       {/* Search box at bottom */}
