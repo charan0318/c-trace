@@ -191,11 +191,18 @@ const ChatBubbleMessage: React.FC<ChatBubbleMessageProps> = ({
 }) => {
   return (
     <div className={cn(
-      "relative rounded-2xl px-4 py-3 text-sm backdrop-blur-sm border transition-all duration-300 hover:shadow-lg group-hover:shadow-md",
+      "relative rounded-2xl px-4 py-3 text-sm backdrop-blur-sm border transition-all duration-300 hover:shadow-lg group-hover:shadow-md animate-fade-in",
       variant === "sent"
         ? "bg-gradient-to-br from-chiliz-primary/20 to-red-600/20 border-chiliz-primary/30 text-white ml-auto"
         : "bg-gray-900/60 border-white/20 text-white"
     )}>
+      {/* Branded AI Avatar Bubble - Only for AI responses */}
+      {variant === "received" && (
+        <div className="absolute -top-4 left-4 w-8 h-8 rounded-full bg-gradient-to-br from-chiliz-primary to-red-600 text-white flex items-center justify-center font-bold text-sm shadow-lg border-2 border-white/20">
+          C
+        </div>
+      )}
+      
       {isLoading ? (
         <div className="flex items-center gap-1">
           <div className="flex gap-1">
@@ -491,40 +498,44 @@ export function BlockchainExplorer() {
           >
             <div className="flex flex-col min-h-full pb-6 space-y-6 max-w-4xl mx-auto w-full">
               {messages.map((message, index) => (
-                <ChatBubble key={index} variant={message.role === "user" ? "sent" : "received"}>
-                  <ChatBubbleAvatar fallback={message.role === "user" ? "U" : "C"} />
-                  <ChatBubbleMessage variant={message.role === "user" ? "sent" : "received"}>
-                    {message.role === "system" ? (
-                      <div className="prose prose-invert prose-sm max-w-none">
-                        <ReactMarkdown
-                          components={{
-                            code: ({ children }) => (
-                              <code className="bg-black/40 text-chiliz-primary px-2 py-1 rounded text-sm font-mono">
-                                {children}
-                              </code>
-                            ),
-                            pre: ({ children }) => (
-                              <pre className="bg-black/60 border border-white/10 rounded-lg p-4 overflow-x-auto">
-                                {children}
-                              </pre>
-                            ),
-                          }}
-                        >
-                          {message.content}
-                        </ReactMarkdown>
-                      </div>
-                    ) : (
-                      message.content
-                    )}
-                  </ChatBubbleMessage>
-                </ChatBubble>
+                <div key={index} className={message.role === "system" ? "mt-6" : ""}>
+                  <ChatBubble variant={message.role === "user" ? "sent" : "received"}>
+                    <ChatBubbleAvatar fallback={message.role === "user" ? "U" : "C"} />
+                    <ChatBubbleMessage variant={message.role === "user" ? "sent" : "received"}>
+                      {message.role === "system" ? (
+                        <div className="prose prose-invert prose-sm max-w-none">
+                          <ReactMarkdown
+                            components={{
+                              code: ({ children }) => (
+                                <code className="bg-black/40 text-chiliz-primary px-2 py-1 rounded text-sm font-mono">
+                                  {children}
+                                </code>
+                              ),
+                              pre: ({ children }) => (
+                                <pre className="bg-black/60 border border-white/10 rounded-lg p-4 overflow-x-auto">
+                                  {children}
+                                </pre>
+                              ),
+                            }}
+                          >
+                            {message.content}
+                          </ReactMarkdown>
+                        </div>
+                      ) : (
+                        message.content
+                      )}
+                    </ChatBubbleMessage>
+                  </ChatBubble>
+                </div>
               ))}
 
               {isTyping && (
-                <ChatBubble variant="received">
-                  <ChatBubbleAvatar fallback="C" />
-                  <ChatBubbleMessage isLoading />
-                </ChatBubble>
+                <div className="mt-6">
+                  <ChatBubble variant="received">
+                    <ChatBubbleAvatar fallback="C" />
+                    <ChatBubbleMessage isLoading />
+                  </ChatBubble>
+                </div>
               )}
 
               {/* Action Buttons - Show only when first message */}
