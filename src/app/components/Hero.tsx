@@ -72,7 +72,7 @@ export default function Hero() {
       {/* Spline Scene - Above Silk */}
       {!splineError && (
         <Spline 
-          scene={`https://prod.spline.design/lX0ekK8OK9dc4DlA/scene.splinecode?v=${sceneVersion}`}
+          scene={`https://prod.spline.design/lX0ekK8OK9dc4DlA/scene.splinecode?v=${Date.now()}&cache=false`}
           onLoad={handleSplineLoad}
           onError={handleSplineError}
           style={{ 
