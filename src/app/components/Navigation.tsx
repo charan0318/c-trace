@@ -12,6 +12,7 @@ import { isFeatureEnabled } from "../lib/features";
 export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const [isLoadingScreenVisible, setIsLoadingScreenVisible] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -34,8 +35,25 @@ export default function Navigation() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Hide navigation on explorer page
-  if (pathname === '/explorer') {
+  // Check if loading screen is visible by detecting DOM elements
+  useEffect(() => {
+    const checkLoadingScreen = () => {
+      const loadingScreen = document.querySelector('[data-loading-screen]') || 
+                           document.querySelector('.fixed.inset-0.bg-black') ||
+                           document.body.style.overflow === 'hidden';
+      setIsLoadingScreenVisible(!!loadingScreen);
+    };
+
+    checkLoadingScreen();
+    
+    // Check periodically for loading screen
+    const interval = setInterval(checkLoadingScreen, 100);
+    
+    return () => clearInterval(interval);
+  }, []);
+
+  // Hide navigation on explorer page or when loading screen is visible
+  if (pathname === '/explorer' || isLoadingScreenVisible) {
     return null;
   }
 

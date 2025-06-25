@@ -45,7 +45,7 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
   }, [onLoadingComplete]);
 
   return (
-    <div className="fixed inset-0 bg-black flex flex-col items-center justify-center z-50">
+    <div data-loading-screen className="fixed inset-0 bg-black flex flex-col items-center justify-center z-50">
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-10">
         <div 
