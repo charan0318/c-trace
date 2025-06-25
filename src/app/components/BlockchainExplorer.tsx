@@ -5,6 +5,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Search, Send, Terminal, ArrowDown, Copy, Edit, Zap, FileText, TrendingUp } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import ReactMarkdown from "react-markdown";
+import BeautifiedResponse from "./ui/BeautifiedResponse";
 
 // Import script to interact with Nebula API
 import {
@@ -191,10 +192,10 @@ const ChatBubbleMessage: React.FC<ChatBubbleMessageProps> = ({
 }) => {
   return (
     <div className={cn(
-      "relative rounded-2xl px-4 py-3 text-sm backdrop-blur-sm border transition-all duration-300 hover:shadow-lg group-hover:shadow-md animate-fade-in",
+      "relative rounded-2xl text-sm backdrop-blur-sm border transition-all duration-300 hover:shadow-lg group-hover:shadow-md animate-fade-in",
       variant === "sent"
-        ? "bg-gradient-to-br from-chiliz-primary/20 to-red-600/20 border-chiliz-primary/30 text-white ml-auto"
-        : "bg-gray-900/60 border-white/20 text-white"
+        ? "bg-gradient-to-br from-chiliz-primary/20 to-red-600/20 border-chiliz-primary/30 text-white ml-auto px-4 py-3"
+        : "bg-transparent border-transparent text-white p-0"
     )}>
       {/* Branded AI Avatar Bubble - Only for AI responses */}
       {variant === "received" && (
@@ -204,13 +205,15 @@ const ChatBubbleMessage: React.FC<ChatBubbleMessageProps> = ({
       )}
       
       {isLoading ? (
-        <div className="flex items-center gap-1">
-          <div className="flex gap-1">
-            <div className="w-2 h-2 bg-chiliz-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-            <div className="w-2 h-2 bg-red-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-            <div className="w-2 h-2 bg-chiliz-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+        <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/40 p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
+          <div className="flex items-center gap-3">
+            <div className="flex gap-1">
+              <div className="w-3 h-3 bg-chiliz-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+              <div className="w-3 h-3 bg-red-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+              <div className="w-3 h-3 bg-chiliz-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+            </div>
+            <span className="text-white/70 text-sm">C-TRACE is analyzing...</span>
           </div>
-          <span className="text-white/70 text-sm ml-2">C-TRACE is analyzing...</span>
         </div>
       ) : (
         <div className="relative">
@@ -503,24 +506,7 @@ export function BlockchainExplorer() {
                     <ChatBubbleAvatar fallback={message.role === "user" ? "U" : "C"} />
                     <ChatBubbleMessage variant={message.role === "user" ? "sent" : "received"}>
                       {message.role === "system" ? (
-                        <div className="prose prose-invert prose-sm max-w-none">
-                          <ReactMarkdown
-                            components={{
-                              code: ({ children }) => (
-                                <code className="bg-black/40 text-chiliz-primary px-2 py-1 rounded text-sm font-mono">
-                                  {children}
-                                </code>
-                              ),
-                              pre: ({ children }) => (
-                                <pre className="bg-black/60 border border-white/10 rounded-lg p-4 overflow-x-auto">
-                                  {children}
-                                </pre>
-                              ),
-                            }}
-                          >
-                            {message.content}
-                          </ReactMarkdown>
-                        </div>
+                        <BeautifiedResponse text={message.content} />
                       ) : (
                         message.content
                       )}
