@@ -8,9 +8,7 @@ import Silk from '@/app/components/ui/Silk';
 import { useRouter } from 'next/navigation';
 
 const blockchains = [
-  { value: '88888', label: 'Chiliz Chain' },
-  { value: '88888', label: 'CHZ Mainnet' },
-  { value: '88882', label: 'Chiliz Spicy Testnet' }
+  { value: '88888', label: 'Chiliz Mainnet' },
 ];
 
 export default function Hero() {
