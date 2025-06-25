@@ -510,6 +510,29 @@ export function BlockchainExplorer() {
         }}
       />
 
+      {/* Got Feedback Button - Fixed Position */}
+      <div className="fixed bottom-6 left-6 z-50">
+        <a
+          href="https://t.me/ch04niverse"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group relative inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white bg-transparent border-2 border-chiliz-primary rounded-full hover:bg-chiliz-primary/10 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+          style={{
+            boxShadow: '0 0 20px rgba(255, 178, 102, 0.3), inset 0 0 20px rgba(255, 178, 102, 0.1)',
+            animation: 'neon-pulse 2s ease-in-out infinite alternate'
+          }}
+        >
+          {/* Neon glow background */}
+          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-chiliz-primary/20 to-red-600/20 blur-lg opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
+          
+          {/* Button content */}
+          <span className="relative z-10 whitespace-nowrap">Got Feedback?</span>
+          
+          {/* Animated border */}
+          <div className="absolute inset-0 rounded-full border-2 border-chiliz-primary opacity-0 group-hover:opacity-100 animate-pulse transition-all duration-300"></div>
+        </a>
+      </div>
+
       {/* Main Content */}
       <div className="h-full flex flex-col">
 
