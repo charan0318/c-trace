@@ -497,7 +497,7 @@ export function BlockchainExplorer() {
           rotation={0}
         />
       </div>
-      
+
       {/* Background Pattern */}
       <div 
         className="absolute inset-0 z-[-5] opacity-10"
@@ -528,18 +528,18 @@ export function BlockchainExplorer() {
                           <ReactMarkdown 
                             className="prose prose-invert max-w-none text-sm md:text-base"
                             components={{
-                              h1: ({ children }) => <h1 className="font-bold text-base md:text-lg text-chiliz-primary mb-3 md:mb-4">{children}</h1>,
-                              h2: ({ children }) => <h2 className="font-bold text-base md:text-lg text-white mb-2 md:mb-3">{children}</h2>,
-                              h3: ({ children }) => <h3 className="font-bold text-base md:text-lg text-white/90 mb-1 md:mb-2">{children}</h3>,
-                              p: ({ children }) => <p className="font-normal text-white/80 mb-2 leading-relaxed text-sm md:text-base">{children}</p>,
-                              ul: ({ children }) => <ul className="space-y-1 mb-3 md:mb-4">{children}</ul>,
-                              li: ({ children }) => <li className="font-normal text-white/70 text-xs md:text-sm">{children}</li>,
-                              code: ({ children }) => (
+                              h1: ({ children }: { children: React.ReactNode }) => <h1 className="font-bold text-base md:text-lg text-chiliz-primary mb-3 md:mb-4">{children}</h1>,
+                              h2: ({ children }: { children: React.ReactNode }) => <h2 className="font-bold text-base md:text-lg text-white mb-2 md:mb-3">{children}</h2>,
+                              h3: ({ children }: { children: React.ReactNode }) => <h3 className="font-bold text-base md:text-lg text-white/90 mb-1 md:mb-2">{children}</h3>,
+                              p: ({ children }: { children: React.ReactNode }) => <p className="font-normal text-white/80 mb-2 leading-relaxed text-sm md:text-base">{children}</p>,
+                              ul: ({ children }: { children: React.ReactNode }) => <ul className="space-y-1 mb-3 md:mb-4">{children}</ul>,
+                              li: ({ children }: { children: React.ReactNode }) => <li className="font-normal text-white/70 text-xs md:text-sm">{children}</li>,
+                              code: ({ children }: { children: React.ReactNode }) => (
                                 <code className="bg-gray-800/60 px-1 md:px-2 py-1 rounded text-chiliz-primary text-xs md:text-sm font-mono break-all">
                                   {children}
                                 </code>
                               ),
-                              strong: ({ children }) => <strong className="text-white font-bold">{children}</strong>,
+                              strong: ({ children }: { children: React.ReactNode }) => <strong className="text-white font-bold">{children}</strong>,
                             }}
                           >
                             {message.content}
@@ -550,18 +550,18 @@ export function BlockchainExplorer() {
                           <ReactMarkdown 
                             className="prose prose-invert max-w-none text-sm md:text-base"
                             components={{
-                              h1: ({ children }) => <h1 className="font-bold text-base md:text-lg text-chiliz-primary mb-3 md:mb-4">{children}</h1>,
-                              h2: ({ children }) => <h2 className="font-bold text-base md:text-lg text-white mb-2 md:mb-3">{children}</h2>,
-                              h3: ({ children }) => <h3 className="font-bold text-base md:text-lg text-white/90 mb-1 md:mb-2">{children}</h3>,
-                              p: ({ children }) => <p className="font-normal text-white/80 mb-2 leading-relaxed text-sm md:text-base">{children}</p>,
-                              ul: ({ children }) => <ul className="space-y-1 mb-3 md:mb-4">{children}</ul>,
-                              li: ({ children }) => <li className="font-normal text-white/70 text-xs md:text-sm">{children}</li>,
-                              code: ({ children }) => (
+                              h1: ({ children }: { children: React.ReactNode }) => <h1 className="font-bold text-base md:text-lg text-chiliz-primary mb-3 md:mb-4">{children}</h1>,
+                              h2: ({ children }: { children: React.ReactNode }) => <h2 className="font-bold text-base md:text-lg text-white mb-2 md:mb-3">{children}</h2>,
+                              h3: ({ children }: { children: React.ReactNode }) => <h3 className="font-bold text-base md:text-lg text-white/90 mb-1 md:mb-2">{children}</h3>,
+                              p: ({ children }: { children: React.ReactNode }) => <p className="font-normal text-white/80 mb-2 leading-relaxed text-sm md:text-base">{children}</p>,
+                              ul: ({ children }: { children: React.ReactNode }) => <ul className="space-y-1 mb-3 md:mb-4">{children}</ul>,
+                              li: ({ children }: { children: React.ReactNode }) => <li className="font-normal text-white/70 text-xs md:text-sm">{children}</li>,
+                              code: ({ children }: { children: React.ReactNode }) => (
                                 <code className="bg-gray-800/60 px-1 md:px-2 py-1 rounded text-chiliz-primary text-xs md:text-sm font-mono break-all">
                                   {children}
                                 </code>
                               ),
-                              strong: ({ children }) => <strong className="text-white font-bold">{children}</strong>,
+                              strong: ({ children }: { children: React.ReactNode }) => <strong className="text-white font-bold">{children}</strong>,
                             }}
                           >
                             {message.content}

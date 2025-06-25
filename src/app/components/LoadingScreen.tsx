@@ -43,7 +43,7 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
     }, 400);
 
     return () => clearInterval(interval);
-  }, [onLoadingComplete]);
+  }, [onLoadingComplete, loadingSteps]);
 
   return (
     <div className="fixed inset-0 bg-black flex flex-col items-center justify-center z-50">
