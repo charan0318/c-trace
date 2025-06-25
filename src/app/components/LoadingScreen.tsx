@@ -12,11 +12,11 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
   const [dots, setDots] = useState('');
 
   const loadingSteps = [
-    '[INFO] Loading 3D environment...',
-    '[INFO] Initializing blockchain explorer...',
+    '[INFO] Initializing C-TRACE Explorer...',
     '[INFO] Connecting to Chiliz network...',
-    '[INFO] Preparing AI assistant...',
-    '[INFO] Starting C-TRACE interface...'
+    '[INFO] Loading AI assistant...',
+    '[INFO] Preparing blockchain interface...',
+    '[INFO] Starting explorer session...'
   ];
 
   useEffect(() => {
