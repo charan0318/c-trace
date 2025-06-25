@@ -172,7 +172,7 @@ interface ChatBubbleAvatarProps {
 
 const ChatBubbleAvatar: React.FC<ChatBubbleAvatarProps> = ({ fallback }) => {
   return (
-    <div className="flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-full bg-gradient-to-br from-chiliz-primary to-chiliz-secondary text-xs font-medium text-white">
+    <div className="flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-full bg-gradient-to-br from-chiliz-primary to-red-600 text-xs font-medium text-white">
       {fallback}
     </div>
   );
@@ -193,14 +193,14 @@ const ChatBubbleMessage: React.FC<ChatBubbleMessageProps> = ({
     <div className={cn(
       "relative rounded-2xl px-4 py-3 text-sm backdrop-blur-sm border transition-all duration-300 hover:shadow-lg group-hover:shadow-md",
       variant === "sent"
-        ? "bg-gradient-to-br from-chiliz-primary/20 to-chiliz-secondary/20 border-chiliz-primary/30 text-white ml-auto"
+        ? "bg-gradient-to-br from-chiliz-primary/20 to-red-600/20 border-chiliz-primary/30 text-white ml-auto"
         : "bg-gray-900/60 border-white/20 text-white"
     )}>
       {isLoading ? (
         <div className="flex items-center gap-1">
           <div className="flex gap-1">
             <div className="w-2 h-2 bg-chiliz-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-            <div className="w-2 h-2 bg-chiliz-secondary rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+            <div className="w-2 h-2 bg-red-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
             <div className="w-2 h-2 bg-chiliz-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
           </div>
           <span className="text-white/70 text-sm ml-2">C-TRACE is analyzing...</span>
@@ -229,7 +229,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ icon: Icon, title, descript
       className="group relative p-6 rounded-2xl bg-gray-900/40 backdrop-blur-sm border border-white/20 hover:border-chiliz-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-chiliz-primary/20 hover:bg-gray-900/60 text-left w-full"
     >
       <div className="flex items-start gap-4">
-        <div className="p-3 rounded-xl bg-gradient-to-br from-chiliz-primary/20 to-chiliz-secondary/20 border border-chiliz-primary/30 group-hover:from-chiliz-primary/30 group-hover:to-chiliz-secondary/30 transition-all duration-300">
+        <div className="p-3 rounded-xl bg-gradient-to-br from-chiliz-primary/20 to-red-600/20 border border-chiliz-primary/30 group-hover:from-chiliz-primary/30 group-hover:to-red-600/30 transition-all duration-300">
           <Icon className="h-6 w-6 text-chiliz-primary" />
         </div>
         <div className="flex-1">
@@ -499,7 +499,7 @@ export function BlockchainExplorer() {
                         <ReactMarkdown
                           components={{
                             code: ({ children }) => (
-                              <code className="bg-black/40 text-chiliz-secondary px-2 py-1 rounded text-sm font-mono">
+                              <code className="bg-black/40 text-chiliz-primary px-2 py-1 rounded text-sm font-mono">
                                 {children}
                               </code>
                             ),
@@ -588,7 +588,7 @@ export function BlockchainExplorer() {
                   <button
                     type="submit"
                     disabled={!input.trim()}
-                    className="h-10 w-10 bg-gradient-to-r from-chiliz-primary to-chiliz-secondary hover:from-chiliz-secondary hover:to-chiliz-primary border-0 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl flex items-center justify-center transition-all duration-200 shadow-lg hover:shadow-xl disabled:shadow-none"
+                    className="h-10 w-10 bg-gradient-to-r from-chiliz-primary to-red-600 hover:from-red-600 hover:to-chiliz-primary border-0 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl flex items-center justify-center transition-all duration-200 shadow-lg hover:shadow-xl disabled:shadow-none"
                   >
                     <Send className="h-5 w-5 text-white" />
                   </button>
