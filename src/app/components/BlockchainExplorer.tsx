@@ -493,9 +493,9 @@ export function BlockchainExplorer() {
             className="flex flex-col w-full h-full px-6 py-4 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent hover:scrollbar-thumb-white/20 transition-colors"
             ref={scrollRef}
           >
-            <div className="flex flex-col min-h-full pb-6 space-y-6 max-w-4xl mx-auto w-full">
+            <div className="flex flex-col min-h-full pb-6 space-y-4 max-w-4xl mx-auto w-full">
               {messages.map((message, index) => (
-                <div key={index} className={message.role === "system" ? "mt-6" : ""}>
+                <div key={index} className={message.role === "system" ? "mt-2" : ""}>
                   <ChatBubble variant={message.role === "user" ? "sent" : "received"}>
                     <ChatBubbleAvatar fallback={message.role === "user" ? "U" : "C"} />
                     <ChatBubbleMessage variant={message.role === "user" ? "sent" : "received"}>
@@ -550,7 +550,7 @@ export function BlockchainExplorer() {
               ))}
 
               {isTyping && (
-                <div className="mt-6">
+                <div className="mt-2">
                   <ChatBubble variant="received">
                     <ChatBubbleAvatar fallback="C" />
                     <ChatBubbleMessage isLoading />
