@@ -407,7 +407,7 @@ export function BlockchainExplorer() {
   };
 
   const handleExecute = async () => {
-    if (!account?.address || !input.includes("execute") || !hasContractToExplore) return;
+    if (!account?.address || !input.includes("execute")) return;
 
     const executeMessage = input.trim();
     setMessages((prev) => [...prev, { role: "user", content: executeMessage }]);
@@ -421,8 +421,8 @@ export function BlockchainExplorer() {
         account.address,
         "default-user",
         false,
-        chainId!,
-        contractAddress!,
+        chainId || "88888",
+        contractAddress || "",
         sessionId
       );
 
@@ -636,7 +636,7 @@ export function BlockchainExplorer() {
                     <Send className="h-5 w-5 text-white" />
                   </button>
 
-                  {input.includes("execute") && hasContractToExplore && (
+                  {input.includes("execute") && walletAddress && (
                     <button
                       type="button"
                       onClick={handleExecute}
