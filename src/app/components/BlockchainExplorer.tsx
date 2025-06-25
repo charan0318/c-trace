@@ -556,7 +556,7 @@ export function BlockchainExplorer() {
                     <button
                       key={index}
                       onClick={() => setInput(action)}
-                      className="flex-shrink-0 px-3 py-1.5 text-xs rounded-full bg-gray-900/60 border border-white/20 hover:border-chiliz-primary/50 hover:bg-gray-900/80 transition-all duration-200 text-white/60 hover:text-white whitespace-nowrap"
+                      className="flex-shrink-0 px-3 py-1.5 text-xs rounded-full bg-transparent border border-white/10 hover:border-chiliz-primary/30 hover:bg-chiliz-primary/10 transition-all duration-200 text-white/50 hover:text-white whitespace-nowrap"
                     >
                       {action}
                     </button>
