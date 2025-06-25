@@ -81,7 +81,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   return (
     <div
       className={`
-        relative flex items-center w-full max-w-4xl mx-auto
+        relative flex items-stretch w-full max-w-4xl mx-auto
         bg-white/10 backdrop-blur-md border border-red-400/40
         rounded-2xl shadow-lg p-2 gap-2
         shadow-red-500/20 shadow-2xl
@@ -101,9 +101,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
           placeholder={placeholder}
           className="
             w-full px-4 py-3 bg-transparent text-white placeholder-white/60
-            border border-gray-600/40 rounded-xl
-            focus:outline-none focus:border-gray-500/70 focus:ring-2 focus:ring-gray-500/30
-            transition-all duration-200
+            border border-red-400/40 rounded-xl
+            focus:outline-none focus:border-red-500/70 focus:ring-2 focus:ring-red-500/30
+            transition-all duration-200 min-h-[48px]
+            shadow-inner shadow-red-500/10
           "
         />
       </div>
@@ -114,9 +115,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           className="
             flex items-center justify-between min-w-[140px] px-4 py-3
-            bg-transparent text-white border border-gray-600/40 rounded-xl
-            hover:border-gray-500/70 focus:outline-none focus:border-gray-500/70
-            focus:ring-2 focus:ring-gray-500/30 transition-all duration-200
+            bg-transparent text-white border border-red-400/40 rounded-xl
+            hover:border-red-500/70 focus:outline-none focus:border-red-500/70
+            focus:ring-2 focus:ring-red-500/30 transition-all duration-200 min-h-[48px]
+            shadow-inner shadow-red-500/10
           "
         >
           <span className="text-sm truncate">{selectedChainLabel}</span>
@@ -130,8 +132,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
         {isDropdownOpen && (
           <div className="
             absolute top-full left-0 right-0 mt-1 z-50
-            bg-white/10 backdrop-blur-md border border-gray-600/40
-            rounded-xl shadow-lg overflow-hidden
+            bg-white/10 backdrop-blur-md border border-red-400/40
+            rounded-xl shadow-lg shadow-red-500/20 overflow-hidden
           ">
             {chains.map((option) => (
               <button
