@@ -88,13 +88,12 @@ export default function Navigation() {
                 <span className="hidden lg:block">Explorer</span>
               </Link>
 
-              {/* Enhanced Connect Wallet Button */}
+              {/* Enhanced Connect Wallet Button - TEMPORARILY DISABLED */}
+              {/* 
               <div className="relative">
-                {/* Glow background */}
                 <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-chiliz-primary/20 to-red-600/20 blur-lg opacity-50"></div>
 
                 <div className="relative overflow-hidden rounded-xl border border-white/20 bg-gradient-to-r from-gray-900/80 to-black/80 backdrop-blur-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-                  {/* Shimmer effect */}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-pulse duration-1000"></div>
 
                   <div className="relative">
@@ -138,6 +137,7 @@ export default function Navigation() {
                   </div>
                 </div>
               </div>
+              */
             </div>
 
             {/* Mobile Menu Button */}
@@ -173,7 +173,8 @@ export default function Navigation() {
                   <span>Explorer</span>
                 </Link>
 
-                {/* Mobile Connect Wallet Button */}
+                {/* Mobile Connect Wallet Button - TEMPORARILY DISABLED */}
+                {/* 
                 <div className="relative">
                   <div className="relative overflow-hidden rounded-xl border border-white/20 bg-gradient-to-r from-gray-900/80 to-black/80 backdrop-blur-xl">
                     <ConnectButton
@@ -216,6 +217,7 @@ export default function Navigation() {
                     />
                   </div>
                 </div>
+                */
               </div>
             </div>
           )}
