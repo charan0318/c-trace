@@ -284,20 +284,20 @@ export function BlockchainExplorer() {
     {
       icon: Search,
       title: "Analyze Chiliz Contract",
-      description: "Deep dive into Chiliz smart contracts and fan token functionality",
+      description: "Explore any Chiliz smart contract. Uncover methods, data, and fan token logic instantly",
       prompt: "Analyze this smart contract on Chiliz Chain: [paste address]"
     },
     {
       icon: TrendingUp,
       title: "Fan Token Analysis",
-      description: "Get insights on fan token performance and Chiliz ecosystem trends",
+      description: "Track fan token performance and discover emerging trends across the Chiliz ecosystem",
       prompt: "What are the main features of the Chiliz Chain and fan tokens?"
     },
     {
       icon: FileText,
       title: "Chiliz Research",
-      description: "Research Chiliz protocol, CHZ token, and sports partnerships",
-      prompt: "Help me understand the Chiliz ecosystem and its sports partnerships"
+      description: "Investigate the CHZ token, its on-chain utility, and the network of sports organizations using it",
+      prompt: "Help me understand the Chiliz ecosystem and its sports clubs using it"
     },
     {
       icon: Zap,
