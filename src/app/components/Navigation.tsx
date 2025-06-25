@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { ConnectButton } from "thirdweb/react";
 import { client } from "../client";
 import { inAppWallet, createWallet } from "thirdweb/wallets";
@@ -10,6 +11,12 @@ import { Search, Zap, Globe, Menu, X } from "lucide-react";
 export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const pathname = usePathname();
+
+  // Hide navigation on explorer page
+  if (pathname === '/explorer') {
+    return null;
+  }
 
   useEffect(() => {
     let lastScrollY = window.pageYOffset;
