@@ -499,7 +499,51 @@ export function BlockchainExplorer() {
                   <ChatBubble variant={message.role === "user" ? "sent" : "received"}>
                     <ChatBubbleAvatar fallback={message.role === "user" ? "U" : "C"} />
                     <ChatBubbleMessage variant={message.role === "user" ? "sent" : "received"}>
-                      {message.content}
+                      {message.role === "system" && message.content.includes("Contract Details") ? (
+                        <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/40 p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
+                          <ReactMarkdown 
+                            className="prose prose-invert max-w-none"
+                            components={{
+                              h1: ({ children }) => <h1 className="text-xl font-bold text-chiliz-primary mb-4">{children}</h1>,
+                              h2: ({ children }) => <h2 className="text-lg font-semibold text-white mb-3">{children}</h2>,
+                              h3: ({ children }) => <h3 className="text-md font-medium text-white/90 mb-2">{children}</h3>,
+                              p: ({ children }) => <p className="text-white/80 mb-2 leading-relaxed">{children}</p>,
+                              ul: ({ children }) => <ul className="space-y-1 mb-4">{children}</ul>,
+                              li: ({ children }) => <li className="text-white/70 text-sm">{children}</li>,
+                              code: ({ children }) => (
+                                <code className="bg-gray-800/60 px-2 py-1 rounded text-chiliz-primary text-sm font-mono">
+                                  {children}
+                                </code>
+                              ),
+                              strong: ({ children }) => <strong className="text-white font-semibold">{children}</strong>,
+                            }}
+                          >
+                            {message.content}
+                          </ReactMarkdown>
+                        </div>
+                      ) : (
+                        <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/40 p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
+                          <ReactMarkdown 
+                            className="prose prose-invert max-w-none"
+                            components={{
+                              h1: ({ children }) => <h1 className="text-xl font-bold text-chiliz-primary mb-4">{children}</h1>,
+                              h2: ({ children }) => <h2 className="text-lg font-semibold text-white mb-3">{children}</h2>,
+                              h3: ({ children }) => <h3 className="text-md font-medium text-white/90 mb-2">{children}</h3>,
+                              p: ({ children }) => <p className="text-white/80 mb-2 leading-relaxed">{children}</p>,
+                              ul: ({ children }) => <ul className="space-y-1 mb-4">{children}</ul>,
+                              li: ({ children }) => <li className="text-white/70 text-sm">{children}</li>,
+                              code: ({ children }) => (
+                                <code className="bg-gray-800/60 px-2 py-1 rounded text-chiliz-primary text-sm font-mono">
+                                  {children}
+                                </code>
+                              ),
+                              strong: ({ children }) => <strong className="text-white font-semibold">{children}</strong>,
+                            }}
+                          >
+                            {message.content}
+                          </ReactMarkdown>
+                        </div>
+                      )}
                     </ChatBubbleMessage>
                   </ChatBubble>
                 </div>
