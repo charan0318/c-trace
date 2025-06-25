@@ -37,6 +37,8 @@ interface ScrollState {
 function useAutoScroll(content?: React.ReactNode) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const lastContentHeight = useRef(0);
+  const animationFrameRef = useRef<number | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const [scrollState, setScrollState] = useState<ScrollState>({
     isAtBottom: true,
@@ -44,20 +46,22 @@ function useAutoScroll(content?: React.ReactNode) {
   });
 
   const checkIsAtBottom = useCallback((element: HTMLElement) => {
+    if (!element || !element.parentNode) return false;
     const { scrollTop, scrollHeight, clientHeight } = element;
     const distanceToBottom = Math.abs(scrollHeight - scrollTop - clientHeight);
     return distanceToBottom <= 20;
   }, []);
 
   const scrollToBottom = useCallback((instant?: boolean) => {
-    if (!scrollRef.current) return;
+    const element = scrollRef.current;
+    if (!element || !element.parentNode) return;
 
-    const targetScrollTop = scrollRef.current.scrollHeight - scrollRef.current.clientHeight;
+    const targetScrollTop = element.scrollHeight - element.clientHeight;
     
     if (instant) {
-      scrollRef.current.scrollTop = targetScrollTop;
+      element.scrollTop = targetScrollTop;
     } else {
-      scrollRef.current.scrollTo({
+      element.scrollTo({
         top: targetScrollTop,
         behavior: "smooth",
       });
@@ -70,8 +74,10 @@ function useAutoScroll(content?: React.ReactNode) {
   }, []);
 
   const handleScroll = useCallback(() => {
-    if (!scrollRef.current) return;
-    const atBottom = checkIsAtBottom(scrollRef.current);
+    const element = scrollRef.current;
+    if (!element || !element.parentNode) return;
+    
+    const atBottom = checkIsAtBottom(element);
     setScrollState((prev) => ({
       isAtBottom: atBottom,
       autoScrollEnabled: atBottom ? true : prev.autoScrollEnabled,
@@ -82,24 +88,59 @@ function useAutoScroll(content?: React.ReactNode) {
     const element = scrollRef.current;
     if (!element) return;
 
-    element.addEventListener("scroll", handleScroll, { passive: true });
-    return () => element.removeEventListener("scroll", handleScroll);
+    const scrollHandler = handleScroll;
+    element.addEventListener("scroll", scrollHandler, { passive: true });
+
+    return () => {
+      // Clean up safely
+      if (element && element.parentNode && scrollHandler) {
+        try {
+          element.removeEventListener("scroll", scrollHandler);
+        } catch (error) {
+          // Ignore removal errors
+        }
+      }
+    };
   }, [handleScroll]);
 
   useEffect(() => {
     const scrollElement = scrollRef.current;
-    if (!scrollElement) return;
+    if (!scrollElement || !scrollElement.parentNode) return;
 
     const currentHeight = scrollElement.scrollHeight;
     const hasNewContent = currentHeight !== lastContentHeight.current;
 
     if (hasNewContent && scrollState.autoScrollEnabled) {
-      requestAnimationFrame(() => {
-        scrollToBottom(lastContentHeight.current === 0);
-      });
+      // Cancel any pending animations
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      // Use timeout instead of requestAnimationFrame for better stability
+      timeoutRef.current = setTimeout(() => {
+        if (scrollRef.current && scrollRef.current.parentNode) {
+          scrollToBottom(lastContentHeight.current === 0);
+        }
+      }, 50);
+      
       lastContentHeight.current = currentHeight;
     }
   }, [content, scrollState.autoScrollEnabled, scrollToBottom]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   return {
     scrollRef,
