@@ -469,7 +469,7 @@ export function BlockchainExplorer() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 pt-20 relative overflow-hidden">
+    <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900 pt-20 overflow-hidden">
       {/* Background Pattern */}
       <div 
         className="absolute inset-0 z-[-10] opacity-20"
@@ -481,73 +481,73 @@ export function BlockchainExplorer() {
       />
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex flex-col h-[calc(100vh-120px)]">
-            
-            {/* Chat Area */}
-            <div className="flex-1 mb-6 overflow-hidden">
-              <div
-                className="flex flex-col w-full h-full p-6 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent hover:scrollbar-thumb-white/20 transition-colors"
-                ref={scrollRef}
-                style={{ maxHeight: 'calc(100vh - 220px)' }}
-              >
-                <div className="flex flex-col min-h-full pb-6 space-y-6">
-                  {messages.map((message, index) => (
-                    <ChatBubble key={index} variant={message.role === "user" ? "sent" : "received"}>
-                      <ChatBubbleAvatar fallback={message.role === "user" ? "U" : "AI"} />
-                      <ChatBubbleMessage variant={message.role === "user" ? "sent" : "received"}>
-                        {message.role === "system" ? (
-                          <div className="prose prose-invert prose-sm max-w-none">
-                            <ReactMarkdown
-                              components={{
-                                code: ({ children }) => (
-                                  <code className="bg-black/40 text-chiliz-secondary px-2 py-1 rounded text-sm font-mono">
-                                    {children}
-                                  </code>
-                                ),
-                                pre: ({ children }) => (
-                                  <pre className="bg-black/60 border border-white/10 rounded-lg p-4 overflow-x-auto">
-                                    {children}
-                                  </pre>
-                                ),
-                              }}
-                            >
-                              {message.content}
-                            </ReactMarkdown>
-                          </div>
-                        ) : (
-                          message.content
-                        )}
-                      </ChatBubbleMessage>
-                    </ChatBubble>
+      <div className="h-full flex flex-col">
+        
+        {/* Chat Area */}
+        <div className="flex-1 overflow-hidden">
+          <div
+            className="flex flex-col w-full h-full px-6 py-4 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent hover:scrollbar-thumb-white/20 transition-colors"
+            ref={scrollRef}
+          >
+            <div className="flex flex-col min-h-full pb-6 space-y-6 max-w-4xl mx-auto w-full">
+              {messages.map((message, index) => (
+                <ChatBubble key={index} variant={message.role === "user" ? "sent" : "received"}>
+                  <ChatBubbleAvatar fallback={message.role === "user" ? "U" : "AI"} />
+                  <ChatBubbleMessage variant={message.role === "user" ? "sent" : "received"}>
+                    {message.role === "system" ? (
+                      <div className="prose prose-invert prose-sm max-w-none">
+                        <ReactMarkdown
+                          components={{
+                            code: ({ children }) => (
+                              <code className="bg-black/40 text-chiliz-secondary px-2 py-1 rounded text-sm font-mono">
+                                {children}
+                              </code>
+                            ),
+                            pre: ({ children }) => (
+                              <pre className="bg-black/60 border border-white/10 rounded-lg p-4 overflow-x-auto">
+                                {children}
+                              </pre>
+                            ),
+                          }}
+                        >
+                          {message.content}
+                        </ReactMarkdown>
+                      </div>
+                    ) : (
+                      message.content
+                    )}
+                  </ChatBubbleMessage>
+                </ChatBubble>
+              ))}
+
+              {isTyping && (
+                <ChatBubble variant="received">
+                  <ChatBubbleAvatar fallback="AI" />
+                  <ChatBubbleMessage isLoading />
+                </ChatBubble>
+              )}
+
+              {/* Action Buttons - Show only when first message */}
+              {messages.length === 1 && !hasContractToExplore && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+                  {actionButtons.map((action, index) => (
+                    <ActionButton
+                      key={index}
+                      icon={action.icon}
+                      title={action.title}
+                      description={action.description}
+                      onClick={() => handleQuickAction(action.prompt)}
+                    />
                   ))}
-
-                  {isTyping && (
-                    <ChatBubble variant="received">
-                      <ChatBubbleAvatar fallback="AI" />
-                      <ChatBubbleMessage isLoading />
-                    </ChatBubble>
-                  )}
-
-                  {/* Action Buttons - Show only when first message */}
-                  {messages.length === 1 && !hasContractToExplore && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
-                      {actionButtons.map((action, index) => (
-                        <ActionButton
-                          key={index}
-                          icon={action.icon}
-                          title={action.title}
-                          description={action.description}
-                          onClick={() => handleQuickAction(action.prompt)}
-                        />
-                      ))}
-                    </div>
-                  )}
                 </div>
-              </div>
+              )}
             </div>
+          </div>
+        </div>
 
+        {/* Input Area */}
+        <div className="bg-gray-900/40 backdrop-blur-sm border-t border-white/10 p-6">
+          <div className="max-w-4xl mx-auto">
             {/* Suggested Actions */}
             {messages.length > 1 && (
               <div className="mb-4">
@@ -566,53 +566,54 @@ export function BlockchainExplorer() {
             )}
 
             {/* Chat Input */}
-            <div className="mt-auto bg-gray-900/40 backdrop-blur-sm rounded-t-2xl border-t border-white/10 pt-6 px-2">
-              <form 
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleSend();
-                }} 
-                className="relative"
-              >
-                <div className="relative rounded-2xl border border-white/20 bg-gray-900/80 backdrop-blur-sm focus-within:border-chiliz-primary/60 focus-within:shadow-lg focus-within:shadow-chiliz-primary/20 transition-all duration-300 hover:border-white/30">
-                  <input
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    placeholder={hasContractToExplore 
-                      ? "Ask about this Chiliz contract or execute a command..." 
-                      : "Ask about Chiliz, fan tokens, or CHZ ecosystem..."}
-                    className="w-full border-0 bg-transparent px-6 py-4 pr-20 focus:outline-none text-white placeholder:text-white/50 text-base"
-                    onKeyPress={(e) => e.key === "Enter" && handleSend()}
-                  />
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+            <form 
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSend();
+              }} 
+              className="relative"
+            >
+              <div className="relative rounded-2xl border border-white/20 bg-gray-900/80 backdrop-blur-sm focus-within:border-chiliz-primary/60 focus-within:shadow-lg focus-within:shadow-chiliz-primary/20 transition-all duration-300 hover:border-white/30">
+                <input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder={hasContractToExplore 
+                    ? "Ask about this Chiliz contract or execute a command..." 
+                    : "Ask about Chiliz, fan tokens, or CHZ ecosystem..."}
+                  className="w-full border-0 bg-transparent px-6 py-4 pr-20 focus:outline-none text-white placeholder:text-white/50 text-base"
+                  onKeyPress={(e) => e.key === "Enter" && handleSend()}
+                />
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                  <button
+                    type="submit"
+                    disabled={!input.trim()}
+                    className="h-10 w-10 bg-gradient-to-r from-chiliz-primary to-chiliz-secondary hover:from-chiliz-secondary hover:to-chiliz-primary border-0 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl flex items-center justify-center transition-all duration-200 shadow-lg hover:shadow-xl disabled:shadow-none"
+                  >
+                    <Send className="h-5 w-5 text-white" />
+                  </button>
+                  
+                  {input.includes("execute") && hasContractToExplore && (
                     <button
-                      type="submit"
-                      disabled={!input.trim()}
-                      className="h-10 w-10 bg-gradient-to-r from-chiliz-primary to-chiliz-secondary hover:from-chiliz-secondary hover:to-chiliz-primary border-0 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl flex items-center justify-center transition-all duration-200 shadow-lg hover:shadow-xl disabled:shadow-none"
+                      type="button"
+                      onClick={handleExecute}
+                      className="h-10 w-10 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-emerald-600 hover:to-green-600 text-white rounded-xl flex items-center justify-center transition-all duration-200 shadow-lg hover:shadow-xl"
                     >
-                      <Send className="h-5 w-5 text-white" />
+                      <Terminal className="h-5 w-5" />
                     </button>
-                    
-                    {input.includes("execute") && hasContractToExplore && (
-                      <button
-                        type="button"
-                        onClick={handleExecute}
-                        className="h-10 w-10 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-emerald-600 hover:to-green-600 text-white rounded-xl flex items-center justify-center transition-all duration-200 shadow-lg hover:shadow-xl"
-                      >
-                        <Terminal className="h-5 w-5" />
-                      </button>
-                    )}
-                  </div>
+                  )}
                 </div>
-              </form>
+              </div>
+            </form>
+
+            {/* Footer moved inside input area */}
+            <div className="mt-4 text-center">
+              <span className="text-xs text-white/30">
+                &copy; {new Date().getFullYear()} c-trace | Crafted with ❤ from ch04niverse
+              </span>
             </div>
           </div>
         </div>
       </div>
-      {/* Footer */}
-      <footer className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-sm text-white/40 text-center">
-        &copy; {new Date().getFullYear()} c-trace | Crafted with ❤ from ch04niverse
-      </footer>
     </div>
   );
 }
