@@ -199,14 +199,14 @@ const ChatBubbleMessage: React.FC<ChatBubbleMessageProps> = ({
       
       
       {isLoading ? (
-        <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/40 p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
-          <div className="flex items-center gap-3">
+        <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/40 p-3 rounded-xl border border-white/10 backdrop-blur-sm">
+          <div className="flex items-center gap-2">
             <div className="flex gap-1">
-              <div className="w-3 h-3 bg-chiliz-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-              <div className="w-3 h-3 bg-red-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-              <div className="w-3 h-3 bg-chiliz-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+              <div className="w-2 h-2 bg-chiliz-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+              <div className="w-2 h-2 bg-red-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+              <div className="w-2 h-2 bg-chiliz-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
             </div>
-            <span className="text-white/70 text-sm">C-TRACE is analyzing...</span>
+            <span className="text-white/70 text-xs">C-TRACE is analyzing...</span>
           </div>
         </div>
       ) : (
