@@ -492,7 +492,7 @@ export function BlockchainExplorer() {
             <div className="flex flex-col min-h-full pb-6 space-y-6 max-w-4xl mx-auto w-full">
               {messages.map((message, index) => (
                 <ChatBubble key={index} variant={message.role === "user" ? "sent" : "received"}>
-                  <ChatBubbleAvatar fallback={message.role === "user" ? "U" : "AI"} />
+                  <ChatBubbleAvatar fallback={message.role === "user" ? "U" : "C"} />
                   <ChatBubbleMessage variant={message.role === "user" ? "sent" : "received"}>
                     {message.role === "system" ? (
                       <div className="prose prose-invert prose-sm max-w-none">
@@ -522,7 +522,7 @@ export function BlockchainExplorer() {
 
               {isTyping && (
                 <ChatBubble variant="received">
-                  <ChatBubbleAvatar fallback="AI" />
+                  <ChatBubbleAvatar fallback="C" />
                   <ChatBubbleMessage isLoading />
                 </ChatBubble>
               )}

@@ -79,13 +79,13 @@ export default function Hero() {
           <p>3D Scene unavailable - Using fallback background</p>
         </div>
       )}
-            {/* Explorer Button */}
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" style={{ zIndex: 999 }}>
+            {/* Explorer Button - Below Navigation */}
+      <div className="absolute top-32 left-1/2 transform -translate-x-1/2" style={{ zIndex: 999 }}>
         <button
           onClick={() => router.push('/explorer')}
-          className="group relative px-8 py-4 rounded-2xl bg-gradient-to-r from-chiliz-primary to-chiliz-secondary hover:from-chiliz-secondary hover:to-chiliz-primary text-white font-semibold text-lg shadow-2xl hover:shadow-chiliz-primary/50 transition-all duration-300 hover:scale-105 border border-white/20 backdrop-blur-sm"
+          className="group relative px-8 py-4 rounded-2xl bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-500 text-white font-semibold text-lg shadow-2xl hover:shadow-red-500/50 transition-all duration-300 hover:scale-105 border border-white/20 backdrop-blur-sm"
         >
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-chiliz-primary to-chiliz-secondary opacity-0 group-hover:opacity-30 blur-xl transition-all duration-300"></div>
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-red-500 to-red-600 opacity-0 group-hover:opacity-30 blur-xl transition-all duration-300"></div>
           <span className="relative flex items-center gap-3">
             AI Meets Chiliz: C-TRACE is Live
             <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
