@@ -271,7 +271,7 @@ export function BlockchainExplorer() {
   const [messages, setMessages] = useState<Array<{ role: string; content: string }>>([]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [showSuggestedActions, setShowSuggestedActions] = useState(true);
+  const [showSuggestedActions, setShowSuggestedActions] = useState(false);
 
   const account = useActiveAccount();
   const walletAddress = account?.address;
