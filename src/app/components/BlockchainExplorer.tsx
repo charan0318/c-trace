@@ -496,12 +496,15 @@ export function BlockchainExplorer() {
       <div className="absolute inset-0" style={{ zIndex: -10 }}>
         <Silk
           speed={2}
-          scale={1.5}
-          color="#2a2a4e"
-          noiseIntensity={0.6}
+          scale={1.8}
+          color="#4a4a7e"
+          noiseIntensity={1.2}
           rotation={0}
         />
       </div>
+      
+      {/* Subtle overlay to enhance visibility */}
+      <div className="absolute inset-0 bg-black/30" style={{ zIndex: -5 }} />
 
       {/* Got Feedback Button - Fixed Position */}
       <div className="fixed bottom-6 right-6 z-50">

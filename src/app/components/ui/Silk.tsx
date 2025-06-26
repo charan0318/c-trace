@@ -140,7 +140,7 @@ function SilkMesh({ speed = 5, scale = 1, color = "#7B7481", noiseIntensity = 1.
       vec3 finalColor = uColor + vec3(combined + shimmer) * 0.3;
       finalColor *= (0.5 + gradient * 0.5);
       
-      gl_FragColor = vec4(finalColor, 0.8);
+      gl_FragColor = vec4(finalColor, 0.95);
     }
   `;
 

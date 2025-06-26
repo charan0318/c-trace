@@ -624,9 +624,9 @@ const DocsPage = () => {
       <div className="absolute inset-0" style={{ zIndex: -10 }}>
         <Silk
           speed={2}
-          scale={1.5}
-          color="#2a2a4e"
-          noiseIntensity={0.6}
+          scale={1.8}
+          color="#4a4a7e"
+          noiseIntensity={1.2}
           rotation={0}
         />
       </div>
