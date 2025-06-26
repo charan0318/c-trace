@@ -594,41 +594,12 @@ const DocsPage = () => {
                     >
                       Submit Feature Request
                     </a>
-                    <button className="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
-                      Join Beta Program
-                    </button>
-                  </div>
-                </div>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-bold text-chiliz-primary mb-4">Connect with Us</h2>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/40 p-6 rounded-2xl border border-white/10">
-                    <h4 className="font-bold text-white mb-4">Community</h4>
-                    <div className="space-y-3">
-                      <a href="https://t.me/ch04niverse" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-white/70 hover:text-white transition-colors">
-                        <Globe className="w-5 h-5 text-chiliz-primary" />
-                        <span>Telegram Community</span>
-                      </a>
-                    </div>
-                  </div>
-
-                  <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/40 p-6 rounded-2xl border border-white/10">
-                    <h4 className="font-bold text-white mb-4">Support</h4>
-                    <div className="space-y-3">
-                      <a href="https://t.me/ch04niverse" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-white/70 hover:text-white transition-colors">
-                        <MessageSquare className="w-5 h-5 text-chiliz-primary" />
-                        <span>Contact Support</span>
-                      </a>
-                    </div>
                   </div>
                 </div>
               </section>
 
               <div className="bg-gradient-to-r from-chiliz-primary/20 to-chiliz-secondary/20 p-8 rounded-2xl border border-chiliz-primary/30 text-center">
                 <div className="flex items-center justify-center gap-2 mb-4">
-                  <Heart className="w-6 h-6 text-chiliz-primary" />
                   <span className="text-2xl font-bold text-white">Built with ❤️ by ch04niverse</span>
                 </div>
                 <p className="text-white/80 mb-4">
