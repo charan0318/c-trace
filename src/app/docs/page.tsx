@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -178,7 +177,7 @@ const DocsPage = () => {
                     description="Analyze any contract address on Chiliz Chain"
                   />
                   <ExamplePrompt 
-                    prompt="What does this transaction do?"
+                    prompt="What does this contract do?"
                     description="Get AI-powered analysis of transaction details"
                   />
                   <ExamplePrompt 
@@ -261,7 +260,7 @@ const DocsPage = () => {
                 </div>
               </section>
 
-              
+
             </div>
           </div>
         );
@@ -341,11 +340,11 @@ const DocsPage = () => {
                 <div className="space-y-4">
                   <div className="bg-gray-900/60 border border-white/10 rounded-lg p-4">
                     <h4 className="font-bold text-white mb-2">✅ Be Specific</h4>
-                    <p className="text-white/70 text-sm">Instead of "analyze this," try "analyze this contract's token distribution"</p>
+                    <p className="text-white/70 text-sm">Instead of &quot;analyze this,&quot; try &quot;analyze this contract&apos;s token distribution&quot;</p>
                   </div>
                   <div className="bg-gray-900/60 border border-white/10 rounded-lg p-4">
                     <h4 className="font-bold text-white mb-2">✅ Provide Context</h4>
-                    <p className="text-white/70 text-sm">Mention if you're looking for security, functionality, or market insights</p>
+                    <p className="text-white/70 text-sm">Mention if you&apos;re looking for security, functionality, or market insights</p>
                   </div>
                   <div className="bg-gray-900/60 border border-white/10 rounded-lg p-4">
                     <h4 className="font-bold text-white mb-2">✅ Ask Follow-ups</h4>
@@ -534,7 +533,7 @@ const DocsPage = () => {
                 </div>
               </div>
 
-              
+
             </div>
           </div>
         );
@@ -543,7 +542,7 @@ const DocsPage = () => {
         return (
           <div className="space-y-6">
             <div>
-              <h1 className="text-3xl font-bold text-white mb-4">What's Next</h1>
+              <h1 className="text-3xl font-bold text-white mb-4">What&apos;s Next</h1>
               <p className="text-white/80 text-lg leading-relaxed">
                 Discover upcoming features and how to stay connected with the C-TRACE community.
               </p>
@@ -636,7 +635,7 @@ const DocsPage = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900/40 via-black/60 to-gray-900/40" style={{ zIndex: -5 }} />
 
       <Navigation />
-      
+
       <div className="flex h-screen pt-16">
         {/* Sidebar */}
         <div className="w-64 bg-gray-900/60 backdrop-blur-sm border-r border-white/10 overflow-y-auto">
@@ -672,7 +671,7 @@ const DocsPage = () => {
                       </div>
                     )}
                   </button>
-                  
+
                   {section.subsections.length > 0 && expandedSections.includes(section.id) && (
                     <div className="ml-6 mt-2 space-y-1">
                       {section.subsections.map((subsection) => (

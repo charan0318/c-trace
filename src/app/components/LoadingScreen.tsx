@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 interface LoadingScreenProps {
   onLoadingComplete?: () => void;
@@ -33,12 +34,14 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
 
         {/* Animated HUD GIF */}
         <div className="relative mb-8">
-          <img 
+          <Image 
             src="/loading-animation.gif"
             alt="Loading Animation"
+            width={600}
+            height={400}
             className="w-96 h-64 md:w-[600px] md:h-96 object-contain"
-            loading="eager"
-            fetchPriority="high"
+            priority
+            unoptimized
             onLoad={() => {
               console.log('✅ Loading GIF loaded successfully');
             }}
