@@ -32,6 +32,7 @@ const DocsPage = () => {
       id: 'getting-started',
       title: 'Getting Started',
       icon: <Rocket className="w-4 h-4" />,
+      subsections: []
     },
     {
       id: 'understanding-output',
