@@ -512,7 +512,7 @@ export function BlockchainExplorer() {
             >
               <Zap className="w-5 h-5 text-chiliz-primary" />
             </button>
-            
+
             {/* Quick Actions Dropdown */}
             {showSuggestedActions && (
               <div className="absolute bottom-full right-0 mb-2 w-64 bg-gray-900/90 backdrop-blur-md border border-white/20 rounded-xl p-3 shadow-xl">
@@ -644,23 +644,6 @@ export function BlockchainExplorer() {
 
         {/* Input Area */}
         <div className="flex-shrink-0">
-          {/* Suggested Actions - Only show when at bottom or user hasn't scrolled much */}
-          {messages.length > 1 && isAtBottom && (
-            <div className="max-w-full md:max-w-3xl lg:max-w-4xl mx-auto p-3 md:p-6 pb-2 transition-all duration-300">
-              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
-                {suggestedActions.map((action, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setInput(action)}
-                    className="flex-shrink-0 px-3 py-1.5 text-xs rounded-full bg-transparent border border-white/10 hover:border-chiliz-primary/30 hover:bg-chiliz-primary/10 transition-all duration-200 text-white/50 hover:text-white whitespace-nowrap min-h-[32px]"
-                  >
-                    {action}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
           {/* Chat Input - Full width glass background */}
           <div className="bg-gray-900/40 backdrop-blur-sm p-3 md:p-6 safe-area-inset-bottom">
             <div className="max-w-full md:max-w-3xl lg:max-w-4xl mx-auto">
