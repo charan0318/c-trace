@@ -62,6 +62,16 @@ C-TRACE bridges the gap between complex blockchain data and user-friendly insigh
 - **Wallet Support**: MetaMask, Coinbase Wallet, Rainbow, Rabby
 - **In-App Wallets**: Email, Google, Apple, Facebook, Phone authentication
 
+## 🚀 Live Demo
+
+Check out the live version here: [c-trace.app](https://c-trace.replit.app)
+
+We'd love your feedback! [Click here to share thoughts](https://t.me/ch04niverse)
+
+## 🏆 Built for Vibe Coding Hackathon
+
+C-TRACE was built as part of the Vibe Coding Hackathon to showcase the power of AI + blockchain in the Chiliz ecosystem. Our goal: simplify and democratize access to fan token data and contract exploration for everyone — not just devs.
+
 ## How to Run the Project
 
 ### Prerequisites
@@ -164,6 +174,11 @@ This project is optimized for deployment on Replit:
 3. Make your changes
 4. Test thoroughly
 5. Submit a pull request
+
+## 👨‍💻 Team
+
+- **ch04niverse** – Full Stack / Blockchain / AI Integration  
+- Special thanks to the Nebula API team & Thirdweb for tools & inspiration
 
 ## License
 
