@@ -16,22 +16,22 @@ C-TRACE bridges the gap between complex blockchain data and user-friendly insigh
 
 ## Key Features
 
-### 🔍 **Smart Contract Explorer**
+### **Smart Contract Explorer** 🔍 
 - Analyze any Chiliz smart contract with AI-powered insights
 - Uncover contract methods, data structures, and fan token logic
 - Real-time contract interaction capabilities
 
-### 🏟️ **Fan Token Analysis**
+### **Fan Token Analysis** 🏟️ 
 - Track fan token performance across the Chiliz ecosystem
 - Discover emerging trends in sports blockchain applications
 - Research CHZ token utility and sports club integrations
 
-### 🤖 **AI Assistant**
+### **AI Assistant** 🤖 
 - Natural language queries for blockchain exploration
 - Context-aware responses about Chiliz network operations
 - Interactive chat interface for complex blockchain questions
 
-### 📱 **Modern UI/UX**
+### **Modern UI/UX** 📱 
 - Fully responsive design optimized for all devices
 - 3D interactive backgrounds with Spline integration
 - Terminal-style loading screens for developer experience
