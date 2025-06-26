@@ -682,6 +682,16 @@ export function BlockchainExplorer() {
                   onKeyPress={(e) => e.key === "Enter" && handleSend()}
                 />
                 <div className="absolute right-2 md:right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 md:gap-2">
+                  {/* Lightning Quick Action Button */}
+                  <button
+                    type="button"
+                    onClick={() => setShowSuggestedActions(!showSuggestedActions)}
+                    className="h-8 w-8 md:h-10 md:w-10 bg-transparent border border-white/30 hover:border-chiliz-primary/60 hover:bg-chiliz-primary/10 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:shadow-lg hover:shadow-chiliz-primary/20 min-h-[44px] min-w-[44px] backdrop-blur-sm"
+                    title="Quick Actions"
+                  >
+                    <Zap className="h-4 w-4 md:h-5 md:w-5 text-chiliz-primary" />
+                  </button>
+
                   <button
                     type="submit"
                     disabled={!input.trim()}
