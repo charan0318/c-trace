@@ -260,20 +260,7 @@ const DocsPage = () => {
                 </div>
               </section>
 
-              <section>
-                <h2 className="text-2xl font-bold text-chiliz-primary mb-4">Copy & Paste Features</h2>
-                <div className="bg-gradient-to-r from-chiliz-primary/10 to-transparent p-6 rounded-2xl border border-chiliz-primary/20">
-                  <p className="text-white/80 mb-4">
-                    Most data in C-TRACE can be easily copied for use in other applications:
-                  </p>
-                  <ul className="space-y-2 text-white/70">
-                    <li>• Click any address to copy to clipboard</li>
-                    <li>• Use the copy button on code blocks</li>
-                    <li>• Transaction hashes are automatically formatted</li>
-                    <li>• API responses can be exported as JSON</li>
-                  </ul>
-                </div>
-              </section>
+              
             </div>
           </div>
         );
@@ -546,26 +533,7 @@ const DocsPage = () => {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-r from-chiliz-primary/10 to-transparent p-6 rounded-2xl border border-chiliz-primary/20">
-                <h3 className="text-xl font-bold text-white mb-4">Still Need Help?</h3>
-                <p className="text-white/80 mb-4">
-                  If you're still experiencing issues, here are additional resources:
-                </p>
-                <div className="space-y-2">
-                  <button className="w-full text-left bg-white/10 hover:bg-white/20 p-3 rounded-lg transition-colors">
-                    <div className="flex items-center gap-3">
-                      <MessageSquare className="w-5 h-5 text-chiliz-primary" />
-                      <span className="text-white">Join our Discord Community</span>
-                    </div>
-                  </button>
-                  <button className="w-full text-left bg-white/10 hover:bg-white/20 p-3 rounded-lg transition-colors">
-                    <div className="flex items-center gap-3">
-                      <ExternalLink className="w-5 h-5 text-chiliz-primary" />
-                      <span className="text-white">Submit a Bug Report</span>
-                    </div>
-                  </button>
-                </div>
-              </div>
+              
             </div>
           </div>
         );
@@ -618,9 +586,14 @@ const DocsPage = () => {
                     Have an idea for a new feature? We'd love to hear from you! Your feedback helps shape the future of C-TRACE.
                   </p>
                   <div className="space-y-3">
-                    <button className="w-full bg-chiliz-primary hover:bg-chiliz-primary/80 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+                    <a 
+                      href="https://t.me/ch04niverse" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="w-full bg-chiliz-primary hover:bg-chiliz-primary/80 text-white font-semibold py-3 px-6 rounded-lg transition-colors block text-center"
+                    >
                       Submit Feature Request
-                    </button>
+                    </a>
                     <button className="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
                       Join Beta Program
                     </button>
@@ -634,15 +607,7 @@ const DocsPage = () => {
                   <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/40 p-6 rounded-2xl border border-white/10">
                     <h4 className="font-bold text-white mb-4">Community</h4>
                     <div className="space-y-3">
-                      <a href="#" className="flex items-center gap-3 text-white/70 hover:text-white transition-colors">
-                        <MessageSquare className="w-5 h-5 text-chiliz-primary" />
-                        <span>Discord Server</span>
-                      </a>
-                      <a href="#" className="flex items-center gap-3 text-white/70 hover:text-white transition-colors">
-                        <ExternalLink className="w-5 h-5 text-chiliz-primary" />
-                        <span>Twitter (@ctrace_ai)</span>
-                      </a>
-                      <a href="#" className="flex items-center gap-3 text-white/70 hover:text-white transition-colors">
+                      <a href="https://t.me/ch04niverse" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-white/70 hover:text-white transition-colors">
                         <Globe className="w-5 h-5 text-chiliz-primary" />
                         <span>Telegram Community</span>
                       </a>
@@ -652,17 +617,9 @@ const DocsPage = () => {
                   <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/40 p-6 rounded-2xl border border-white/10">
                     <h4 className="font-bold text-white mb-4">Support</h4>
                     <div className="space-y-3">
-                      <a href="mailto:support@c-trace.app" className="flex items-center gap-3 text-white/70 hover:text-white transition-colors">
+                      <a href="https://t.me/ch04niverse" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-white/70 hover:text-white transition-colors">
                         <MessageSquare className="w-5 h-5 text-chiliz-primary" />
-                        <span>support@c-trace.app</span>
-                      </a>
-                      <a href="#" className="flex items-center gap-3 text-white/70 hover:text-white transition-colors">
-                        <ExternalLink className="w-5 h-5 text-chiliz-primary" />
-                        <span>GitHub Issues</span>
-                      </a>
-                      <a href="#" className="flex items-center gap-3 text-white/70 hover:text-white transition-colors">
-                        <Globe className="w-5 h-5 text-chiliz-primary" />
-                        <span>Documentation</span>
+                        <span>Contact Support</span>
                       </a>
                     </div>
                   </div>
@@ -763,10 +720,15 @@ const DocsPage = () => {
 
       {/* Feedback Button */}
       <div className="fixed bottom-6 right-6 z-50">
-        <button className="bg-chiliz-primary hover:bg-chiliz-primary/80 text-white font-semibold py-3 px-6 rounded-full shadow-lg transition-all duration-200 flex items-center gap-2">
+        <a 
+          href="https://t.me/ch04niverse" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="bg-chiliz-primary hover:bg-chiliz-primary/80 text-white font-semibold py-3 px-6 rounded-full shadow-lg transition-all duration-200 flex items-center gap-2"
+        >
           <MessageSquare className="w-5 h-5" />
           <span>Give Feedback</span>
-        </button>
+        </a>
       </div>
     </div>
   );
