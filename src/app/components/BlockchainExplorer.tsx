@@ -281,6 +281,15 @@ export function BlockchainExplorer() {
 
   const { scrollRef, isAtBottom, scrollToBottom } = useAutoScroll(messages.length);
 
+  const suggestedActions = [
+    "What is Chiliz and how does it work?",
+    "Show me popular fan tokens",
+    "Analyze latest CHZ transactions",
+    "Explain Chiliz tokenomics",
+    "Find FC Barcelona fan token info",
+    "How to interact with fan tokens?",
+  ];
+
   const actionButtons = [
     {
       icon: Search,
