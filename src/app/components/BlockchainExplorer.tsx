@@ -502,7 +502,7 @@ export function BlockchainExplorer() {
           rotation={0}
         />
       </div>
-      
+
       {/* Subtle overlay to enhance visibility */}
       <div className="absolute inset-0 bg-black/30" style={{ zIndex: -5 }} />
 
