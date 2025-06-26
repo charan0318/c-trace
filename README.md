@@ -66,7 +66,7 @@ C-TRACE bridges the gap between complex blockchain data and user-friendly insigh
 
 Check out the live version here: [c-trace.app](https://c-trace.replit.app)
 
-We'd love your feedback! [Click here to share thoughts](https://t.me/ch04niverse)
+We'd love your feedback! [Click here to share thoughts directly with me](https://t.me/ch04niverse)
 
 ## 🏆 Built for Vibe Coding Hackathon
 
@@ -95,7 +95,7 @@ C-TRACE was built as part of the Vibe Coding Hackathon to showcase the power of 
    Create a `.env.local` file with:
    ```env
    # Add your environment variables here
-   NEXT_PUBLIC_THIRDWEB_CLIENT_ID=your_thirdweb_client_id
+   
    # Add other required API keys
    ```
 
@@ -151,15 +151,6 @@ src/
 - Wallet connection integration (feature-flagged)
 - Modern gradient styling with Chiliz branding
 
-## Feature Flags
-
-The project uses feature flags for controlled rollouts:
-```typescript
-export const FEATURES = {
-  WALLET_CONNECTION: false, // Currently disabled
-} as const;
-```
-
 ## Deployment
 
 This project is optimized for deployment on Replit:
@@ -177,8 +168,7 @@ This project is optimized for deployment on Replit:
 
 ## 👨‍💻 Team
 
-- **ch04niverse** – Full Stack / Blockchain / AI Integration  
-- Special thanks to the Nebula API team & Thirdweb for tools & inspiration
+- **ch04niverse** – Full Stack / Blockchain / AI Integration
 
 ## License
 
