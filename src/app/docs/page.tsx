@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import { ChevronDown, ChevronRight, Copy, ExternalLink, MessageSquare, Search, Zap, Globe, Shield, Rocket, Heart } from 'lucide-react';
 import Navigation from '../components/Navigation';
+import Silk from '../components/ui/Silk';
 
 const DocsPage = () => {
   const [activeSection, setActiveSection] = useState('welcome');
@@ -619,7 +620,21 @@ const DocsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-chiliz-dark">
+    <div className="relative min-h-screen bg-gradient-to-br from-black via-gray-900 to-chiliz-dark">
+      {/* Silk Background */}
+      <div className="absolute inset-0" style={{ zIndex: -10 }}>
+        <Silk
+          speed={2}
+          scale={1.5}
+          color="#2a2a4e"
+          noiseIntensity={0.6}
+          rotation={0}
+        />
+      </div>
+
+      {/* Fallback Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-900/40 via-black/60 to-gray-900/40" style={{ zIndex: -5 }} />
+
       <Navigation />
       
       <div className="flex h-screen pt-16">
