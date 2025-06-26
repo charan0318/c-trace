@@ -481,13 +481,6 @@ export function BlockchainExplorer() {
     }
   };
 
-  const suggestedActions = [
-    "Explain fan token mechanics",
-    "Check CHZ gas prices",
-    "Analyze Chiliz transaction",
-    "What is the Latest Block?",
-  ];
-
   return (
     <div className="fixed inset-0 bg-black overflow-hidden z-10">
       {/* Silk Background */}
