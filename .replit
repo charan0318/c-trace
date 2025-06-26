@@ -3,6 +3,7 @@ run = "yarn run dev"
 
 [nix]
 channel = "stable-24_05"
+packages = ["lsof"]
 
 [deployment]
 run = ["sh", "-c", "yarn run start"]
