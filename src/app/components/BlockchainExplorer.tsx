@@ -312,7 +312,7 @@ export function BlockchainExplorer() {
       try {
         console.log("🔄 Initializing session...");
         console.log("📋 URL Parameters:", { contractAddress, chainId, hasContractToExplore });
-        
+
         const newSessionId = await createSession("Blockchain Explorer Session");
         console.log("✅ Session created:", newSessionId);
         setSessionId(newSessionId);
@@ -510,7 +510,7 @@ export function BlockchainExplorer() {
         >
           {/* Gradient background on hover */}
           <div className="absolute inset-0 rounded-full bg-gradient-to-r from-chiliz-primary/20 to-red-600/20 opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
-          
+
           {/* Button content */}
           <span className="relative z-10 whitespace-nowrap group-hover:text-chiliz-primary transition-colors">Got Feedback?</span>
         </a>
