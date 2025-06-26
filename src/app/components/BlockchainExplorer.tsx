@@ -204,7 +204,7 @@ const ChatBubbleMessage: React.FC<ChatBubbleMessageProps> = ({
 }) => {
   return (
     <div className={cn(
-      "relative rounded-2xl text-sm backdrop-blur-sm transition-all duration-300 hover:shadow-lg group-hover:shadow-md animate-fade-in",
+      "relative rounded-2xl text-sm transition-all duration-300 animate-fade-in",
       variant === "sent"
         ? "bg-gradient-to-br from-chiliz-primary/20 to-red-600/20 text-white ml-auto px-4 py-3"
         : "bg-transparent text-white p-0"
