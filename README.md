@@ -1,7 +1,7 @@
 
 # C-TRACE - AI-Powered Chiliz Blockchain Explorer
 
-**C-TRACE** is an AI-powered blockchain explorer and assistant specifically designed for the Chiliz ecosystem, enabling users to explore smart contracts, analyze fan tokens, and interact with the Chiliz network through natural language queries.
+**C-TRACE** is an AI-powered blockchain explorer and assistant specifically designed for the Chiliz ecosystem, enabling users to explore smart contracts, analyze chiliz chain, and interact with the Chiliz network through natural language queries.
 
 ## What Problem Does It Solve?
 
