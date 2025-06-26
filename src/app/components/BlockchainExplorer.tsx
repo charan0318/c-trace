@@ -488,7 +488,7 @@ export function BlockchainExplorer() {
   ];
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-gray-900/60 via-black/80 to-gray-900/60 pt-20 md:pt-24 overflow-hidden">
+    <div className="fixed inset-0 bg-black overflow-hidden z-10">
       {/* Silk Background */}
       <div className="absolute inset-0" style={{ zIndex: -10 }}>
         <Silk
@@ -499,16 +499,6 @@ export function BlockchainExplorer() {
           rotation={0}
         />
       </div>
-
-      {/* Background Pattern */}
-      <div 
-        className="absolute inset-0 z-[-5] opacity-10"
-        style={{
-          backgroundImage: `radial-gradient(#1a1a2e 1px, transparent 1px)`,
-          backgroundSize: '32px 32px',
-          maskImage: 'radial-gradient(ellipse at center, var(--tw-bg-opacity), transparent)'
-        }}
-      />
 
       {/* Got Feedback Button - Fixed Position */}
       <div className="fixed bottom-6 right-6 z-50">
