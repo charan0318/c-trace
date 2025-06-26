@@ -501,41 +501,8 @@ export function BlockchainExplorer() {
         />
       </div>
 
-      {/* Quick Actions & Feedback Buttons - Fixed Position */}
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
-        {/* Quick Actions Button - Only show when not at bottom and has messages */}
-        {messages.length > 1 && !isAtBottom && (
-          <div className="relative group">
-            <button
-              onClick={() => setShowSuggestedActions(!showSuggestedActions)}
-              className="group relative inline-flex items-center justify-center w-12 h-12 text-white bg-gray-900/80 border border-white/30 hover:border-chiliz-primary/60 transition-all duration-300 hover:shadow-lg hover:shadow-chiliz-primary/20 rounded-full backdrop-blur-md"
-            >
-              <Zap className="w-5 h-5 text-chiliz-primary" />
-            </button>
-
-            {/* Quick Actions Dropdown */}
-            {showSuggestedActions && (
-              <div className="absolute bottom-full right-0 mb-2 w-64 bg-gray-900/90 backdrop-blur-md border border-white/20 rounded-xl p-3 shadow-xl">
-                <div className="space-y-2">
-                  {suggestedActions.map((action, index) => (
-                    <button
-                      key={index}
-                      onClick={() => {
-                        setInput(action);
-                        setShowSuggestedActions(false);
-                      }}
-                      className="w-full text-left px-3 py-2 text-xs rounded-lg bg-transparent border border-white/10 hover:border-chiliz-primary/30 hover:bg-chiliz-primary/10 transition-all duration-200 text-white/70 hover:text-white"
-                    >
-                      {action}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Got Feedback Button */}
+      {/* Got Feedback Button - Fixed Position */}
+      <div className="fixed bottom-6 right-6 z-50">
         <a
           href="https://t.me/ch04niverse"
           target="_blank"
@@ -644,6 +611,23 @@ export function BlockchainExplorer() {
 
         {/* Input Area */}
         <div className="flex-shrink-0">
+          {/* Suggested Actions - Only show when at bottom or user hasn't scrolled much */}
+          {messages.length > 1 && isAtBottom && (
+            <div className="max-w-full md:max-w-3xl lg:max-w-4xl mx-auto p-3 md:p-6 pb-2 transition-all duration-300">
+              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+                {suggestedActions.map((action, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setInput(action)}
+                    className="flex-shrink-0 px-3 py-1.5 text-xs rounded-full bg-transparent border border-white/10 hover:border-chiliz-primary/30 hover:bg-chiliz-primary/10 transition-all duration-200 text-white/50 hover:text-white whitespace-nowrap min-h-[32px]"
+                  >
+                    {action}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Chat Input - Full width glass background */}
           <div className="bg-gray-900/40 backdrop-blur-sm p-3 md:p-6 safe-area-inset-bottom">
             <div className="max-w-full md:max-w-3xl lg:max-w-4xl mx-auto">
@@ -665,15 +649,37 @@ export function BlockchainExplorer() {
                   onKeyPress={(e) => e.key === "Enter" && handleSend()}
                 />
                 <div className="absolute right-2 md:right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 md:gap-2">
-                  {/* Lightning Quick Action Button */}
-                  <button
-                    type="button"
-                    onClick={() => setShowSuggestedActions(!showSuggestedActions)}
-                    className="h-8 w-8 md:h-10 md:w-10 bg-transparent border border-white/30 hover:border-chiliz-primary/60 hover:bg-chiliz-primary/10 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:shadow-lg hover:shadow-chiliz-primary/20 min-h-[44px] min-w-[44px] backdrop-blur-sm"
-                    title="Quick Actions"
-                  >
-                    <Zap className="h-4 w-4 md:h-5 md:w-5 text-chiliz-primary" />
-                  </button>
+                  {/* Lightning Quick Action Button with Dropdown */}
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setShowSuggestedActions(!showSuggestedActions)}
+                      className="h-8 w-8 md:h-10 md:w-10 bg-transparent border border-white/30 hover:border-chiliz-primary/60 hover:bg-chiliz-primary/10 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:shadow-lg hover:shadow-chiliz-primary/20 min-h-[44px] min-w-[44px] backdrop-blur-sm"
+                      title="Quick Actions"
+                    >
+                      <Zap className="h-4 w-4 md:h-5 md:w-5 text-chiliz-primary" />
+                    </button>
+                    
+                    {/* Quick Actions Dropdown */}
+                    {showSuggestedActions && (
+                      <div className="absolute bottom-full right-0 mb-2 w-64 bg-gray-900/90 backdrop-blur-md border border-white/20 rounded-xl p-3 shadow-xl z-50">
+                        <div className="space-y-2">
+                          {suggestedActions.map((action, index) => (
+                            <button
+                              key={index}
+                              onClick={() => {
+                                setInput(action);
+                                setShowSuggestedActions(false);
+                              }}
+                              className="w-full text-left px-3 py-2 text-xs rounded-lg bg-transparent border border-white/10 hover:border-chiliz-primary/30 hover:bg-chiliz-primary/10 transition-all duration-200 text-white/70 hover:text-white"
+                            >
+                              {action}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
 
                   <button
                     type="submit"
