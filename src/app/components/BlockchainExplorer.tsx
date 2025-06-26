@@ -271,6 +271,7 @@ export function BlockchainExplorer() {
   const [messages, setMessages] = useState<Array<{ role: string; content: string }>>([]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [showSuggestedActions, setShowSuggestedActions] = useState(true);
 
   const account = useActiveAccount();
   const walletAddress = account?.address;
@@ -500,8 +501,41 @@ export function BlockchainExplorer() {
         />
       </div>
 
-      {/* Got Feedback Button - Fixed Position */}
-      <div className="fixed bottom-6 right-6 z-50">
+      {/* Quick Actions & Feedback Buttons - Fixed Position */}
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
+        {/* Quick Actions Button - Only show when not at bottom and has messages */}
+        {messages.length > 1 && !isAtBottom && (
+          <div className="relative group">
+            <button
+              onClick={() => setShowSuggestedActions(!showSuggestedActions)}
+              className="group relative inline-flex items-center justify-center w-12 h-12 text-white bg-gray-900/80 border border-white/30 hover:border-chiliz-primary/60 transition-all duration-300 hover:shadow-lg hover:shadow-chiliz-primary/20 rounded-full backdrop-blur-md"
+            >
+              <Zap className="w-5 h-5 text-chiliz-primary" />
+            </button>
+            
+            {/* Quick Actions Dropdown */}
+            {showSuggestedActions && (
+              <div className="absolute bottom-full right-0 mb-2 w-64 bg-gray-900/90 backdrop-blur-md border border-white/20 rounded-xl p-3 shadow-xl">
+                <div className="space-y-2">
+                  {suggestedActions.map((action, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        setInput(action);
+                        setShowSuggestedActions(false);
+                      }}
+                      className="w-full text-left px-3 py-2 text-xs rounded-lg bg-transparent border border-white/10 hover:border-chiliz-primary/30 hover:bg-chiliz-primary/10 transition-all duration-200 text-white/70 hover:text-white"
+                    >
+                      {action}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Got Feedback Button */}
         <a
           href="https://t.me/ch04niverse"
           target="_blank"
@@ -610,9 +644,9 @@ export function BlockchainExplorer() {
 
         {/* Input Area */}
         <div className="flex-shrink-0">
-          {/* Suggested Actions */}
-          {messages.length > 1 && (
-            <div className="max-w-full md:max-w-3xl lg:max-w-4xl mx-auto p-3 md:p-6 pb-2">
+          {/* Suggested Actions - Only show when at bottom or user hasn't scrolled much */}
+          {messages.length > 1 && isAtBottom && (
+            <div className="max-w-full md:max-w-3xl lg:max-w-4xl mx-auto p-3 md:p-6 pb-2 transition-all duration-300">
               <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
                 {suggestedActions.map((action, index) => (
                   <button
