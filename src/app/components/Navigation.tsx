@@ -78,11 +78,11 @@ export default function Navigation() {
                 <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-chiliz-primary to-red-600 opacity-0 group-hover:opacity-30 blur-lg transition-all duration-300"></div>
               </div>
               <div className="flex flex-col relative">
-                <div className="flex items-center gap-2">
+                <div className="relative inline-block">
                   <span className="text-lg md:text-xl font-black tracking-tight bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
                     C-TRACE
                   </span>
-                  <span className="px-1.5 py-0.5 text-[9px] md:text-[10px] font-bold bg-gradient-to-r from-chiliz-primary to-red-500 text-white rounded-md uppercase tracking-wider shadow-sm">
+                  <span className="absolute -top-1 -right-2 px-1 py-0.5 text-[7px] md:text-[8px] font-bold text-white rounded uppercase tracking-wider">
                     BETA
                   </span>
                 </div>
