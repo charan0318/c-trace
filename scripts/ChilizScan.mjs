@@ -19,7 +19,8 @@ class ChilizScanAPI {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
-          'User-Agent': 'C-TRACE/1.0'
+          'User-Agent': 'C-TRACE/1.0',
+          'Cache-Control': 'no-cache'
         }
       });
 

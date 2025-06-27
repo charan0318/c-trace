@@ -521,13 +521,14 @@ export function BlockchainExplorer() {
           },
         ]);
 
-        // This should trigger the wallet approval popup
-        const receipt = await sendAndConfirmTransaction({
-          transaction: preparedTransaction,
-          account,
-        });
+        // Send transaction with proper wallet approval
+        try {
+          const receipt = await sendAndConfirmTransaction({
+            transaction: preparedTransaction,
+            account,
+          });
 
-        console.log("Transaction receipt:", receipt);
+          console.log("Transaction receipt:", receipt);
 
         setMessages((prev) => [
           ...prev.slice(0, -1), // Remove the approval message
@@ -544,26 +545,57 @@ export function BlockchainExplorer() {
 Your transaction has been successfully executed and confirmed on the blockchain.`,
           },
         ]);
+        } catch (txError) {
+          console.error("Transaction execution failed:", txError);
+          setMessages((prev) => [
+            ...prev.slice(0, -1), // Remove the approval message
+            {
+              role: "system",
+              content: `## ❌ Transaction Failed
+
+**Error:** ${txError.message || 'Transaction execution failed'}
+
+**Common Issues:**
+- User rejected the transaction in wallet
+- Insufficient balance for transaction + gas fees
+- Invalid recipient address
+- Network connectivity issues
+- Gas estimation failed
+
+**Solutions:**
+1. Check your wallet balance (ask "what is my balance")
+2. Ensure you're connected to Chiliz Chain (ID: 88888)
+3. Try reducing the transaction amount
+4. Check recipient address is valid
+5. Ensure you have enough CHZ for gas fees`,
+            },
+          ]);
+        }
       } else {
         setMessages((prev) => [
           ...prev.slice(0, -1), // Remove the preparing message
           {
             role: "system",
-            content: `## ❌ Transaction Failed
+            content: `## ❌ Transaction Preparation Failed
 
 No valid transaction data received from the command.
 
 **Debug Info:**
 - Response: ${JSON.stringify(executeResponse, null, 2)}
 
-Please check your command format and try again.`,
+**Possible Issues:**
+- Invalid command format
+- Unsupported transaction type
+- Missing required parameters
+
+Please check your command format and try again. Example: "execute transfer 0.1 CHZ to 0x..."`,
           },
         ]);
       }
 
       setIsTyping(false);
     } catch (error) {
-      console.error("Error executing transaction:", error);
+      console.error("Error in transaction flow:", error);
       setMessages((prev) => [
         ...prev.slice(0, -1), // Remove any pending messages
         {
@@ -572,17 +604,19 @@ Please check your command format and try again.`,
 
 **Error:** ${error.message || 'Unknown error occurred'}
 
+**Error Type:** ${error.name || 'Unknown'}
+
 **Common Issues:**
-- User rejected the transaction in wallet
-- Insufficient balance for transaction + gas fees
-- Invalid recipient address
-- Network connectivity issues
+- Wallet connection lost
+- Network connectivity problems
+- Invalid transaction parameters
+- Insufficient permissions
 
 **Solutions:**
-1. Check your wallet balance (ask "what is my balance")
-2. Ensure you're connected to Chiliz Chain
-3. Try the transaction again
-4. Contact support if the issue persists`,
+1. Reconnect your wallet
+2. Refresh the page and try again
+3. Check your internet connection
+4. Ensure you're on Chiliz Chain (ID: 88888)`,
         },
       ]);
       setIsTyping(false);
@@ -638,17 +672,36 @@ Once connected, I'll be able to show you your CHZ balance on Chiliz Chain.`,
         let balance = null;
         let method = "unknown";
 
-        // Method 1: Thirdweb client (most reliable)
+        // Method 1: Direct Chiliz RPC call (most reliable for Chiliz)
         try {
-          const rpcRequest = client.getRpcClient({ chain: chilizChain });
-          balance = await rpcRequest.request({
-            method: "eth_getBalance",
-            params: [walletAddress, "latest"]
+          const response = await fetch('https://spicy-rpc.chiliz.com/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+              jsonrpc: '2.0',
+              method: 'eth_getBalance',
+              params: [walletAddress, 'latest'],
+              id: Date.now()
+            })
           });
-          method = "Thirdweb Client";
-          console.log("Balance fetched via Thirdweb:", balance);
+
+          if (response.ok) {
+            const data = await response.json();
+            if (data.result && !data.error) {
+              balance = data.result;
+              method = "Direct Chiliz RPC";
+              console.log("Balance fetched via direct RPC:", balance);
+            } else if (data.error) {
+              console.log("RPC returned error:", data.error);
+            }
+          } else {
+            console.log("RPC request failed with status:", response.status);
+          }
         } catch (error) {
-          console.log("Thirdweb RPC failed, trying direct RPC...", error);
+          console.log("Direct RPC failed, trying Thirdweb...", error);
         }
 
         // Method 2: Direct Chiliz RPC call as fallback
@@ -889,7 +942,8 @@ Visit [ChilizScan](https://scan.chiliz.com/address/${walletAddress}) to view you
                           createWallet("com.coinbase.wallet"),
                           createWallet("me.rainbow"),
                           createWallet("io.rabby"),
-                          createWallet("com.socios"),
+                          createWallet("com.socios.fan"),
+                          createWallet("io.trust"),
                           inAppWallet({
                             auth: {
                               options: ["email", "google", "apple", "facebook", "phone"],
