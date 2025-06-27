@@ -153,6 +153,38 @@ export default function Navigation() {
                             overflow: 'visible',
                           }
                         }}
+                        detailsButton={{
+                          style: {
+                            background: 'linear-gradient(135deg, rgba(255, 178, 102, 0.15) 0%, rgba(220, 38, 38, 0.15) 100%)',
+                            border: '1px solid rgba(255, 178, 102, 0.3)',
+                            color: 'white',
+                            fontWeight: '600',
+                            fontSize: '14px',
+                            padding: '12px 20px',
+                            minWidth: '140px',
+                            borderRadius: '12px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '8px',
+                            width: 'auto',
+                            textAlign: 'center',
+                            whiteSpace: 'nowrap',
+                            overflow: 'visible',
+                            backdropFilter: 'blur(12px)',
+                            boxShadow: '0 4px 12px rgba(255, 178, 102, 0.15)',
+                            transition: 'all 0.3s ease',
+                          }
+                        }}
+                        detailsModal={{
+                          style: {
+                            background: 'rgba(17, 24, 39, 0.95)',
+                            backdropFilter: 'blur(20px)',
+                            border: '1px solid rgba(255, 178, 102, 0.2)',
+                            borderRadius: '16px',
+                            color: 'white',
+                          }
+                        }}
                       />
                     </div>
                   </div>
@@ -233,6 +265,39 @@ export default function Navigation() {
                             minHeight: '44px',
                             whiteSpace: 'nowrap',
                             overflow: 'visible',
+                          }
+                        }}
+                        detailsButton={{
+                          style: {
+                            background: 'linear-gradient(135deg, rgba(255, 178, 102, 0.15) 0%, rgba(220, 38, 38, 0.15) 100%)',
+                            border: '1px solid rgba(255, 178, 102, 0.3)',
+                            color: 'white',
+                            fontWeight: '600',
+                            fontSize: '16px',
+                            padding: '16px 24px',
+                            minWidth: '160px',
+                            borderRadius: '12px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '8px',
+                            width: '100%',
+                            textAlign: 'center',
+                            minHeight: '44px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'visible',
+                            backdropFilter: 'blur(12px)',
+                            boxShadow: '0 4px 12px rgba(255, 178, 102, 0.15)',
+                            transition: 'all 0.3s ease',
+                          }
+                        }}
+                        detailsModal={{
+                          style: {
+                            background: 'rgba(17, 24, 39, 0.95)',
+                            backdropFilter: 'blur(20px)',
+                            border: '1px solid rgba(255, 178, 102, 0.2)',
+                            borderRadius: '16px',
+                            color: 'white',
                           }
                         }}
                       />

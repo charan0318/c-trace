@@ -551,56 +551,71 @@ export function BlockchainExplorer() {
       <div className="fixed top-6 right-6 z-50">
         <div className="relative overflow-hidden rounded-xl border border-white/20 bg-gradient-to-r from-gray-900/80 to-black/80 backdrop-blur-xl">
           <ConnectButton
-            client={client}
-            wallets={[
-              createWallet("io.metamask"),
-              createWallet("com.coinbase.wallet"), 
-              createWallet("me.rainbow"),
-              createWallet("io.rabby"),
-              createWallet("com.socios"),
-              inAppWallet({
-                auth: {
-                  options: ["email", "google", "apple", "facebook", "phone"],
-                },
-              }),
-            ]}
-            connectModal={{ 
-              size: "compact",
-              title: "Connect to C-TRACE",
-              titleIcon: "",
-            }}
-            connectButton={{
-              label: "Connect Wallet",
-              style: {
-                background: 'transparent',
-                border: 'none',
-                color: 'white',
-                fontWeight: '600',
-                fontSize: '14px',
-                padding: '12px 20px',
-                minWidth: '140px',
-                borderRadius: '12px',
-                display: 'block',
-                width: 'auto',
-                textAlign: 'center',
-              }
-            }}
-            detailsButton={{
-              style: {
-                background: 'transparent',
-                border: 'none',
-                color: 'white',
-                fontWeight: '600',
-                fontSize: '14px',
-                padding: '12px 20px',
-                minWidth: '140px',
-                borderRadius: '12px',
-                display: 'block',
-                width: 'auto',
-                textAlign: 'center',
-              }
-            }}
-          />
+                        client={client}
+                        wallets={[
+                          createWallet("io.metamask"),
+                          createWallet("com.coinbase.wallet"),
+                          createWallet("me.rainbow"),
+                          createWallet("io.rabby"),
+                          createWallet("com.socios"),
+                          inAppWallet({
+                            auth: {
+                              options: ["email", "google", "apple", "facebook", "phone"],
+                            },
+                          }),
+                        ]}
+                        connectModal={{ 
+                          size: "compact",
+                          title: "Connect to C-TRACE",
+                          titleIcon: "",
+                        }}
+                        connectButton={{
+                          label: "Connect Wallet",
+                          style: {
+                            background: 'transparent',
+                            border: 'none',
+                            color: 'white',
+                            fontWeight: '600',
+                            fontSize: '14px',
+                            padding: '12px 20px',
+                            minWidth: '140px',
+                            borderRadius: '12px',
+                            display: 'block',
+                            width: 'auto',
+                            textAlign: 'center',
+                          }
+                        }}
+                        detailsButton={{
+                          style: {
+                            background: 'linear-gradient(135deg, rgba(255, 178, 102, 0.15) 0%, rgba(220, 38, 38, 0.15) 100%)',
+                            border: '1px solid rgba(255, 178, 102, 0.3)',
+                            color: 'white',
+                            fontWeight: '600',
+                            fontSize: '14px',
+                            padding: '12px 20px',
+                            minWidth: '140px',
+                            borderRadius: '12px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '8px',
+                            width: 'auto',
+                            textAlign: 'center',
+                            backdropFilter: 'blur(12px)',
+                            boxShadow: '0 4px 12px rgba(255, 178, 102, 0.15)',
+                            transition: 'all 0.3s ease',
+                          }
+                        }}
+                        detailsModal={{
+                          style: {
+                            background: 'rgba(17, 24, 39, 0.95)',
+                            backdropFilter: 'blur(20px)',
+                            border: '1px solid rgba(255, 178, 102, 0.2)',
+                            borderRadius: '16px',
+                            color: 'white',
+                          }
+                        }}
+                      />
         </div>
       </div>
 
