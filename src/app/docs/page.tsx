@@ -1344,7 +1344,7 @@ const DocsPage = () => {
                     </div>
                     <p className="text-white/70 mb-3">Real-time gas price tracking, optimization suggestions, and transaction timing recommendations for Chiliz Chain.</p>
                     <div className="bg-chiliz-primary/10 p-3 rounded-lg">
-                      <p className="text-chiliz-primary text-sm">🎯 Coming Q2 2024</p>
+                      <p className="text-chiliz-primary text-sm">🎯 Coming Soon</p>
                     </div>
                   </div>
                   
@@ -1355,7 +1355,7 @@ const DocsPage = () => {
                     </div>
                     <p className="text-white/70 mb-3">Cross-chain analysis for fan tokens on different networks, with bridge recommendations and liquidity insights.</p>
                     <div className="bg-chiliz-primary/10 p-3 rounded-lg">
-                      <p className="text-chiliz-primary text-sm">🎯 Coming Q2 2024</p>
+                      <p className="text-chiliz-primary text-sm">🎯 Coming Soon</p>
                     </div>
                   </div>
 
@@ -1364,9 +1364,9 @@ const DocsPage = () => {
                       <Trophy className="w-5 h-5 text-chiliz-primary" />
                       <h4 className="font-bold text-white">🏆 Fan Token Leaderboard</h4>
                     </div>
-                    <p className="text-white/70 mb-3">Live rankings of fan tokens by performance, community engagement, voting activity, and market metrics.</p>
+                    <p className="text-white/70 mb-3">Live rankings of fan tokens by performance, engagement, voting activity, and market metrics.</p>
                     <div className="bg-chiliz-primary/10 p-3 rounded-lg">
-                      <p className="text-chiliz-primary text-sm">🎯 Coming Q3 2024</p>
+                      <p className="text-chiliz-primary text-sm">🎯 In Development</p>
                     </div>
                   </div>
 
@@ -1375,9 +1375,9 @@ const DocsPage = () => {
                       <Users className="w-5 h-5 text-chiliz-primary" />
                       <h4 className="font-bold text-white">👥 Social Features</h4>
                     </div>
-                    <p className="text-white/70 mb-3">Share analyses, create watchlists, follow other users, and get community insights on fan tokens.</p>
+                    <p className="text-white/70 mb-3">Share analyses, create watchlists, follow other users, and get insights on fan tokens.</p>
                     <div className="bg-chiliz-primary/10 p-3 rounded-lg">
-                      <p className="text-chiliz-primary text-sm">🎯 Coming Q3 2024</p>
+                      <p className="text-chiliz-primary text-sm">🎯 In Development</p>
                     </div>
                   </div>
 
@@ -1388,7 +1388,7 @@ const DocsPage = () => {
                     </div>
                     <p className="text-white/70 mb-3">Custom notifications for contract events, price changes, voting periods, and team announcements.</p>
                     <div className="bg-chiliz-primary/10 p-3 rounded-lg">
-                      <p className="text-chiliz-primary text-sm">🎯 Coming Q4 2024</p>
+                      <p className="text-chiliz-primary text-sm">🎯 Planned</p>
                     </div>
                   </div>
 
@@ -1399,64 +1399,7 @@ const DocsPage = () => {
                     </div>
                     <p className="text-white/70 mb-3">Native iOS and Android apps with push notifications, widget support, and offline analysis capabilities.</p>
                     <div className="bg-chiliz-primary/10 p-3 rounded-lg">
-                      <p className="text-chiliz-primary text-sm">🎯 Coming Q4 2024</p>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-bold text-chiliz-primary mb-4">💡 Feature Requests</h2>
-                <div className="bg-gradient-to-r from-chiliz-primary/10 to-transparent p-6 rounded-2xl border border-chiliz-primary/20">
-                  <p className="text-white/80 mb-4">
-                    Have an idea for a new feature? Your feedback shapes the future of C-TRACE! We're actively building based on community suggestions.
-                  </p>
-                  <div className="grid md:grid-cols-2 gap-4 mb-4">
-                    <div className="bg-black/40 p-4 rounded-lg">
-                      <h4 className="font-bold text-white mb-2">📊 Popular Requests</h4>
-                      <ul className="text-white/70 text-sm space-y-1">
-                        <li>• Portfolio tracking and P&L</li>
-                        <li>• NFT marketplace integration</li>
-                        <li>• DeFi yield farming analytics</li>
-                        <li>• Advanced charting tools</li>
-                      </ul>
-                    </div>
-                    <div className="bg-black/40 p-4 rounded-lg">
-                      <h4 className="font-bold text-white mb-2">🚀 Submit Ideas</h4>
-                      <p className="text-white/70 text-sm">Join our Telegram community to suggest features, vote on roadmap priorities, and influence development.</p>
-                    </div>
-                  </div>
-                  <a 
-                    href="https://t.me/ch04niverse" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 bg-chiliz-primary hover:bg-chiliz-primary/80 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
-                  >
-                    <MessageSquare className="w-5 h-5" />
-                    Submit Feature Request
-                  </a>
-                </div>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-bold text-chiliz-primary mb-4">🌟 Community & Updates</h2>
-                <div className="space-y-4">
-                  <div className="bg-gray-900/60 border border-white/10 rounded-lg p-4">
-                    <h4 className="font-bold text-white mb-2">📢 Stay Updated</h4>
-                    <p className="text-white/70 text-sm mb-3">Follow development progress and get early access to new features</p>
-                    <div className="flex flex-wrap gap-2">
-                      <a href="https://t.me/ch04niverse" target="_blank" rel="noopener noreferrer" className="bg-blue-600/20 text-blue-400 px-3 py-2 rounded text-sm hover:bg-blue-600/30 transition-colors">Telegram</a>
-                      <a href="https://c-trace.replit.app" target="_blank" rel="noopener noreferrer" className="bg-green-600/20 text-green-400 px-3 py-2 rounded text-sm hover:bg-green-600/30 transition-colors">Live App</a>
-                    </div>
-                  </div>
-                  <div className="bg-gray-900/60 border border-white/10 rounded-lg p-4">
-                    <h4 className="font-bold text-white mb-2">🤝 Community Contributions</h4>
-                    <p className="text-white/70 text-sm mb-3">Help improve C-TRACE through bug reports, feature suggestions, and user feedback</p>
-                    <div className="text-white/60 text-sm">
-                      <p>• Report bugs and issues</p>
-                      <p>• Share usage feedback</p>
-                      <p>• Suggest UI/UX improvements</p>
-                      <p>• Request new token integrations</p>
+                      <p className="text-chiliz-primary text-sm">🎯 Planned</p>
                     </div>
                   </div>
                 </div>
@@ -1465,33 +1408,33 @@ const DocsPage = () => {
               <section>
                 <h2 className="text-2xl font-bold text-chiliz-primary mb-4">🎯 Development Roadmap</h2>
                 <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/40 p-6 rounded-2xl border border-white/10">
-                  <h4 className="font-bold text-white mb-4">Our Vision for 2024-2025</h4>
+                  <h4 className="font-bold text-white mb-4">Our Development Vision</h4>
                   <div className="space-y-4">
                     <div className="flex items-center gap-4">
                       <div className="w-3 h-3 bg-green-500 rounded-full flex-shrink-0"></div>
                       <div>
-                        <p className="text-white font-semibold">Q1 2024: Foundation ✅</p>
+                        <p className="text-white font-semibold">Foundation ✅</p>
                         <p className="text-white/70 text-sm">Core AI explorer, wallet integration, fan token database</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="w-3 h-3 bg-yellow-500 rounded-full flex-shrink-0"></div>
                       <div>
-                        <p className="text-white font-semibold">Q2 2024: Enhancement 🚧</p>
+                        <p className="text-white font-semibold">Enhancement 🚧</p>
                         <p className="text-white/70 text-sm">Gas analytics, multi-chain support, advanced security features</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="w-3 h-3 bg-blue-500 rounded-full flex-shrink-0"></div>
                       <div>
-                        <p className="text-white font-semibold">Q3 2024: Social 🔮</p>
-                        <p className="text-white/70 text-sm">Community features, leaderboards, social sharing</p>
+                        <p className="text-white font-semibold">Social Features 🔮</p>
+                        <p className="text-white/70 text-sm">Leaderboards, social sharing, user profiles</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="w-3 h-3 bg-purple-500 rounded-full flex-shrink-0"></div>
                       <div>
-                        <p className="text-white font-semibold">Q4 2024: Mobile 📱</p>
+                        <p className="text-white font-semibold">Mobile Experience 📱</p>
                         <p className="text-white/70 text-sm">Native apps, notifications, offline capabilities</p>
                       </div>
                     </div>
