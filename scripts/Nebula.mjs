@@ -134,7 +134,20 @@ async function handleUserMessage(
     }
   }
 
-  // Check if this is a token search query
+  // Check if this is a "what is" explanatory query first
+  const whatIsPattern = /^what\s+is\s+([a-zA-Z]+)(?:\s+token)?\??$/i;
+  const whatIsMatch = userMessage.match(whatIsPattern);
+  
+  if (whatIsMatch && chainId === "88888") {
+    const symbol = whatIsMatch[1].toLowerCase();
+    const explanation = getTokenExplanation(symbol);
+    if (explanation) {
+      console.log(`🔍 Providing explanation for: ${symbol}`);
+      return explanation;
+    }
+  }
+
+  // Check if this is a token search query (for technical details)
   const tokenSearchPattern = /(?:\$([A-Z]+)|([A-Z]{2,10})\s+token|token\s+([A-Z]{2,10})|search\s+for\s+([A-Z]{2,10})|find\s+([A-Z]{2,10}))/i;
   const tokenMatch = userMessage.match(tokenSearchPattern);
   
@@ -284,6 +297,131 @@ async function executeCommand(
   console.log("Execute Command Response:", response);
 
   return response; // Return the full response including message and actions
+}
+
+// Token explanation function
+function getTokenExplanation(symbol) {
+  const explanations = {
+    'asr': `**ASR (AS Roma Fan Token)**
+
+ASR is the official fan token of **AS Roma**, one of Italy's most prestigious football clubs based in Rome. 
+
+**What it represents:**
+- 🏟️ **Digital connection** between AS Roma and their global fanbase
+- 🗳️ **Voting rights** on club decisions (jersey designs, stadium music, etc.)
+- 🎁 **Exclusive experiences** like meet & greets, VIP events, and stadium tours
+- 🏆 **Rewards and gamification** through the Socios.com platform
+
+**Key details:**
+- Built on **Chiliz Chain** (Chain ID: 88888)
+- Part of the **Socios.com ecosystem**
+- Enables fans to have a **voice in club decisions**
+- **Tradeable** on various cryptocurrency exchanges
+
+ASR represents the future of **fan engagement** in sports, giving supporters worldwide a stake in their favorite team's non-critical decisions.`,
+
+    'psg': `**PSG (Paris Saint-Germain Fan Token)**
+
+PSG is the official fan token of **Paris Saint-Germain**, one of the world's most valuable football clubs.
+
+**What it represents:**
+- 🏟️ **Digital connection** to PSG's global fanbase
+- 🗳️ **Fan voting** on club polls and decisions
+- ⭐ **Exclusive access** to PSG experiences and content
+- 🎮 **Gamification** and rewards through Socios.com
+
+Built on **Chiliz Chain** as part of the revolutionary **fan engagement ecosystem**.`,
+
+    'bar': `**BAR (FC Barcelona Fan Token)**
+
+BAR is the official fan token of **FC Barcelona**, one of the most successful football clubs in history.
+
+**What it represents:**
+- 🏟️ **Connection** to Barça's massive global fanbase
+- 🗳️ **Voting power** on club decisions and polls
+- 🎁 **VIP experiences** and exclusive content access
+- 🏆 **Rewards** through fan engagement activities
+
+Built on **Chiliz Chain** to revolutionize how fans interact with their beloved club.`,
+
+    'juv': `**JUV (Juventus Fan Token)**
+
+JUV is the official fan token of **Juventus FC**, Italy's most successful football club.
+
+**What it represents:**
+- 🏟️ **Digital fan engagement** with the Bianconeri
+- 🗳️ **Voting rights** on various club decisions
+- ⭐ **Exclusive experiences** and VIP access
+- 🎮 **Gamified rewards** through Socios platform
+
+Built on **Chiliz Chain** to connect Juventus with fans worldwide.`,
+
+    'acm': `**ACM (AC Milan Fan Token)**
+
+ACM is the official fan token of **AC Milan**, one of Italy's most historic football clubs.
+
+**What it represents:**
+- 🏟️ **Digital connection** to the Rossoneri legacy
+- 🗳️ **Fan voting** on club-related decisions
+- 🎁 **Exclusive Milan experiences** and content
+- 🏆 **Rewards** for fan engagement and loyalty
+
+Built on **Chiliz Chain** as part of the modern fan engagement revolution.`,
+
+    'chz': `**CHZ (Chiliz)**
+
+CHZ is the native cryptocurrency of the **Chiliz blockchain** and the fuel of the sports fan token ecosystem.
+
+**What it represents:**
+- ⛽ **Gas token** for transactions on Chiliz Chain
+- 🎫 **Currency** to purchase fan tokens on Socios.com
+- 🏗️ **Foundation** of the world's first sports-focused blockchain
+- 🌐 **Bridge** between traditional sports and crypto innovation
+
+**Key facts:**
+- Powers the **entire fan token ecosystem**
+- Used by **100+ sports teams** worldwide
+- **Native token** of Chiliz Chain (Chain ID: 88888)
+- **Utility token** for sports fan engagement`,
+
+    'pepper': `**PEPPER Token**
+
+PEPPER is a community token on the **Chiliz Chain** ecosystem.
+
+**What it represents:**
+- 🌶️ **Community-driven** token project
+- 🔥 **Spicy** addition to the Chiliz ecosystem
+- 💎 **Meme token** with community focus
+- 🚀 **Grassroots** project on Chiliz Chain
+
+Built on **Chiliz Chain** as part of the growing DeFi and community token movement.`,
+
+    'chilizinu': `**CHILIZINU (ChilizInu)**
+
+CHILIZINU is a meme token inspired by the popular "Inu" trend, built on **Chiliz Chain**.
+
+**What it represents:**
+- 🐕 **Meme token** combining Chiliz ecosystem with Inu culture
+- 🌶️ **Community project** on Chiliz Chain
+- 💎 **Experimental token** in the Chiliz DeFi space
+- 🚀 **Fan-driven** cryptocurrency project
+
+Built on **Chiliz Chain** to bring meme culture to the sports blockchain ecosystem.`,
+
+    'kayen': `**KAYEN Token**
+
+KAYEN is a community token project on the **Chiliz Chain** ecosystem.
+
+**What it represents:**
+- 🎯 **Community-focused** token project
+- 🔥 **Innovation** in the Chiliz ecosystem
+- 💎 **Experimental** DeFi project
+- 🌐 **Decentralized** community initiative
+
+Built on **Chiliz Chain** as part of the expanding token ecosystem beyond sports.`
+  };
+
+  return explanations[symbol] || null;
 }
 
 // Import ChilizScan integration
