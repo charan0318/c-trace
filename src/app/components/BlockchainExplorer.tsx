@@ -679,7 +679,7 @@ export function BlockchainExplorer() {
                 <div className="w-1.5 h-1.5 bg-red-500 rounded-full mt-1.5 flex-shrink-0"></div>
                 <div>
                   <p className="text-xs text-white/90 font-medium">Token Details</p>
-                  <p className="text-xs text-white/60 leading-relaxed">Add "token" suffix for addresses (e.g., "CHZ token", "BAR token")</p>
+                  <p className="text-xs text-white/60 leading-relaxed"> Use " What is xxx token" for addresses & details (e.g., "CHZ token", "BAR token")</p>
                 </div>
               </div>
             </div>
