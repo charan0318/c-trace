@@ -17,7 +17,8 @@ import {
   getPopularTokens,
 } from "../../../scripts/Nebula.mjs";
 
-import { useActiveAccount } from "thirdweb/react";
+import { useActiveAccount, ConnectButton } from "thirdweb/react";
+import { createWallet, inAppWallet } from "thirdweb/wallets";
 
 import {
   sendAndConfirmTransaction,
@@ -545,6 +546,62 @@ export function BlockchainExplorer() {
 
       {/* Subtle overlay to enhance visibility */}
       <div className="absolute inset-0 bg-black/30" style={{ zIndex: -5 }} />
+
+      {/* Connect Wallet Button - Fixed Position Top Right */}
+      <div className="fixed top-6 right-6 z-50">
+        <div className="relative overflow-hidden rounded-xl border border-white/20 bg-gradient-to-r from-gray-900/80 to-black/80 backdrop-blur-xl">
+          <ConnectButton
+            client={client}
+            wallets={[
+              createWallet("io.metamask"),
+              createWallet("com.coinbase.wallet"),
+              createWallet("me.rainbow"),
+              createWallet("io.rabby"),
+              inAppWallet({
+                auth: {
+                  options: ["email", "google", "apple", "facebook", "phone"],
+                },
+              }),
+            ]}
+            connectModal={{ 
+              size: "compact",
+              title: "Connect to C-TRACE",
+              titleIcon: "",
+            }}
+            connectButton={{
+              label: "Connect Wallet",
+              style: {
+                background: 'transparent',
+                border: 'none',
+                color: 'white',
+                fontWeight: '600',
+                fontSize: '14px',
+                padding: '12px 20px',
+                minWidth: '140px',
+                borderRadius: '12px',
+                display: 'block',
+                width: 'auto',
+                textAlign: 'center',
+              }
+            }}
+            detailsButton={{
+              style: {
+                background: 'transparent',
+                border: 'none',
+                color: 'white',
+                fontWeight: '600',
+                fontSize: '14px',
+                padding: '12px 20px',
+                minWidth: '140px',
+                borderRadius: '12px',
+                display: 'block',
+                width: 'auto',
+                textAlign: 'center',
+              }
+            }}
+          />
+        </div>
+      </div>
 
       {/* Got Feedback Button - Fixed Position */}
       <div className="fixed bottom-6 right-6 z-50">
