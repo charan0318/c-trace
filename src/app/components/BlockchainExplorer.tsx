@@ -567,7 +567,7 @@ export function BlockchainExplorer() {
             value: txValue.toString(),
             chain: "Chiliz Chain (88888)"
           });
-          
+
           // Force wallet interaction - this MUST trigger popup
           const receipt = await sendAndConfirmTransaction({
             transaction: preparedTransaction,
@@ -594,7 +594,7 @@ Your CHZ transfer has been successfully executed and confirmed on the blockchain
           ]);
         } catch (txError) {
           console.error("❌ Transaction execution failed:", txError);
-          
+
           // Handle specific error types with better messaging
           if (txError.message?.includes('User rejected') || txError.message?.includes('user rejected')) {
             setMessages((prev) => [
@@ -861,22 +861,32 @@ Once connected, I'll be able to show you your CHZ balance on Chiliz Chain.`,
       {/* Subtle overlay to enhance visibility */}
       <div className="absolute inset-0 bg-black/30" style={{ zIndex: -5 }} />
 
-      {/* Essential Tips Box - Fixed Position Left Side */}
+      {/* Token Comparison Tips Box - Fixed Position Left Side */}
       <div className="fixed left-6 top-1/2 -translate-y-1/2 z-40 w-72 max-h-[70vh] overflow-y-auto">
         <div className="bg-gray-900/60 backdrop-blur-xl border border-white/20 rounded-2xl p-4 shadow-2xl">
           {/* Header */}
           <div className="flex items-center justify-center gap-2 mb-4">
-            <h3 className="text-sm font-bold text-white">Essential Tips</h3>
+            <h3 className="text-sm font-bold text-white">Token Comparison</h3>
           </div>
 
           {/* Tips List */}
           <div className="space-y-3">
             <div className="group">
               <div className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                <div>
+                  <p className="text-xs text-white/90 font-medium">Compare Tokens</p>
+                  <p className="text-xs text-white/60 leading-relaxed">Use "compare PSG and BAR" to see side-by-side fan token details</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="group">
+              <div className="flex items-start gap-2">
                 <div className="w-1.5 h-1.5 bg-chiliz-primary rounded-full mt-1.5 flex-shrink-0"></div>
                 <div>
-                  <p className="text-xs text-white/90 font-medium">Execute Commands</p>
-                  <p className="text-xs text-white/60 leading-relaxed">Use "execute" prefix to transfer tokens or interact with contracts</p>
+                  <p className="text-xs text-white/90 font-medium">Fan Token Queries</p>
+                  <p className="text-xs text-white/60 leading-relaxed">Use "fan token" suffix after team name (e.g., "explain PSG fan token")</p>
                 </div>
               </div>
             </div>
@@ -886,17 +896,17 @@ Once connected, I'll be able to show you your CHZ balance on Chiliz Chain.`,
                 <div className="w-1.5 h-1.5 bg-red-500 rounded-full mt-1.5 flex-shrink-0"></div>
                 <div>
                   <p className="text-xs text-white/90 font-medium">Token Details</p>
-                  <p className="text-xs text-white/60 leading-relaxed"> Use " What is xxx token" for addresses & details (e.g., "What is CHZ token")</p>
+                  <p className="text-xs text-white/60 leading-relaxed">Use "What is xxx token" for details (e.g., "What is CHZ token")</p>
                 </div>
               </div>
             </div>
 
             <div className="group">
               <div className="flex items-start gap-2">
-                <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                <div className="w-1.5 h-1.5 bg-purple-500 rounded-full mt-1.5 flexshrink-0"></div>
                 <div>
-                  <p className="text-xs text-white/90 font-medium">Wallet Connection</p>
-                  <p className="text-xs text-white/60 leading-relaxed">Connect wallet first to check balances and execute transactions</p>
+                  <p className="text-xs text-white/90 font-medium">Natural Language</p>
+                  <p className="text-xs text-white/60 leading-relaxed">Ask questions in plain English - C-TRACE understands context</p>
                 </div>
               </div>
             </div>
@@ -910,16 +920,6 @@ Once connected, I'll be able to show you your CHZ balance on Chiliz Chain.`,
                 </div>
               </div>
             </div>
-
-            <div className="group">
-              <div className="flex items-start gap-2">
-                <div className="w-1.5 h-1.5 bg-purple-500 rounded-full mt-1.5 flex-shrink-0"></div>
-                <div>
-                  <p className="text-xs text-white/90 font-medium">Natural Language</p>
-                  <p className="text-xs text-white/60 leading-relaxed">Ask questions in plain English - C-TRACE understands context</p>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Footer */}
@@ -929,32 +929,22 @@ Once connected, I'll be able to show you your CHZ balance on Chiliz Chain.`,
         </div>
       </div>
 
-      {/* Fan Token & Advanced Tips Box - Fixed Position Right Side */}
+      {/* Wallet & Transaction Tips Box - Fixed Position Right Side */}
       <div className="fixed right-6 top-1/2 -translate-y-1/2 z-40 w-72 max-h-[70vh] overflow-y-auto">
         <div className="bg-gray-900/60 backdrop-blur-xl border border-white/20 rounded-2xl p-4 shadow-2xl">
           {/* Header */}
           <div className="flex items-center justify-center gap-2 mb-4">
-            <h3 className="text-sm font-bold text-white">Fan Token Tips</h3>
+            <h3 className="text-sm font-bold text-white">Wallet & Transactions</h3>
           </div>
 
           {/* Tips List */}
           <div className="space-y-3">
             <div className="group">
               <div className="flex items-start gap-2">
-                <div className="w-1.5 h-1.5 bg-chiliz-primary rounded-full mt-1.5 flex-shrink-0"></div>
+                <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-1.5 flex-shrink-0"></div>
                 <div>
-                  <p className="text-xs text-white/90 font-medium">Fan Token Queries</p>
-                  <p className="text-xs text-white/60 leading-relaxed">Use "fan token" suffix after team name (e.g., "explain PSG fan token")</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="group">
-              <div className="flex items-start gap-2">
-                <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mt-1.5 flex-shrink-0"></div>
-                <div>
-                  <p className="text-xs text-white/90 font-medium">Compare Tokens</p>
-                  <p className="text-xs text-white/60 leading-relaxed">Use "compare PSG and BAR" to see side-by-side fan token details</p>
+                  <p className="text-xs text-white/90 font-medium">Wallet Connection</p>
+                  <p className="text-xs text-white/60 leading-relaxed">Connect wallet first to check balances and execute transactions</p>
                 </div>
               </div>
             </div>
@@ -965,16 +955,6 @@ Once connected, I'll be able to show you your CHZ balance on Chiliz Chain.`,
                 <div>
                   <p className="text-xs text-white/90 font-medium">Balance Checking</p>
                   <p className="text-xs text-white/60 leading-relaxed">Type "what is my balance" to see your CHZ and token holdings</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="group">
-              <div className="flex items-start gap-2">
-                <div className="w-1.5 h-1.5 bg-pink-500 rounded-full mt-1.5 flex-shrink-0"></div>
-                <div>
-                  <p className="text-xs text-white/90 font-medium">Contract Addresses</p>
-                  <p className="text-xs text-white/60 leading-relaxed">Paste any 0x address for instant smart contract analysis</p>
                 </div>
               </div>
             </div>
@@ -998,11 +978,21 @@ Once connected, I'll be able to show you your CHZ balance on Chiliz Chain.`,
                 </div>
               </div>
             </div>
+
+            <div className="group">
+              <div className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 bg-chiliz-primary rounded-full mt-1.5 flex-shrink-0"></div>
+                <div>
+                  <p className="text-xs text-white/90 font-medium">Execute Commands</p>
+                  <p className="text-xs text-white/60 leading-relaxed">Use "execute" prefix to transfer tokens or interact with contracts</p>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Footer */}
           <div className="mt-4 pt-3 border-t border-white/10">
-            <p className="text-xs text-orange-500 font-medium text-center">⚽ Fan Token Expert Mode</p>
+            <p className="text-xs text-orange-500 font-medium text-center">⚽ Ready to Execute!</p>
           </div>
         </div>
       </div>
