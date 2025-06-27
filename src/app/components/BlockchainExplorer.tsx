@@ -323,7 +323,7 @@ export function BlockchainExplorer() {
     const initSession = async () => {
       try {
         console.log("🔄 Initializing session...");
-        console.log("📋 URL Parameters:", { contractAddress, chainId, hasContractToExplore });
+        console.log("📋 URL Parameters:", { contractAddress, chainId, hasContractToExplore, textQuery });
 
         const newSessionId = await createSession("Blockchain Explorer Session");
         console.log("✅ Session created:", newSessionId);
@@ -348,9 +348,23 @@ export function BlockchainExplorer() {
           setIsTyping(false);
         } else if (hasTextQuery) {
           console.log("🔍 Text query to process:", textQuery, "on chain:", chainId);
+
+          // Get search parameters to understand the type of search
+          const searchType = searchParams.get("searchType");
+          const symbol = searchParams.get("symbol");
+
           setIsTyping(true);
+
+          // Enhance the query based on search type
+          let enhancedQuery = textQuery!;
+          if (searchType === "token") {
+            enhancedQuery = `I need you to search for the token "${symbol || textQuery}" on Chiliz Chain. Please provide: 1) The exact contract address 2) Token symbol 3) Total supply 4) Number of decimals 5) Current holder count 6) If it exists on Chiliz scan.chiliz.com. If you cannot find it on Chiliz, please indicate that clearly and suggest checking other networks or verify the token name spelling.`;
+          } else if (textQuery!.toLowerCase().includes('contract address') || textQuery!.toLowerCase().includes('chilizinu') || textQuery!.toLowerCase().includes('kayen')) {
+            enhancedQuery = `Search for specific token information: "${textQuery}". I need the exact contract address and token details. Please check the Chiliz blockchain explorer and provide comprehensive information about this token including its contract address, symbol, supply, and verification status.`;
+          }
+
           const queryResponse = await handleUserMessage(
-            textQuery!,
+            enhancedQuery,
             newSessionId,
             chainId!,
             ""
@@ -370,7 +384,7 @@ export function BlockchainExplorer() {
           setMessages([
             {
               role: "system",
-              content: "Welcome to C-TRACE 🚀 I'm your AI assistant for exploring the Chiliz blockchain and ecosystem. What would you like to discover about Chiliz today?",
+              content: "Welcome to C-TRACE 🚀 I'm your AI assistant for exploring the Chiliz blockchain and ecosystem. I can help you find contract addresses, analyze tokens, and explore the Chiliz ecosystem. What would you like to discover?",
             },
           ]);
         }
@@ -387,7 +401,7 @@ export function BlockchainExplorer() {
     };
 
     initSession();
-  }, [contractAddress, chainId, hasContractToExplore, textQuery, hasTextQuery]);
+  }, [contractAddress, chainId, hasContractToExplore, textQuery, hasTextQuery, searchParams]);
 
   const handleSend = async () => {
     if (!input.trim() || !sessionId) return;

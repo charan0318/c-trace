@@ -24,12 +24,12 @@ export default function Hero() {
       alert('Please enter a contract address or search term');
       return;
     }
-    
+
     const trimmedInput = searchInput.trim();
-    
+
     // Check if input looks like a contract address (starts with 0x and is 40-42 characters)
     const isContractAddress = /^0x[a-fA-F0-9]{40}$/.test(trimmedInput);
-    
+
     try {
       if (isContractAddress) {
         // Navigate with contract address
@@ -38,11 +38,32 @@ export default function Hero() {
           `/explorer?chainId=${finalChain}&searchTerm=${encodeURIComponent(trimmedInput)}`
         );
       } else {
-        // Navigate with general text query (no contract address)
-        console.log('Navigating to explorer with text query:', { query: trimmedInput, chain: finalChain });
+        const normalizedInput = trimmedInput.trim();
+        const isTokenSymbol = /^[A-Za-z]+$/.test(normalizedInput);
+
+        if (isTokenSymbol) {
+        // Handle token symbol queries specially with more specific search
+        const tokenQuery = `Find the contract address and details for ${normalizedInput} token on Chiliz Chain. Search the Chiliz token explorer and provide the exact contract address, total supply, and token information.`;
+        console.log('Navigating to explorer with token query:', { query: tokenQuery, chain: finalChain });
         router.push(
-          `/explorer?chainId=${finalChain}&query=${encodeURIComponent(trimmedInput)}`
+          `/explorer?chainId=${finalChain}&query=${encodeURIComponent(tokenQuery)}&searchType=token&symbol=${encodeURIComponent(normalizedInput)}`
         );
+      } else {
+        // Handle specific token name searches (like chilizinu, kayen, etc.)
+        const lowerInput = normalizedInput.toLowerCase();
+        let searchQuery;
+
+        if (lowerInput.includes('inu') || lowerInput.includes('token') || lowerInput.includes('coin')) {
+          searchQuery = `Find the contract address and complete details for "${normalizedInput}" token on Chiliz Chain. Search the Chiliz blockchain explorer at https://scan.chiliz.com/tokens and provide: 1) Contract address 2) Token symbol 3) Total supply 4) Decimals 5) Current holders. If not found on Chiliz, check if it exists on other networks.`;
+        } else {
+          searchQuery = normalizedInput.toLowerCase();
+        }
+
+        console.log('Navigating to explorer with enhanced query:', { query: searchQuery, chain: finalChain });
+        router.push(
+          `/explorer?chainId=${finalChain}&query=${encodeURIComponent(searchQuery)}&searchType=general`
+        );
+      }
       }
     } catch (error) {
       console.error('Navigation error:', error);
