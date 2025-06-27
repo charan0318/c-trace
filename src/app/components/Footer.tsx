@@ -5,7 +5,7 @@ export function Footer() {
           <div className="text-center">
             <p className="text-lg font-semibold text-red-500 mb-2">#BuiltOnChiliz</p>
             <p className="text-sm text-white/60">
-              © {new Date().getFullYear()} c-trace | Crafted with ❤️ by ch04niverse
+              © {new Date().getFullYear()} c-trace | Crafted with ❤️ from ch04niverse
             </p>
           </div>
         </div>
