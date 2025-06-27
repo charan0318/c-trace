@@ -1,7 +1,7 @@
 
 // Feature flags configuration
 export const FEATURES = {
-  WALLET_CONNECTION: false, // Set to false to disable wallet connection
+  WALLET_CONNECTION: true, // Set to false to disable wallet connection
   // Add more feature flags here as needed
 } as const;
 
