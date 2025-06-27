@@ -12,6 +12,9 @@ import {
   queryContract,
   handleUserMessage,
   executeCommand,
+  searchChilizScan,
+  lookupToken,
+  getPopularTokens,
 } from "../../../scripts/Nebula.mjs";
 
 import { useActiveAccount } from "thirdweb/react";
@@ -286,10 +289,12 @@ export function BlockchainExplorer() {
   const suggestedActions = [
     "What is Chiliz and how does it work?",
     "Show me popular fan tokens",
-    "Analyze latest CHZ transactions",
-    "Explain Chiliz tokenomics",
-    "Find FC Barcelona fan token info",
+    "$CHZ token information",
+    "$BAR (FC Barcelona) fan token details", 
+    "Search for chilizinu token",
+    "Find kayen token information",
     "How to interact with fan tokens?",
+    "Popular tokens on Chiliz Chain",
   ];
 
   const actionButtons = [
@@ -301,15 +306,15 @@ export function BlockchainExplorer() {
     },
     {
       icon: TrendingUp,
-      title: "Fan Token Analysis",
-      description: "Track fan token performance and discover emerging trends across the Chiliz ecosystem",
-      prompt: "What are the main features of the Chiliz Chain and fan tokens?"
+      title: "Fan Token Discovery",
+      description: "Browse popular fan tokens and discover new ones using ChilizScan integration",
+      prompt: "Show me popular fan tokens on Chiliz Chain"
     },
     {
       icon: FileText,
-      title: "Chiliz Research",
-      description: "Investigate the CHZ token, its on-chain utility, and the network of sports organizations using it",
-      prompt: "Help me understand the Chiliz ecosystem and its sports clubs using it"
+      title: "Token Lookup",
+      description: "Search for any token by name, symbol, or contract address using ChilizScan data",
+      prompt: "Search for a specific token (e.g., chilizinu, kayen, or $CHZ)"
     },
     {
       icon: Zap,

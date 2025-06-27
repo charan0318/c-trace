@@ -73,55 +73,23 @@ async function queryContract(contractAddress, chainId, sessionId) {
   return response.message; // Return the structured response from Nebula
 }
 
-// Handle user messages in the context of a session
-async function handleUserMessage(message, sessionId, chainId = "88888", contractAddress = "") {
-  // Enhance token search queries with better context
-  let enhancedMessage = message;
-
-  // Detect if this is a token search query and enhance it
-  if (message.toLowerCase().includes('contract address') || 
-      message.toLowerCase().includes('chilizinu') || 
-      message.toLowerCase().includes('kayen') ||
-      message.toLowerCase().includes('find') && message.toLowerCase().includes('token')) {
-
-    enhancedMessage = `${message}
-
-Please search comprehensively for this token information. If this is a request for a specific token like "chilizinu" or "kayen":
-
-1. Search for the exact contract address on Chiliz Chain
-2. If not found on Chiliz, indicate this clearly
-3. Provide alternative suggestions (check spelling, other networks)
-4. Give specific steps for manual verification
-
-For token searches, please provide:
-- Contract Address (if found)
-- Token Symbol
-- Token Name
-- Total Supply
-- Decimals
-- Verification Status
-- Explorer Link
-
-If you cannot find the specific token, please state this clearly and explain why (e.g., "Token not found on Chiliz Chain" or "Please verify the token name spelling").`;
-  }
-
-  const requestBody = {
-    message: enhancedMessage,
+// Handle user messages (follow-up questions)
+async function handleUserMessage(
+  userMessage,
+  sessionId,
+  chainId,
+  contractAddress
+) {
+  const response = await apiRequest("/chat", "POST", {
+    message: userMessage,
     session_id: sessionId,
     context_filter: {
       chain_ids: [chainId.toString()],
+      contract_addresses: [contractAddress],
     },
-  };
+  });
 
-  // Add contract address to context if provided
-  if (contractAddress) {
-    requestBody.context_filter.contract_addresses = [contractAddress];
-  }
-
-  console.log("Handle User Message Request Body:", requestBody);
-
-  const response = await apiRequest("/chat", "POST", requestBody);
-  return response.message;
+  return response.message; // Nebula's reply
 }
 
 async function updateSession(sessionId, title, isPublic) {
@@ -189,6 +157,9 @@ async function executeCommand(
   return response; // Return the full response including message and actions
 }
 
+// Import ChilizScan integration
+import { searchChilizScan, lookupToken, getPopularTokens } from './ChilizScan.mjs';
+
 export {
   createSession,
   queryContract,
@@ -197,4 +168,8 @@ export {
   clearSession,
   deleteSession,
   executeCommand,
+  // Export ChilizScan functions
+  searchChilizScan,
+  lookupToken,
+  getPopularTokens,
 };
