@@ -378,7 +378,7 @@ ${queryLower === 'chz' ? '✅ **Chiliz (CHZ)** is the native token of Chiliz Cha
         results.results.forEach((token, index) => {
           formatted += `### ${index + 1}. ${token.name || 'Unknown'} (${token.symbol || 'N/A'})\n`;
           if (token.contractAddress) {
-            formatted += `**Contract:** \`${token.contractAddress}\`\n`;
+            formatted += `📍 **Contract Address:** \`${token.contractAddress}\`\n`;
           }
           if (token.decimals !== undefined) {
             formatted += `**Decimals:** ${token.decimals}\n`;
