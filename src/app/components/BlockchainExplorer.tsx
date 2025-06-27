@@ -17,6 +17,9 @@ import {
   getPopularTokens,
 } from "../../../scripts/Nebula.mjs";
 
+// Import ChilizScan API
+import { chilizScanAPI } from "../../../scripts/ChilizScan.mjs";
+
 import { useActiveAccount, ConnectButton } from "thirdweb/react";
 import { createWallet, inAppWallet } from "thirdweb/wallets";
 
@@ -545,18 +548,21 @@ export function BlockchainExplorer() {
 
         // Send transaction with proper wallet approval
         try {
+          console.log("📤 Sending transaction to wallet for approval...");
+          
+          // This will trigger the wallet popup for user approval
           const receipt = await sendAndConfirmTransaction({
             transaction: preparedTransaction,
             account,
           });
 
-          console.log("Transaction receipt:", receipt);
+          console.log("✅ Transaction receipt:", receipt);
 
-        setMessages((prev) => [
-          ...prev.slice(0, -1), // Remove the approval message
-          {
-            role: "system",
-            content: `## ✅ Transaction Successful!
+          setMessages((prev) => [
+            ...prev.slice(0, -1), // Remove the approval message
+            {
+              role: "system",
+              content: `## ✅ Transaction Successful!
 
 **Transaction Hash:** \`${receipt.transactionHash}\`
 **Status:** Confirmed
@@ -565,15 +571,47 @@ export function BlockchainExplorer() {
 🔗 **View on ChilizScan:** [${receipt.transactionHash}](https://scan.chiliz.com/tx/${receipt.transactionHash})
 
 Your transaction has been successfully executed and confirmed on the blockchain.`,
-          },
-        ]);
+            },
+          ]);
         } catch (txError) {
-          console.error("Transaction execution failed:", txError);
-          setMessages((prev) => [
-            ...prev.slice(0, -1), // Remove the approval message
-            {
-              role: "system",
-              content: `## ❌ Transaction Failed
+          console.error("❌ Transaction execution failed:", txError);
+          
+          // Handle specific error types
+          if (txError.message?.includes('User rejected')) {
+            setMessages((prev) => [
+              ...prev.slice(0, -1),
+              {
+                role: "system",
+                content: `## ❌ Transaction Cancelled
+
+You cancelled the transaction in your wallet. This is normal if you decided not to proceed.
+
+**To try again:**
+- Use the same command again
+- Make sure you approve the transaction in your wallet popup`,
+              },
+            ]);
+          } else if (txError.message?.includes('insufficient funds')) {
+            setMessages((prev) => [
+              ...prev.slice(0, -1),
+              {
+                role: "system",
+                content: `## ❌ Insufficient Balance
+
+You don't have enough CHZ to complete this transaction.
+
+**Solutions:**
+1. Check your balance: "what is my balance"
+2. Reduce the transaction amount
+3. Make sure you have CHZ for gas fees (~0.001 CHZ)`,
+              },
+            ]);
+          } else {
+            setMessages((prev) => [
+              ...prev.slice(0, -1),
+              {
+                role: "system",
+                content: `## ❌ Transaction Failed
 
 **Error:** ${txError.message || 'Transaction execution failed'}
 
@@ -582,16 +620,17 @@ Your transaction has been successfully executed and confirmed on the blockchain.
 - Insufficient balance for transaction + gas fees
 - Invalid recipient address
 - Network connectivity issues
-- Gas estimation failed
+- Wrong network (ensure you're on Chiliz Chain ID: 88888)
 
 **Solutions:**
-1. Check your wallet balance (ask "what is my balance")
+1. Check your wallet balance: "what is my balance"
 2. Ensure you're connected to Chiliz Chain (ID: 88888)
 3. Try reducing the transaction amount
 4. Check recipient address is valid
-5. Ensure you have enough CHZ for gas fees`,
-            },
-          ]);
+5. Make sure your wallet is unlocked`,
+              },
+            ]);
+          }
         }
       } else {
         setMessages((prev) => [
@@ -880,7 +919,7 @@ Once connected, I'll be able to show you your CHZ balance on Chiliz Chain.`,
                           createWallet("com.coinbase.wallet"),
                           createWallet("me.rainbow"),
                           createWallet("io.rabby"),
-                          createWallet("com.socios"),
+                          createWallet("com.chiliz.wallet"),
                           inAppWallet({
                             auth: {
                               options: ["email", "google", "apple", "facebook", "phone"],

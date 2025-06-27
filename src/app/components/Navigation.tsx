@@ -123,7 +123,7 @@ export default function Navigation() {
                           createWallet("com.coinbase.wallet"),
                           createWallet("me.rainbow"),
                           createWallet("io.rabby"),
-                          createWallet("com.socios"),
+                          createWallet("com.chiliz.wallet"),
                           inAppWallet({
                             auth: {
                               options: ["email", "google", "apple", "facebook", "phone"],
@@ -236,7 +236,7 @@ export default function Navigation() {
                           createWallet("com.coinbase.wallet"),
                           createWallet("me.rainbow"),
                           createWallet("io.rabby"),
-                          createWallet("com.socios"),
+                          createWallet("com.chiliz.wallet"),
                           inAppWallet({
                             auth: {
                               options: ["email", "google", "apple", "facebook", "phone"],
