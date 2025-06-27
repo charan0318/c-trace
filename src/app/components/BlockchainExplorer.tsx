@@ -929,6 +929,84 @@ Once connected, I'll be able to show you your CHZ balance on Chiliz Chain.`,
         </div>
       </div>
 
+      {/* Fan Token & Advanced Tips Box - Fixed Position Right Side */}
+      <div className="fixed right-6 top-1/2 -translate-y-1/2 z-40 w-72 max-h-[70vh] overflow-y-auto">
+        <div className="bg-gray-900/60 backdrop-blur-xl border border-white/20 rounded-2xl p-4 shadow-2xl">
+          {/* Header */}
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <h3 className="text-sm font-bold text-white">Fan Token Tips</h3>
+          </div>
+
+          {/* Tips List */}
+          <div className="space-y-3">
+            <div className="group">
+              <div className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 bg-chiliz-primary rounded-full mt-1.5 flex-shrink-0"></div>
+                <div>
+                  <p className="text-xs text-white/90 font-medium">Fan Token Queries</p>
+                  <p className="text-xs text-white/60 leading-relaxed">Use "fan token" suffix after team name (e.g., "explain PSG fan token")</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="group">
+              <div className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                <div>
+                  <p className="text-xs text-white/90 font-medium">Compare Tokens</p>
+                  <p className="text-xs text-white/60 leading-relaxed">Use "compare PSG and BAR" to see side-by-side fan token details</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="group">
+              <div className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                <div>
+                  <p className="text-xs text-white/90 font-medium">Balance Checking</p>
+                  <p className="text-xs text-white/60 leading-relaxed">Type "what is my balance" to see your CHZ and token holdings</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="group">
+              <div className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 bg-pink-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                <div>
+                  <p className="text-xs text-white/90 font-medium">Contract Addresses</p>
+                  <p className="text-xs text-white/60 leading-relaxed">Paste any 0x address for instant smart contract analysis</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="group">
+              <div className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 bg-cyan-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                <div>
+                  <p className="text-xs text-white/90 font-medium">Transfer Commands</p>
+                  <p className="text-xs text-white/60 leading-relaxed">Format: "execute transfer 10 CHZ to 0x..." for wallet transactions</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="group">
+              <div className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                <div>
+                  <p className="text-xs text-white/90 font-medium">Network Tips</p>
+                  <p className="text-xs text-white/60 leading-relaxed">Ensure your wallet is on Chiliz Chain (ID: 88888) for transactions</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="mt-4 pt-3 border-t border-white/10">
+            <p className="text-xs text-orange-500 font-medium text-center">⚽ Fan Token Expert Mode</p>
+          </div>
+        </div>
+      </div>
+
       {/* Connect Wallet Button - Fixed Position Top Right */}
       <div className="fixed top-6 right-6 z-50">
         <div className="relative overflow-hidden rounded-xl border border-white/20 bg-gradient-to-r from-gray-900/80 to-black/80 backdrop-blur-xl">
