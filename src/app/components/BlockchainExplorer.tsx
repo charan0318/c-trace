@@ -690,31 +690,8 @@ Once connected, I'll be able to show you your CHZ balance on Chiliz Chain.`,
       }
 
       try {
-        // First check if wallet is connected to the right network
-        if (account?.chainId !== 88888) {
-          const networkMessage = {
-            role: "system",
-            content: `## ⚠️ Wrong Network
-
-Your wallet is connected to chain ID: ${account?.chainId || 'Unknown'}
-
-**Please switch to Chiliz Chain:**
-- **Chain ID:** 88888
-- **Network Name:** Chiliz Chain
-- **RPC URL:** https://rpc.ankr.com/chiliz
-- **Alternative RPC:** https://chiliz-mainnet.gateway.tatum.io
-- **Currency Symbol:** CHZ
-- **Block Explorer:** https://scan.chiliz.com
-
-Once you switch networks, try checking your balance again.`,
-          };
-          setMessages((prev) => [...prev, networkMessage]);
-          setIsTyping(false);
-          return;
-        }
-
-        // Fetch balance from ChilizScan API
-        const balance = await chilizScanAPI.getAccountBalance(walletAddress);
+          // Fetch balance directly from ChilizScan API
+          const balance = await chilizScanAPI.getAccountBalance(walletAddress);
 
         if (balance !== null) {
           const balanceInCHZ = (parseInt(balance) / Math.pow(10, 18)).toFixed(4);
