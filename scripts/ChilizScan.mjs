@@ -166,13 +166,13 @@ class ChilizScanAPI {
     }
   }
 
-  // Get known token information for popular Chiliz tokens
+  // Get known token information for popular Chiliz tokens  
   getKnownTokenInfo(symbol) {
     const knownTokens = {
       'chz': {
         name: "Chiliz",
         symbol: "CHZ", 
-        contractAddress: "0x0000000000000000000000000000000000000000",
+        contractAddress: "Native Token",
         decimals: "18",
         type: "Native Token",
         totalSupply: "8,888,888,888 CHZ"
@@ -190,7 +190,7 @@ class ChilizScanAPI {
         symbol: "BAR",
         contractAddress: "0x9F5377D4A915A3D62d13A15bB88D30bb8a2C4E40",
         decimals: "0",
-        type: "Fan Token",
+        type: "Fan Token", 
         totalSupply: "40,000,000 BAR"
       },
       'juv': {
@@ -273,20 +273,24 @@ class ChilizScanAPI {
   formatSearchResults(results, query) {
     if (!results) {
       const queryLower = query.toLowerCase().replace('$', '');
+      const knownToken = this.getKnownTokenInfo(queryLower);
+      
+      if (knownToken) {
+        return `## ${knownToken.name} (${knownToken.symbol})
 
-      return `I searched ChilizScan for "${query}" but couldn't find detailed API data. However, here's what I know:
+📍 **Contract Address:** \`${knownToken.contractAddress}\`
+🔢 **Total Supply:** ${knownToken.totalSupply}
+⚽ **Type:** ${knownToken.type}
+🔗 **ChilizScan:** ${this.explorerURL}/token/${knownToken.contractAddress}`;
+      }
 
-**For ${query.toUpperCase()}:**
-${queryLower === 'asr' ? '✅ **AS Roma Fan Token (ASR)** is available on Chiliz Chain\n📍 **Contract:** 0xb8C77C860e8E9F6d29554fB0E86F54b5F749d4e3' : ''}
-${queryLower === 'psg' ? '✅ **Paris Saint-Germain Fan Token (PSG)** is available on Chiliz Chain\n📍 **Contract:** 0x8f4bE8C71C67D7b1C4935A3E0f89580C03F7F1D2' : ''}
-${queryLower === 'bar' ? '✅ **FC Barcelona Fan Token (BAR)** is available on Chiliz Chain\n📍 **Contract:** 0x9F5377D4A915A3D62d13A15bB88D30bb8a2C4E40' : ''}
-${queryLower === 'juv' ? '✅ **Juventus Fan Token (JUV)** is available on Chiliz Chain\n📍 **Contract:** 0xF2f93d847266E2703a39Ef27391E1cD3FC19d50C' : ''}
-${queryLower === 'acm' ? '✅ **AC Milan Fan Token (ACM)** is available on Chiliz Chain\n📍 **Contract:** 0xbEAb3b9AF7B4C7C6C3a2B73F1d8C5a69Ff6b4b4b' : ''}
-${queryLower === 'chz' ? '✅ **Chiliz (CHZ)** is the native token of Chiliz Chain' : ''}
+      return `❌ Token "${query}" not found on Chiliz Chain.
 
-**ChilizScan Link:** ${this.explorerURL}/tokens
+**Popular Chiliz tokens you can search:**
+• CHZ (native token)
+• PSG, BAR, JUV, ACM, ASR (fan tokens)
 
-**Manual verification available at:** ${this.explorerURL}`;
+Try searching with a contract address for better results.`;
     }
 
     if (results.type === 'address') {
@@ -373,24 +377,17 @@ ${queryLower === 'chz' ? '✅ **Chiliz (CHZ)** is the native token of Chiliz Cha
 
         return formatted;
       } else {
-        let formatted = `## Found ${results.results.length} token(s) matching "${query}":\n\n`;
+        let formatted = `## ${results.results[0].name} (${results.results[0].symbol})\n\n`;
 
-        results.results.forEach((token, index) => {
-          formatted += `### ${index + 1}. ${token.name || 'Unknown'} (${token.symbol || 'N/A'})\n`;
-          if (token.contractAddress) {
-            formatted += `📍 **Contract Address:** \`${token.contractAddress}\`\n`;
-          }
-          if (token.decimals !== undefined) {
-            formatted += `**Decimals:** ${token.decimals}\n`;
-          }
-          if (token.type) {
-            formatted += `**Type:** ${token.type}\n`;
-          }
-          if (token.totalSupply) {
-            formatted += `**Total Supply:** ${token.totalSupply}\n`;
-          }
-          formatted += `**ChilizScan:** ${this.explorerURL}/token/${token.contractAddress || ''}\n\n`;
-        });
+        const token = results.results[0];
+        formatted += `📍 **Contract:** \`${token.contractAddress}\`\n`;
+        if (token.totalSupply) {
+          formatted += `📊 **Supply:** ${token.totalSupply}\n`;
+        }
+        if (token.type) {
+          formatted += `⚽ **Type:** ${token.type}\n`;
+        }
+        formatted += `🔗 **ChilizScan:** ${this.explorerURL}/token/${token.contractAddress}\n`;
 
         return formatted;
       }

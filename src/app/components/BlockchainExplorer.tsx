@@ -277,6 +277,8 @@ export function BlockchainExplorer() {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [showSuggestedActions, setShowSuggestedActions] = useState(false);
+  const [executeMode, setExecuteMode] = useState(false);
+  const [executeResponse, setExecuteResponse] = useState(null);
 
   const account = useActiveAccount();
   const walletAddress = account?.address;
@@ -286,6 +288,8 @@ export function BlockchainExplorer() {
   const hasTextQuery = textQuery && chainId;
 
   const { scrollRef, isAtBottom, scrollToBottom } = useAutoScroll(messages.length);
+
+  const chilizChain = defineChain(88888);
 
   const suggestedActions = [
     "What is Chiliz and how does it work?",
@@ -531,6 +535,106 @@ export function BlockchainExplorer() {
     }
   };
 
+  const handleSendMessage = async (userMessage: string) => {
+    if (!userMessage.trim() || !sessionId) return;
+
+    // Check for balance queries first
+    const balanceQueries = [
+      'what is my balance',
+      'show my balance', 
+      'check my balance',
+      'get my balance',
+      'my balance',
+      'wallet balance'
+    ];
+
+    const isBalanceQuery = balanceQueries.some(query => 
+      userMessage.toLowerCase().includes(query)
+    );
+
+    if (isBalanceQuery && walletAddress) {
+      setIsTyping(true);
+      const newMessage = { role: "user", content: userMessage };
+      setMessages((prev) => [...prev, newMessage]);
+
+      try {
+        // Get wallet balance using Thirdweb
+        const balance = await client.getBalance({
+          chain: chilizChain,
+          address: walletAddress
+        });
+
+        const balanceInCHZ = parseFloat(balance.displayValue).toFixed(4);
+
+        const balanceResponse = `## 💰 Your Wallet Balance
+
+**Address:** \`${walletAddress}\`
+**Balance:** ${balanceInCHZ} CHZ
+**Network:** Chiliz Chain (ID: 88888)
+
+💡 **Tip:** Your balance is automatically updated when you make transactions on the Chiliz network.`;
+
+        const aiMessage = {
+          role: "system",
+          content: balanceResponse,
+        };
+        setMessages((prev) => [...prev, aiMessage]);
+      } catch (error) {
+        console.error("Error fetching balance:", error);
+        const errorMessage = {
+          role: "system",
+          content: "❌ Unable to fetch your balance. Please ensure your wallet is connected to Chiliz Chain.",
+        };
+        setMessages((prev) => [...prev, errorMessage]);
+      } finally {
+        setIsTyping(false);
+      }
+      return;
+    }
+
+    setIsTyping(true);
+    const newMessage = { role: "user", content: userMessage };
+    setMessages((prev) => [...prev, newMessage]);
+
+    try {
+      let response;
+      if (executeMode && walletAddress) {
+        response = await executeCommand(
+          userMessage,
+          walletAddress,
+          "default-user",
+          false,
+          chainId || "88888",
+          contractAddress || "",
+          sessionId
+        );
+        setExecuteResponse(response);
+      } else {
+        response = await handleUserMessage(
+          userMessage,
+          sessionId,
+          chainId || "88888",
+          contractAddress || ""
+        );
+      }
+
+      const aiMessage = {
+        role: "system",
+        content: response?.message || response || "No response received.",
+      };
+      setMessages((prev) => [...prev, aiMessage]);
+    } catch (error) {
+      console.error("Error handling message:", error);
+      const errorMessage = {
+        role: "system",
+        content: "Sorry, I encountered an error. Please try again.",
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
+      setIsTyping(false);
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black overflow-hidden z-10">
       {/* Silk Background */}
@@ -735,7 +839,7 @@ export function BlockchainExplorer() {
               <form 
                 onSubmit={(e) => {
                   e.preventDefault();
-                  handleSend();
+                  handleSendMessage(input);
                 }} 
                 className="relative"
               >
@@ -749,7 +853,7 @@ export function BlockchainExplorer() {
                       ? "Continue your Chiliz exploration..."
                       : "Ask about Chiliz, fan tokens, or CHZ..."}
                   className="w-full border-0 bg-transparent px-4 md:px-6 py-3 md:py-4 pr-16 md:pr-20 focus:outline-none text-white placeholder:text-white/50 text-sm md:text-base min-h-[48px]"
-                  onKeyPress={(e) => e.key === "Enter" && handleSend()}
+                  onKeyPress={(e) => e.key === "Enter" && handleSendMessage(input)}
                 />
                 <div className="absolute right-2 md:right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 md:gap-2">
                   {/* Lightning Quick Action Button with Dropdown */}
