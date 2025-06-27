@@ -1170,7 +1170,7 @@ Once connected, I'll be able to show you your CHZ balance on Chiliz Chain.`,
 
                   <button
                     type="submit"
-                    disabled={!input.trim()}
+                    disabled={!input.trim() || (input.toLowerCase().includes("execute") || input.toLowerCase().includes("transfer"))}
                     className="h-8 w-8 md:h-10 md:w-10 bg-gradient-to-r from-chiliz-primary to-red-600 hover:from-red-600 hover:to-chiliz-primary border-0 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl flex items-center justify-center transition-all duration-200 shadow-lg hover:shadow-xl disabled:shadow-none min-h-[44px] min-w-[44px]"
                   >
                     <Send className="h-4 w-4 md:h-5 md:w-5 text-white" />
