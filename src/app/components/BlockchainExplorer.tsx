@@ -289,7 +289,29 @@ export function BlockchainExplorer() {
 
   const { scrollRef, isAtBottom, scrollToBottom } = useAutoScroll(messages.length);
 
-  const chilizChain = defineChain(88888);
+  const chilizChain = defineChain({
+    id: 88888,
+    name: "Chiliz Chain",
+    nativeCurrency: {
+      name: "Chiliz",
+      symbol: "CHZ", 
+      decimals: 18,
+    },
+    rpcUrls: {
+      default: {
+        http: ["https://rpc.ankr.com/chiliz"],
+      },
+      public: {
+        http: ["https://rpc.ankr.com/chiliz"],
+      },
+    },
+    blockExplorers: {
+      default: {
+        name: "ChilizScan",
+        url: "https://scan.chiliz.com",
+      },
+    },
+  });
 
   const suggestedActions = [
     "What is Chiliz and how does it work?",
@@ -679,7 +701,8 @@ Your wallet is connected to chain ID: ${account?.chainId || 'Unknown'}
 **Please switch to Chiliz Chain:**
 - **Chain ID:** 88888
 - **Network Name:** Chiliz Chain
-- **RPC URL:** https://spicy-rpc.chiliz.com
+- **RPC URL:** https://rpc.ankr.com/chiliz
+- **Alternative RPC:** https://chiliz-mainnet.gateway.tatum.io
 - **Currency Symbol:** CHZ
 - **Block Explorer:** https://scan.chiliz.com
 
