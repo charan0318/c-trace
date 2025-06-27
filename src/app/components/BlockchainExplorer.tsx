@@ -866,7 +866,7 @@ Once connected, I'll be able to show you your CHZ balance on Chiliz Chain.`,
         <div className="bg-gray-900/60 backdrop-blur-xl border border-white/20 rounded-2xl p-4 shadow-2xl">
           {/* Header */}
           <div className="flex items-center justify-center gap-2 mb-4">
-            <h3 className="text-sm font-bold text-white">Token Comparison</h3>
+            <h3 className="text-sm font-bold text-white">Basic Essential Tips</h3>
           </div>
 
           {/* Tips List */}
@@ -984,7 +984,7 @@ Once connected, I'll be able to show you your CHZ balance on Chiliz Chain.`,
                 <div className="w-1.5 h-1.5 bg-chiliz-primary rounded-full mt-1.5 flex-shrink-0"></div>
                 <div>
                   <p className="text-xs text-white/90 font-medium">Execute Commands</p>
-                  <p className="text-xs text-white/60 leading-relaxed">Use "execute" prefix to transfer tokens or interact with contracts</p>
+                  <p className="text-xs text-white/60 leading-relaxed">Use "execute" prefix to interact with contracts</p>
                 </div>
               </div>
             </div>
@@ -992,7 +992,7 @@ Once connected, I'll be able to show you your CHZ balance on Chiliz Chain.`,
 
           {/* Footer */}
           <div className="mt-4 pt-3 border-t border-white/10">
-            <p className="text-xs text-orange-500 font-medium text-center">⚽ Ready to Execute!</p>
+            <p className="text-xs text-orange-500 font-medium text-center">Ready to Execute ⚽ </p>
           </div>
         </div>
       </div>
