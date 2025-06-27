@@ -726,7 +726,7 @@ export function BlockchainExplorer() {
       </div>
 
       {/* Connect Wallet Button - Fixed Position Top Right */}
-      <div className="fixed top-6 right-6 z-50"></div>
+      <div className="fixed top-6 right-6 z-50">
         <div className="relative overflow-hidden rounded-xl border border-white/20 bg-gradient-to-r from-gray-900/80 to-black/80 backdrop-blur-xl">
           <ConnectButton
                         client={client}
