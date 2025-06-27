@@ -550,43 +550,126 @@ export function BlockchainExplorer() {
       userMessage.toLowerCase().includes(query)
     );
 
-    if (isBalanceQuery && walletAddress) {
+    if (isBalanceQuery) {
       setIsTyping(true);
       const newMessage = { role: "user", content: userMessage };
       setMessages((prev) => [...prev, newMessage]);
 
+      if (!walletAddress) {
+        const connectWalletMessage = {
+          role: "system",
+          content: `## 🔗 Connect Your Wallet
+
+To check your balance, please connect your wallet first using the "Connect Wallet" button in the top-right corner.
+
+**Supported Wallets:**
+- MetaMask
+- Coinbase Wallet
+- Rainbow
+- Rabby Wallet
+- Socios Wallet
+- In-App Wallet (Email, Google, Apple, Facebook, Phone)
+
+Once connected, I'll be able to show you your CHZ balance on Chiliz Chain.`,
+        };
+        setMessages((prev) => [...prev, connectWalletMessage]);
+        setIsTyping(false);
+        return;
+      }
+
       try {
-        // Get wallet balance using Thirdweb
-        const rpcRequest = client.getRpcClient({ chain: chilizChain });
-        const balance = await rpcRequest.request({
-          method: "eth_getBalance",
-          params: [walletAddress, "latest"]
-        });
+        // Try multiple methods to get balance
+        let balance = null;
+        let method = "unknown";
 
-        // Convert hex balance to decimal and then to CHZ
-        const balanceInWei = BigInt(balance);
-        const balanceInCHZ = Number(balanceInWei) / Math.pow(10, 18);
+        // Method 1: Direct Chiliz RPC call
+        try {
+          const response = await fetch('https://spicy-rpc.chiliz.com/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              jsonrpc: '2.0',
+              method: 'eth_getBalance',
+              params: [walletAddress, 'latest'],
+              id: 1
+            })
+          });
 
-        const formattedBalance = balanceInCHZ.toFixed(4);
+          if (response.ok) {
+            const data = await response.json();
+            if (data.result) {
+              balance = data.result;
+              method = "Chiliz RPC";
+            }
+          }
+        } catch (error) {
+          console.log("Chiliz RPC failed, trying Thirdweb...");
+        }
 
-        const balanceResponse = `## 💰 Your Wallet Balance
+        // Method 2: Thirdweb client as fallback
+        if (!balance) {
+          try {
+            const rpcRequest = client.getRpcClient({ chain: chilizChain });
+            balance = await rpcRequest.request({
+              method: "eth_getBalance",
+              params: [walletAddress, "latest"]
+            });
+            method = "Thirdweb";
+          } catch (error) {
+            console.log("Thirdweb RPC failed:", error);
+          }
+        }
+
+        if (balance) {
+          // Convert hex balance to decimal and then to CHZ
+          const balanceInWei = BigInt(balance);
+          const balanceInCHZ = Number(balanceInWei) / Math.pow(10, 18);
+          const formattedBalance = balanceInCHZ.toFixed(4);
+
+          const balanceResponse = `## 💰 Your Wallet Balance
 
 **Address:** \`${walletAddress}\`
 **Balance:** ${formattedBalance} CHZ
 **Network:** Chiliz Chain (ID: 88888)
+**Method:** ${method}
 
-💡 **Tip:** Your balance is automatically updated when you make transactions on the Chiliz network.`;
+💡 **Tip:** Your balance is automatically updated when you make transactions on the Chiliz network.
 
-        const aiMessage = {
-          role: "system",
-          content: balanceResponse,
-        };
-        setMessages((prev) => [...prev, aiMessage]);
+**Quick Actions:**
+- Type "execute transfer 0.1 CHZ to [address]" to send CHZ
+- Ask about fan tokens to explore PSG, BAR, JUV, and more`;
+
+          const aiMessage = {
+            role: "system",
+            content: balanceResponse,
+          };
+          setMessages((prev) => [...prev, aiMessage]);
+        } else {
+          throw new Error("Failed to fetch balance from all methods");
+        }
       } catch (error) {
         console.error("Error fetching balance:", error);
         const errorMessage = {
           role: "system",
-          content: "❌ Unable to fetch your balance. Please ensure your wallet is connected to Chiliz Chain.",
+          content: `## ❌ Balance Fetch Failed
+
+Unable to fetch your balance. This might be due to:
+
+**Possible Issues:**
+- Network connectivity problems
+- RPC endpoint temporarily unavailable
+- Wallet not properly connected to Chiliz Chain
+
+**Try these solutions:**
+1. **Reconnect wallet** - Disconnect and reconnect your wallet
+2. **Switch networks** - Make sure you're on Chiliz Chain (ID: 88888)
+3. **Check connection** - Ensure stable internet connection
+4. **Try again** - Sometimes RPC calls need a retry
+
+**Manual Check:**
+Visit [ChilizScan](https://scan.chiliz.com/address/${walletAddress}) to view your balance directly.`,
         };
         setMessages((prev) => [...prev, errorMessage]);
       } finally {
@@ -679,7 +762,7 @@ export function BlockchainExplorer() {
                 <div className="w-1.5 h-1.5 bg-red-500 rounded-full mt-1.5 flex-shrink-0"></div>
                 <div>
                   <p className="text-xs text-white/90 font-medium">Token Details</p>
-                  <p className="text-xs text-white/60 leading-relaxed"> Use " What is xxx token" for addresses & details (e.g., "CHZ token", "BAR token")</p>
+                  <p className="text-xs text-white/60 leading-relaxed"> Use " What is xxx token" for addresses & details (e.g., "What is CHZ token")</p>
                 </div>
               </div>
             </div>
