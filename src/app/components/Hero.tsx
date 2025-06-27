@@ -16,7 +16,6 @@ export default function Hero() {
   const [selectedChain, setSelectedChain] = useState('88888'); // Default to Chiliz Chain
   const [splineLoaded, setSplineLoaded] = useState(false);
   const [splineError, setSplineError] = useState(false);
-  const [sceneVersion, setSceneVersion] = useState(Date.now());
   const router = useRouter();
 
   const handleSearch = useCallback((searchInput: string, chain: string) => {
@@ -65,7 +64,7 @@ export default function Hero() {
   }, []);
 
   const handleSplineError = useCallback((error: any) => {
-    console.error('❌ Spline scene failed to load:', error);
+    console.warn('⚠️ Spline scene failed to load, using fallback background:', error);
     setSplineError(true);
     setSplineLoaded(false);
   }, []);
@@ -89,7 +88,7 @@ export default function Hero() {
       {/* Spline Scene - Above Silk */}
       {!splineError && (
         <Spline 
-          scene={`https://prod.spline.design/lX0ekK8OK9dc4DlA/scene.splinecode?v=${Date.now()}&cache=false`}
+          scene="https://prod.spline.design/lX0ekK8OK9dc4DlA/scene.splinecode"
           onLoad={handleSplineLoad}
           onError={handleSplineError}
           style={{ 
