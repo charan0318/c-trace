@@ -1,6 +1,9 @@
+
 # C-TRACE - AI-Powered Chiliz Blockchain Explorer
 
 **C-TRACE** is an AI-powered blockchain explorer and assistant specifically designed for the Chiliz ecosystem. It enables users to explore smart contracts, analyze the Chiliz chain, and interact with fan tokens through natural language queries and intelligent blockchain analysis.
+
+![image](https://github.com/user-attachments/assets/75cc95e6-415e-4a80-882e-ab69017ab48e)
 
 ## 🌟 Live Demo
 
@@ -93,7 +96,17 @@ C-TRACE bridges the gap between complex blockchain data and user-friendly insigh
 - **In-App Wallets**: Email, Google, Apple, Facebook, Phone authentication
 - **Token Standards**: ERC-20, ERC-721, ERC-1155 support
 
-## 🚀 How to Run the Project
+## 🚀 Live Demo
+
+Check out the live version here: [c-trace.replit.app](https://c-trace.replit.app)
+
+We'd love your feedback! [Click here to share thoughts directly with me](https://t.me/ch04niverse)
+
+## Built for Vibe Coding Hackathon 🏆 
+
+C-TRACE was built as part of the Vibe Coding Hackathon to showcase the power of AI + blockchain in the Chiliz ecosystem. Our goal: simplify and democratize access to fan token data and contract exploration for everyone — not just devs.
+
+## How to Run the Project
 
 ### Prerequisites
 - **Node.js** 18+ installed
@@ -164,7 +177,9 @@ src/
 └── tests/                         # Test files and examples
 ```
 
-## 🎯 Key Features Deep Dive
+![image](https://github.com/user-attachments/assets/fc8046bf-9514-415b-b874-297978cd9c9b)
+
+## Key Components
 
 ### AI-Powered Blockchain Analysis
 - **Natural Language Processing**: Ask questions in plain English
