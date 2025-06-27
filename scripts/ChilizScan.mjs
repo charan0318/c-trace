@@ -135,6 +135,22 @@ class ChilizScanAPI {
     try {
       const cleanQuery = query.trim().toLowerCase().replace('$', '');
 
+      // Check for comparison queries (e.g., "compare PSG and BAR")
+      const comparisonMatch = query.match(/compare\s+(\w+)\s+and\s+(\w+)/i);
+      if (comparisonMatch) {
+        const token1 = comparisonMatch[1].toLowerCase();
+        const token2 = comparisonMatch[2].toLowerCase();
+        
+        const token1Info = this.getKnownTokenInfo(token1);
+        const token2Info = this.getKnownTokenInfo(token2);
+        
+        const results = [];
+        if (token1Info) results.push(token1Info);
+        if (token2Info) results.push(token2Info);
+        
+        return results.length > 0 ? results : null;
+      }
+
       // Check known popular tokens first
       const knownToken = this.getKnownTokenInfo(cleanQuery);
       if (knownToken) {
@@ -331,26 +347,60 @@ ${queryLower === 'chz' ? '✅ **Chiliz (CHZ)** is the native token of Chiliz Cha
     }
 
     if (results.type === 'tokens' && results.results.length > 0) {
-      let formatted = `## Found ${results.results.length} token(s) matching "${query}":\n\n`;
+      // Check if this is a comparison query
+      const isComparison = query.toLowerCase().includes('compare') && results.results.length > 1;
+      
+      if (isComparison) {
+        let formatted = `## Token Comparison: ${results.results.map(t => t.symbol).join(' vs ')}\n\n`;
+        
+        results.results.forEach((token, index) => {
+          formatted += `### ${index + 1}. ${token.name || 'Unknown'} (${token.symbol || 'N/A'})\n`;
+          if (token.contractAddress) {
+            formatted += `**Contract:** \`${token.contractAddress}\`\n`;
+          }
+          if (token.decimals !== undefined) {
+            formatted += `**Decimals:** ${token.decimals}\n`;
+          }
+          if (token.type) {
+            formatted += `**Type:** ${token.type}\n`;
+          }
+          if (token.totalSupply) {
+            formatted += `**Total Supply:** ${token.totalSupply}\n`;
+          }
+          formatted += `**ChilizScan:** ${this.explorerURL}/token/${token.contractAddress || ''}\n\n`;
+        });
+        
+        // Add comparison summary
+        formatted += `### 📊 Quick Comparison\n`;
+        formatted += `| Token | Contract | Supply | Type |\n`;
+        formatted += `|-------|----------|--------|------|\n`;
+        results.results.forEach(token => {
+          formatted += `| ${token.symbol} | \`${token.contractAddress?.slice(0,10)}...\` | ${token.totalSupply} | ${token.type} |\n`;
+        });
+        
+        return formatted;
+      } else {
+        let formatted = `## Found ${results.results.length} token(s) matching "${query}":\n\n`;
 
-      results.results.forEach((token, index) => {
-        formatted += `### ${index + 1}. ${token.name || 'Unknown'} (${token.symbol || 'N/A'})\n`;
-        if (token.contractAddress) {
-          formatted += `**Contract:** \`${token.contractAddress}\`\n`;
-        }
-        if (token.decimals !== undefined) {
-          formatted += `**Decimals:** ${token.decimals}\n`;
-        }
-        if (token.type) {
-          formatted += `**Type:** ${token.type}\n`;
-        }
-        if (token.totalSupply) {
-          formatted += `**Total Supply:** ${token.totalSupply}\n`;
-        }
-        formatted += `**ChilizScan:** ${this.explorerURL}/token/${token.contractAddress || ''}\n\n`;
-      });
+        results.results.forEach((token, index) => {
+          formatted += `### ${index + 1}. ${token.name || 'Unknown'} (${token.symbol || 'N/A'})\n`;
+          if (token.contractAddress) {
+            formatted += `**Contract:** \`${token.contractAddress}\`\n`;
+          }
+          if (token.decimals !== undefined) {
+            formatted += `**Decimals:** ${token.decimals}\n`;
+          }
+          if (token.type) {
+            formatted += `**Type:** ${token.type}\n`;
+          }
+          if (token.totalSupply) {
+            formatted += `**Total Supply:** ${token.totalSupply}\n`;
+          }
+          formatted += `**ChilizScan:** ${this.explorerURL}/token/${token.contractAddress || ''}\n\n`;
+        });
 
-      return formatted;
+        return formatted;
+      }
     }
 
     return `No results found for "${query}" on ChilizScan.`;
