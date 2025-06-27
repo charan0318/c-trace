@@ -472,6 +472,15 @@ export function BlockchainExplorer() {
     try {
       setIsTyping(true);
 
+      // Show initial message that we're preparing the transaction
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "system",
+          content: "🔄 Preparing transaction... Please wait for wallet prompt.",
+        },
+      ]);
+
       const executeResponse = await executeCommand(
         executeMessage,
         account.address,
@@ -482,39 +491,72 @@ export function BlockchainExplorer() {
         sessionId
       );
 
+      console.log("Execute response:", executeResponse);
+
       const action = executeResponse.actions?.find(
         (a: { type: string; data: string }) => a.type === "sign_transaction"
       );
 
       if (action) {
         const transactionData = JSON.parse(action.data);
+        console.log("Transaction data:", transactionData);
 
+        // Prepare the transaction
         const preparedTransaction = prepareTransaction({
           to: transactionData.to,
-          value: transactionData.value,
+          value: BigInt(transactionData.value || 0),
           data: transactionData.data,
-          chain: defineChain(transactionData.chainId),
+          chain: chilizChain,
           client,
         });
 
+        console.log("Prepared transaction:", preparedTransaction);
+
+        // Update message to show wallet approval needed
+        setMessages((prev) => [
+          ...prev.slice(0, -1), // Remove the preparing message
+          {
+            role: "system",
+            content: "💰 **Transaction Ready!** Please approve the transaction in your wallet to continue.",
+          },
+        ]);
+
+        // This should trigger the wallet approval popup
         const receipt = await sendAndConfirmTransaction({
           transaction: preparedTransaction,
           account,
         });
 
+        console.log("Transaction receipt:", receipt);
+
         setMessages((prev) => [
-          ...prev,
+          ...prev.slice(0, -1), // Remove the approval message
           {
             role: "system",
-            content: `Transaction sent successfully! Hash: ${receipt.transactionHash}`,
+            content: `## ✅ Transaction Successful!
+
+**Transaction Hash:** \`${receipt.transactionHash}\`
+**Status:** Confirmed
+**Network:** Chiliz Chain
+
+🔗 **View on ChilizScan:** [${receipt.transactionHash}](https://scan.chiliz.com/tx/${receipt.transactionHash})
+
+Your transaction has been successfully executed and confirmed on the blockchain.`,
           },
         ]);
       } else {
         setMessages((prev) => [
-          ...prev,
+          ...prev.slice(0, -1), // Remove the preparing message
           {
             role: "system",
-            content: "No transaction to sign in the response.",
+            content: `## ❌ Transaction Failed
+
+No valid transaction data received from the command.
+
+**Debug Info:**
+- Response: ${JSON.stringify(executeResponse, null, 2)}
+
+Please check your command format and try again.`,
           },
         ]);
       }
@@ -523,10 +565,24 @@ export function BlockchainExplorer() {
     } catch (error) {
       console.error("Error executing transaction:", error);
       setMessages((prev) => [
-        ...prev,
+        ...prev.slice(0, -1), // Remove any pending messages
         {
           role: "system",
-          content: "Failed to execute the command. Please try again.",
+          content: `## ❌ Transaction Error
+
+**Error:** ${error.message || 'Unknown error occurred'}
+
+**Common Issues:**
+- User rejected the transaction in wallet
+- Insufficient balance for transaction + gas fees
+- Invalid recipient address
+- Network connectivity issues
+
+**Solutions:**
+1. Check your wallet balance (ask "what is my balance")
+2. Ensure you're connected to Chiliz Chain
+3. Try the transaction again
+4. Contact support if the issue persists`,
         },
       ]);
       setIsTyping(false);
@@ -582,43 +638,45 @@ Once connected, I'll be able to show you your CHZ balance on Chiliz Chain.`,
         let balance = null;
         let method = "unknown";
 
-        // Method 1: Direct Chiliz RPC call
+        // Method 1: Thirdweb client (most reliable)
         try {
-          const response = await fetch('https://spicy-rpc.chiliz.com/', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              jsonrpc: '2.0',
-              method: 'eth_getBalance',
-              params: [walletAddress, 'latest'],
-              id: 1
-            })
+          const rpcRequest = client.getRpcClient({ chain: chilizChain });
+          balance = await rpcRequest.request({
+            method: "eth_getBalance",
+            params: [walletAddress, "latest"]
           });
-
-          if (response.ok) {
-            const data = await response.json();
-            if (data.result) {
-              balance = data.result;
-              method = "Chiliz RPC";
-            }
-          }
+          method = "Thirdweb Client";
+          console.log("Balance fetched via Thirdweb:", balance);
         } catch (error) {
-          console.log("Chiliz RPC failed, trying Thirdweb...");
+          console.log("Thirdweb RPC failed, trying direct RPC...", error);
         }
 
-        // Method 2: Thirdweb client as fallback
+        // Method 2: Direct Chiliz RPC call as fallback
         if (!balance) {
           try {
-            const rpcRequest = client.getRpcClient({ chain: chilizChain });
-            balance = await rpcRequest.request({
-              method: "eth_getBalance",
-              params: [walletAddress, "latest"]
+            const response = await fetch('https://spicy-rpc.chiliz.com/', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                jsonrpc: '2.0',
+                method: 'eth_getBalance',
+                params: [walletAddress, 'latest'],
+                id: 1
+              })
             });
-            method = "Thirdweb";
+
+            if (response.ok) {
+              const data = await response.json();
+              if (data.result) {
+                balance = data.result;
+                method = "Direct Chiliz RPC";
+                console.log("Balance fetched via direct RPC:", balance);
+              }
+            }
           } catch (error) {
-            console.log("Thirdweb RPC failed:", error);
+            console.log("Direct RPC also failed:", error);
           }
         }
 
@@ -626,7 +684,16 @@ Once connected, I'll be able to show you your CHZ balance on Chiliz Chain.`,
           // Convert hex balance to decimal and then to CHZ
           const balanceInWei = BigInt(balance);
           const balanceInCHZ = Number(balanceInWei) / Math.pow(10, 18);
-          const formattedBalance = balanceInCHZ.toFixed(4);
+          
+          // Format balance with appropriate decimal places
+          let formattedBalance;
+          if (balanceInCHZ === 0) {
+            formattedBalance = "0.0000";
+          } else if (balanceInCHZ < 0.0001) {
+            formattedBalance = balanceInCHZ.toExponential(4);
+          } else {
+            formattedBalance = balanceInCHZ.toFixed(4);
+          }
 
           const balanceResponse = `## 💰 Your Wallet Balance
 
@@ -634,12 +701,19 @@ Once connected, I'll be able to show you your CHZ balance on Chiliz Chain.`,
 **Balance:** ${formattedBalance} CHZ
 **Network:** Chiliz Chain (ID: 88888)
 **Method:** ${method}
+**Raw Balance:** ${balance} (wei)
 
 💡 **Tip:** Your balance is automatically updated when you make transactions on the Chiliz network.
 
 **Quick Actions:**
 - Type "execute transfer 0.1 CHZ to [address]" to send CHZ
-- Ask about fan tokens to explore PSG, BAR, JUV, and more`;
+- Ask about fan tokens to explore PSG, BAR, JUV, and more
+
+**Troubleshooting:**
+If balance shows 0 but you expect more:
+• Verify you're on the correct Chiliz Chain network
+• Check your address on [ChilizScan](https://scan.chiliz.com/address/${walletAddress})
+• Ensure your wallet is properly connected`;
 
           const aiMessage = {
             role: "system",
