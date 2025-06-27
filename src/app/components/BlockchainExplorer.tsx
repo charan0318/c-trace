@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Search, Send, Terminal, ArrowDown, Copy, Edit, Zap, FileText, TrendingUp } from "lucide-react";
+import { Search, Send, Terminal, ArrowDown, Copy, Edit, Zap, FileText, TrendingUp, Activity } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import Silk from '@/app/components/ui/Silk';

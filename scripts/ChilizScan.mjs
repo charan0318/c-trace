@@ -9,6 +9,71 @@ class ChilizScanAPI {
     this.explorerURL = CHILIZ_SCAN_BASE;
   }
 
+  // Get transaction history for an address
+  async getTransactionHistory(address, page = 1, offset = 10) {
+    try {
+      if (!address || !address.startsWith('0x') || address.length !== 42) {
+        return null;
+      }
+
+      // Try multiple endpoints for transaction history
+      const endpoints = [
+        `?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=${page}&offset=${offset}&sort=desc`,
+        `?module=account&action=txlistinternal&address=${address}&startblock=0&endblock=99999999&page=${page}&offset=${offset}&sort=desc`,
+        `?module=account&action=tokentx&address=${address}&startblock=0&endblock=99999999&page=${page}&offset=${offset}&sort=desc`
+      ];
+
+      const results = {};
+      
+      for (let i = 0; i < endpoints.length; i++) {
+        const endpoint = endpoints[i];
+        const result = await this.makeRequest(endpoint);
+        
+        if (result && result.status === "1" && Array.isArray(result.result)) {
+          const type = i === 0 ? 'normal' : i === 1 ? 'internal' : 'token';
+          results[type] = result.result;
+        }
+      }
+
+      return Object.keys(results).length > 0 ? results : null;
+    } catch (error) {
+      console.error("Get transaction history failed:", error);
+      return null;
+    }
+  }
+
+  // Get account balance and basic info
+  async getAccountInfo(address) {
+    try {
+      if (!address || !address.startsWith('0x') || address.length !== 42) {
+        return null;
+      }
+
+      const endpoints = [
+        `?module=account&action=balance&address=${address}&tag=latest`,
+        `?module=account&action=tokenlist&address=${address}`,
+        `?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=1&sort=desc`
+      ];
+
+      const results = {};
+      
+      for (let i = 0; i < endpoints.length; i++) {
+        const endpoint = endpoints[i];
+        const result = await this.makeRequest(endpoint);
+        
+        if (result && result.status === "1") {
+          const type = i === 0 ? 'balance' : i === 1 ? 'tokens' : 'lastTx';
+          results[type] = result.result;
+        }
+      }
+
+      return Object.keys(results).length > 0 ? results : null;
+    } catch (error) {
+      console.error("Get account info failed:", error);
+      return null;
+    }
+  }
+
   async makeRequest(queryParams) {
     try {
       const url = `${this.baseURL}${queryParams}`;
@@ -19,13 +84,20 @@ class ChilizScanAPI {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
-          'User-Agent': 'C-TRACE/1.0'
+          'User-Agent': 'C-TRACE/1.0',
+          'Origin': window.location.origin
         },
         mode: 'cors'
       });
 
       if (!response.ok) {
         console.warn(`ChilizScan API Error: ${response.status} ${response.statusText}`);
+        
+        // If main API fails, try alternative approach
+        if (response.status === 400 || response.status === 404) {
+          console.log("Trying alternative API approach...");
+          return this.tryAlternativeAPI(queryParams);
+        }
         return null;
       }
 
@@ -34,6 +106,38 @@ class ChilizScanAPI {
       return data;
     } catch (error) {
       console.error("ChilizScan API Request Failed:", error);
+      
+      // Try alternative approach on network errors
+      console.log("Trying alternative API approach due to network error...");
+      return this.tryAlternativeAPI(queryParams);
+    }
+  }
+
+  // Alternative API approach when main endpoints fail
+  async tryAlternativeAPI(queryParams) {
+    try {
+      // Parse the query to understand what we're looking for
+      const params = new URLSearchParams(queryParams.substring(1));
+      const module = params.get('module');
+      const action = params.get('action');
+      const address = params.get('address');
+      
+      // For now, return mock data structure to avoid complete failures
+      if (module === 'account' && action === 'txlist' && address) {
+        return {
+          status: "0",
+          message: "API limitations - providing alternative analysis",
+          result: []
+        };
+      }
+
+      return {
+        status: "0",
+        message: "API endpoint temporarily unavailable",
+        result: null
+      };
+    } catch (error) {
+      console.error("Alternative API approach failed:", error);
       return null;
     }
   }
@@ -419,4 +523,134 @@ export async function getPopularTokens() {
   });
 
   return formatted;
+}
+
+// Analyze address transaction history
+export async function analyzeAddressHistory(address) {
+  console.log("Analyzing address history for:", address);
+  
+  if (!address || !address.startsWith('0x') || address.length !== 42) {
+    return "Invalid address format. Please provide a valid Ethereum address (0x followed by 40 characters).";
+  }
+
+  try {
+    // Get account info first
+    const accountInfo = await chilizScanAPI.getAccountInfo(address);
+    
+    // Get transaction history
+    const txHistory = await chilizScanAPI.getTransactionHistory(address, 1, 20);
+    
+    let analysis = `## Address Analysis: \`${address}\`\n\n`;
+    
+    // Account overview
+    analysis += "### Account Overview\n";
+    if (accountInfo) {
+      if (accountInfo.balance) {
+        const balanceInCHZ = (parseInt(accountInfo.balance) / Math.pow(10, 18)).toFixed(4);
+        analysis += `**CHZ Balance:** ${balanceInCHZ} CHZ\n`;
+      }
+      
+      if (accountInfo.tokens && Array.isArray(accountInfo.tokens)) {
+        analysis += `**Token Holdings:** ${accountInfo.tokens.length} different tokens\n`;
+      }
+      
+      if (accountInfo.lastTx && Array.isArray(accountInfo.lastTx) && accountInfo.lastTx.length > 0) {
+        const lastTx = accountInfo.lastTx[0];
+        analysis += `**Last Transaction:** Block ${lastTx.blockNumber}\n`;
+      }
+    } else {
+      analysis += "**Status:** Unable to fetch account data from API\n";
+    }
+    
+    analysis += `**ChilizScan Link:** ${chilizScanAPI.explorerURL}/address/${address}\n\n`;
+    
+    // Transaction analysis
+    analysis += "### Transaction History Analysis\n\n";
+    
+    if (txHistory && (txHistory.normal || txHistory.internal || txHistory.token)) {
+      let totalTxs = 0;
+      
+      if (txHistory.normal && txHistory.normal.length > 0) {
+        totalTxs += txHistory.normal.length;
+        analysis += `**Normal Transactions:** ${txHistory.normal.length} found\n`;
+      }
+      
+      if (txHistory.internal && txHistory.internal.length > 0) {
+        totalTxs += txHistory.internal.length;
+        analysis += `**Internal Transactions:** ${txHistory.internal.length} found\n`;
+      }
+      
+      if (txHistory.token && txHistory.token.length > 0) {
+        totalTxs += txHistory.token.length;
+        analysis += `**Token Transfers:** ${txHistory.token.length} found\n`;
+      }
+      
+      if (totalTxs > 0) {
+        analysis += `\n**Total Activity:** ${totalTxs} transactions analyzed\n`;
+        
+        // Analyze recent activity
+        if (txHistory.normal && txHistory.normal.length > 0) {
+          const recentTx = txHistory.normal.slice(0, 5);
+          analysis += "\n### Recent Normal Transactions:\n";
+          recentTx.forEach((tx, i) => {
+            const value = (parseInt(tx.value || '0') / Math.pow(10, 18)).toFixed(4);
+            analysis += `${i + 1}. **Hash:** \`${tx.hash}\` - **Value:** ${value} CHZ\n`;
+          });
+        }
+      }
+    } else {
+      analysis += `⚠️ **Limited API Access**: ChilizScan API returned limited data for this address.
+
+**Alternative Analysis Options:**
+
+1. **Manual ChilizScan Review:**
+   - Visit: ${chilizScanAPI.explorerURL}/address/${address}
+   - Review transaction history directly on the explorer
+   - Check token balances and NFT holdings
+
+2. **Address Activity Patterns:**
+   - Check for recent transactions manually
+   - Look for smart contract interactions
+   - Identify token transfers and swaps
+
+3. **Workarounds for Analysis:**
+   - Use the address in contract interaction queries
+   - Check specific token balances if you have contract addresses
+   - Monitor the address for future activity
+
+**Why this happens:**
+- Chiliz Chain API may have rate limits or access restrictions
+- Some addresses might not have recent activity
+- API endpoints might be temporarily limited
+
+**Next Steps:**
+- Try searching for specific token contracts this address might have interacted with
+- Use contract analysis features for any smart contracts this address deployed`;
+    }
+    
+    analysis += `\n\n**💡 Tip:** For deeper analysis, try asking about specific contracts or tokens this address might have interacted with.`;
+    
+    return analysis;
+    
+  } catch (error) {
+    console.error("Address analysis error:", error);
+    return `## Address Analysis Error
+
+I encountered difficulties analyzing the address \`${address}\` on Chiliz Chain.
+
+**What you can do:**
+
+1. **Manual Review**: Visit ${chilizScanAPI.explorerURL}/address/${address} directly
+2. **Contract Analysis**: If this is a contract address, try the contract analysis feature
+3. **Token Search**: Search for specific tokens this address might hold
+4. **Try Again**: API issues may be temporary
+
+**Common Reasons for Analysis Limitations:**
+- API rate limiting or access restrictions
+- Address has no recent activity
+- Network connectivity issues
+- Chiliz Chain API maintenance
+
+Would you like me to help you with a different type of analysis or search for specific contracts/tokens instead?`;
+  }
 }

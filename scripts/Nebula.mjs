@@ -80,6 +80,28 @@ async function handleUserMessage(
   chainId,
   contractAddress
 ) {
+  // Check if this is an address analysis request
+  const addressPattern = /(?:analyze|history|transactions|activity).*?(0x[a-fA-F0-9]{40})|(?:0x[a-fA-F0-9]{40}).*?(?:analyze|history|transactions|activity)/i;
+  const addressMatch = userMessage.match(addressPattern);
+  const directAddressMatch = userMessage.match(/(0x[a-fA-F0-9]{40})/);
+  
+  // If we detect an address analysis request on Chiliz Chain
+  if ((addressMatch || (directAddressMatch && (userMessage.toLowerCase().includes('analyze') || userMessage.toLowerCase().includes('history') || userMessage.toLowerCase().includes('transaction')))) && chainId === "88888") {
+    const addressToAnalyze = addressMatch ? addressMatch[1] || addressMatch[2] : directAddressMatch[1];
+    
+    if (addressToAnalyze) {
+      console.log(`🔍 Detected address analysis request: ${addressToAnalyze} on Chiliz Chain`);
+      
+      try {
+        const analysisResult = await analyzeAddressHistory(addressToAnalyze);
+        return analysisResult;
+      } catch (error) {
+        console.error("Error in address analysis:", error);
+        // Fall through to regular Nebula query
+      }
+    }
+  }
+
   // Check if this is a token search query
   const tokenSearchPattern = /(?:\$([A-Z]+)|([A-Z]{2,10})\s+token|token\s+([A-Z]{2,10})|search\s+for\s+([A-Z]{2,10})|find\s+([A-Z]{2,10}))/i;
   const tokenMatch = userMessage.match(tokenSearchPattern);
@@ -233,7 +255,7 @@ async function executeCommand(
 }
 
 // Import ChilizScan integration
-import { searchChilizScan, lookupToken, getPopularTokens } from './ChilizScan.mjs';
+import { searchChilizScan, lookupToken, getPopularTokens, analyzeAddressHistory } from './ChilizScan.mjs';
 
 export {
   createSession,
@@ -247,4 +269,5 @@ export {
   searchChilizScan,
   lookupToken,
   getPopularTokens,
+  analyzeAddressHistory,
 };
