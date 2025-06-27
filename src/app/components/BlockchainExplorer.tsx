@@ -295,9 +295,7 @@ export function BlockchainExplorer() {
     "What is Chiliz and how does it work?",
     "Show me popular fan tokens",
     "$CHZ token information",
-    "$BAR (FC Barcelona) fan token details", 
-    "Search for chilizinu token",
-    "Find kayen token information",
+    "$BAR (FC Barcelona) fan token details",
     "How to interact with fan tokens?",
     "Popular tokens on Chiliz Chain",
   ];
@@ -660,11 +658,10 @@ export function BlockchainExplorer() {
       <div className="fixed left-6 top-1/2 -translate-y-1/2 z-40 w-72 max-h-[70vh] overflow-y-auto">
         <div className="bg-gray-900/60 backdrop-blur-xl border border-white/20 rounded-2xl p-4 shadow-2xl">
           {/* Header */}
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-2 h-2 bg-chiliz-primary rounded-full animate-pulse"></div>
+          <div className="flex items-center justify-center gap-2 mb-4">
             <h3 className="text-sm font-bold text-white">Essential Tips</h3>
           </div>
-
+          
           {/* Tips List */}
           <div className="space-y-3">
             <div className="group">
@@ -676,7 +673,7 @@ export function BlockchainExplorer() {
                 </div>
               </div>
             </div>
-
+            
             <div className="group">
               <div className="flex items-start gap-2">
                 <div className="w-1.5 h-1.5 bg-red-500 rounded-full mt-1.5 flex-shrink-0"></div>
@@ -686,7 +683,7 @@ export function BlockchainExplorer() {
                 </div>
               </div>
             </div>
-
+            
             <div className="group">
               <div className="flex items-start gap-2">
                 <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-1.5 flex-shrink-0"></div>
@@ -696,7 +693,7 @@ export function BlockchainExplorer() {
                 </div>
               </div>
             </div>
-
+            
             <div className="group">
               <div className="flex items-start gap-2">
                 <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 flex-shrink-0"></div>
@@ -706,7 +703,7 @@ export function BlockchainExplorer() {
                 </div>
               </div>
             </div>
-
+            
             <div className="group">
               <div className="flex items-start gap-2">
                 <div className="w-1.5 h-1.5 bg-purple-500 rounded-full mt-1.5 flex-shrink-0"></div>
@@ -717,7 +714,7 @@ export function BlockchainExplorer() {
               </div>
             </div>
           </div>
-
+          
           {/* Footer */}
           <div className="mt-4 pt-3 border-t border-white/10">
             <p className="text-xs text-chiliz-primary font-medium text-center">💡 Pro Tip: Be specific for better results!</p>
