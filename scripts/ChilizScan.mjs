@@ -151,14 +151,26 @@ class ChilizScanAPI {
         return results.length > 0 ? results : null;
       }
 
-      // Check known popular tokens first
+      // Check known popular tokens first - this should always work
       const knownToken = this.getKnownTokenInfo(cleanQuery);
       if (knownToken) {
-        console.log(`Found known token: ${knownToken.name} (${knownToken.symbol})`);
+        console.log(`✅ Found known token: ${knownToken.name} (${knownToken.symbol})`);
         return [knownToken];
       }
 
-      console.log(`No known token found for: ${cleanQuery}`);
+      // For unknown tokens, try API search but don't depend on it
+      console.log(`❌ No known token found for: ${cleanQuery}`);
+      
+      // Try a few API endpoints as fallback (these may fail)
+      try {
+        const apiResult = await this.makeRequest(`?module=token&action=getToken&contractaddress=${cleanQuery}`);
+        if (apiResult && apiResult.status === "1") {
+          return [apiResult.result];
+        }
+      } catch (error) {
+        console.log("API search failed, continuing with known tokens only");
+      }
+
       return null;
     } catch (error) {
       console.error("Token search failed:", error);

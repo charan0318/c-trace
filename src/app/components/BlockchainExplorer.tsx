@@ -664,7 +664,7 @@ export function BlockchainExplorer() {
             <div className="w-2 h-2 bg-chiliz-primary rounded-full animate-pulse"></div>
             <h3 className="text-sm font-bold text-white">Essential Tips</h3>
           </div>
-          
+
           {/* Tips List */}
           <div className="space-y-3">
             <div className="group">
@@ -676,7 +676,7 @@ export function BlockchainExplorer() {
                 </div>
               </div>
             </div>
-            
+
             <div className="group">
               <div className="flex items-start gap-2">
                 <div className="w-1.5 h-1.5 bg-red-500 rounded-full mt-1.5 flex-shrink-0"></div>
@@ -686,7 +686,7 @@ export function BlockchainExplorer() {
                 </div>
               </div>
             </div>
-            
+
             <div className="group">
               <div className="flex items-start gap-2">
                 <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-1.5 flex-shrink-0"></div>
@@ -696,7 +696,7 @@ export function BlockchainExplorer() {
                 </div>
               </div>
             </div>
-            
+
             <div className="group">
               <div className="flex items-start gap-2">
                 <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 flex-shrink-0"></div>
@@ -706,7 +706,7 @@ export function BlockchainExplorer() {
                 </div>
               </div>
             </div>
-            
+
             <div className="group">
               <div className="flex items-start gap-2">
                 <div className="w-1.5 h-1.5 bg-purple-500 rounded-full mt-1.5 flex-shrink-0"></div>
@@ -717,7 +717,7 @@ export function BlockchainExplorer() {
               </div>
             </div>
           </div>
-          
+
           {/* Footer */}
           <div className="mt-4 pt-3 border-t border-white/10">
             <p className="text-xs text-chiliz-primary font-medium text-center">💡 Pro Tip: Be specific for better results!</p>

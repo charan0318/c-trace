@@ -188,6 +188,16 @@ async function handleUserMessage(
 
     try {
       const searchTerm = tokenSymbol || foundTokenName;
+      
+      // First check if it's a known token (this should always work)
+      const knownTokenSymbols = ['chz', 'psg', 'bar', 'juv', 'acm', 'asr'];
+      if (knownTokenSymbols.includes(searchTerm.toLowerCase())) {
+        console.log("✅ Found known token, using direct lookup");
+        const chilizScanResult = await searchChilizScan(searchTerm);
+        return chilizScanResult;
+      }
+
+      // For unknown tokens, try ChilizScan search
       const chilizScanResult = await searchChilizScan(searchTerm);
 
       // If ChilizScan found results, return them
