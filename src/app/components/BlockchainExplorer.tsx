@@ -714,9 +714,10 @@ export function BlockchainExplorer() {
             </form>
 
               {/* Footer moved inside input area */}
-              <div className="mt-3 md:mt-4 text-center">
+              <div className="mt-3 md:mt-4 text-center space-y-1">
+                <p className="text-xs text-red-500 font-semibold">#BuiltOnChiliz</p>
                 <span className="text-xs text-white/30">
-                  &copy; {new Date().getFullYear()} c-trace | Crafted with ❤ from ch04niverse
+                  &copy; {new Date().getFullYear()} c-trace | Crafted with ❤️ by ch04niverse
                 </span>
               </div>
             </div>

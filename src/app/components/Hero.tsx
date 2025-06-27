@@ -182,7 +182,10 @@ export default function Hero() {
 
       {/* Footer */}
       <footer className="absolute bottom-4 md:bottom-6 left-1/2 transform -translate-x-1/2 text-xs md:text-sm text-white/40 text-center px-4 max-w-full">
-        <span className="block">&copy; {new Date().getFullYear()} c-trace | Crafted with ❤ from ch04niverse</span>
+        <div className="space-y-1">
+          <p className="text-red-500 font-semibold">#BuiltOnChiliz</p>
+          <span className="block">&copy; {new Date().getFullYear()} c-trace | Crafted with ❤️ by ch04niverse</span>
+        </div>
       </footer>
     </div>
   );
