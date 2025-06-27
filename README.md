@@ -5,13 +5,13 @@
 
 ![image](https://github.com/user-attachments/assets/75cc95e6-415e-4a80-882e-ab69017ab48e)
 
-## 🌟 Live Demo
+## Live Demo 🌟
 
 Experience C-TRACE live: **[c-trace.replit.app](https://c-trace.replit.app)**
 
 Share your feedback: **[Telegram @ch04niverse](https://t.me/ch04niverse)**
 
-## 🎯 What Problem Does It Solve?
+## What Problem Does It Solve? 🎯
 
 C-TRACE bridges the gap between complex blockchain data and user-friendly insights on the Chiliz network. It solves several key challenges:
 
@@ -21,7 +21,7 @@ C-TRACE bridges the gap between complex blockchain data and user-friendly insigh
 - **Real-time Data**: Live blockchain data with intelligent interpretation and context
 - **Wallet Integration**: Seamless wallet connectivity with transaction execution capabilities
 
-## 👥 Who Is It For?
+## Who Is It For? 👥 
 
 - **Sports Fans** exploring fan tokens and team-related blockchain activities
 - **Developers** building on the Chiliz network who need quick contract analysis
@@ -30,9 +30,9 @@ C-TRACE bridges the gap between complex blockchain data and user-friendly insigh
 - **Traders** analyzing fan token performance and market trends
 - **Content Creators** seeking blockchain data for sports-related content
 
-## ✨ Key Features
+## Key Features ✨ 
 
-### 🔍 **Smart Contract Explorer**
+### **Smart Contract Explorer** 🔍
 - AI-powered analysis of any Chiliz smart contract
 - Real-time contract interaction capabilities
 - Security analysis and vulnerability detection
@@ -177,8 +177,6 @@ src/
 └── tests/                         # Test files and examples
 ```
 
-![image](https://github.com/user-attachments/assets/fc8046bf-9514-415b-b874-297978cd9c9b)
-
 ## Key Components
 
 ### AI-Powered Blockchain Analysis
@@ -205,7 +203,7 @@ src/
 - **Transaction Execution**: Real-time blockchain transaction processing
 - **Error Handling**: Comprehensive error messages and guidance
 
-## 🌟 Example Usage
+## Example Usage 🌟
 
 ### Basic Queries
 ```
@@ -231,7 +229,7 @@ src/
 "AC Milan fan token analysis"
 ```
 
-## 🚀 Deployment
+## Deployment 🚀 
 
 This project is optimized for **Replit deployment**:
 
@@ -247,7 +245,7 @@ This project is optimized for **Replit deployment**:
 3. Run the project using the Run button
 4. Access your live application via the generated URL
 
-## 🎨 User Interface Highlights
+## User Interface Highlights 🎨 
 
 ### 3D Interactive Experience
 - **Spline Integration**: Immersive 3D backgrounds and animations
@@ -267,7 +265,7 @@ This project is optimized for **Replit deployment**:
 - **Execute Buttons**: Direct transaction execution from chat
 - **Error Prevention**: Smart input validation and guidance
 
-## 🔧 Advanced Features
+## Advanced Features  🔧
 
 ### ChilizScan Integration
 - **Real-time Data**: Live blockchain data via ChilizScan API
@@ -287,7 +285,7 @@ This project is optimized for **Replit deployment**:
 - **Real-time Updates**: Live token data and market information
 - **Comparison Tools**: Side-by-side token analysis
 
-## 🤝 Contributing
+## Contributing 🤝
 
 We welcome contributions from the community!
 
@@ -306,25 +304,25 @@ We welcome contributions from the community!
 - Ensure responsive design compliance
 - Test on multiple devices and browsers
 
-## 🐛 Issues & Support
+## Issues & Support 🐛
 
 - **Bug Reports**: Submit via GitHub Issues
 - **Feature Requests**: Suggest via GitHub Discussions
 - **Security Issues**: Report privately via email
 - **General Support**: Contact on [Telegram](https://t.me/ch04niverse)
 
-## 🏆 Built for Innovation
+## Built for Innovation  🏆 
 
 C-TRACE was crafted to showcase the powerful synergy of AI and blockchain technology within the Chiliz ecosystem. Our mission: **democratize access to fan token data and contract exploration for everyone—not just developers.**
 
-## 🙏 Acknowledgments
+## Acknowledgments 🙏 
 
 - **Chiliz Chain** for the innovative sports blockchain platform
 - **Thirdweb** for excellent Web3 development tools
 - **Replit** for hosting and development environment
 - **Open Source Community** for amazing tools and libraries
 
-## 📞 Contact
+## Contact 📞 
 
 - **Developer**: ch04niverse
 - **Telegram**: [@ch04niverse](https://t.me/ch04niverse)
