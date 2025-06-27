@@ -668,9 +668,7 @@ const DocsPage = () => {
                         toggleSection(section.id);
                       }
                       // Close mobile menu if it's open
-                      if (isMobileMenuOpen) {
-                        setIsMobileMenuOpen(false);
-                      }
+                      setIsMobileMenuOpen(false);
                     }}
                     className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors ${
                       activeSection === section.id
@@ -698,13 +696,8 @@ const DocsPage = () => {
                       {section.subsections.map((subsection) => (
                         <button
                           key={subsection.id}
-                          onClick={() => {
-                            setActiveSection(subsection.id);
-                            if (isMobileMenuOpen) {
-                              setIsMobileMenuOpen(false);
-                            }
-                          }}
-                          className={`w-full text-left p-3 rounded text-sm transition-colors touch-manipulation ${
+                          onClick={() => setActiveSection(subsection.id)}
+                          className={`w-full text-left p-2 rounded text-sm transition-colors ${
                             activeSection === subsection.id
                               ? 'text-chiliz-primary bg-chiliz-primary/10'
                               : 'text-white/60 hover:text-white hover:bg-white/5'

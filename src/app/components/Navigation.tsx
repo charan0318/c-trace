@@ -88,11 +88,11 @@ export default function Navigation() {
             </Link>
 
             {/* Desktop Navigation Items */}
-            <div className="hidden md:flex items-center space-x-4 lg:space-x-8">
+            <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
               {/* Docs Link */}
               <Link 
                 href="/docs" 
-                className="group flex items-center space-x-2 text-white/70 hover:text-white font-medium transition-all duration-200 hover:scale-105 min-h-[44px] min-w-[44px] justify-center px-2 py-2 rounded-lg hover:bg-white/10"
+                className="group flex items-center space-x-2 text-white/70 hover:text-white font-medium transition-all duration-200 hover:scale-105 min-h-[44px] min-w-[44px] justify-center"
               >
                 <Globe className="w-4 h-4 text-chiliz-primary/60 group-hover:text-chiliz-primary transition-colors" />
                 <span className="hidden lg:block">Docs</span>
@@ -101,7 +101,7 @@ export default function Navigation() {
               {/* Explorer Link */}
               <Link 
                 href="/explorer" 
-                className="group flex items-center space-x-2 text-white/70 hover:text-white font-medium transition-all duration-200 hover:scale-105 min-h-[44px] min-w-[44px] justify-center px-2 py-2 rounded-lg hover:bg-white/10"
+                className="group flex items-center space-x-2 text-white/70 hover:text-white font-medium transition-all duration-200 hover:scale-105 min-h-[44px] min-w-[44px] justify-center"
               >
                 <Search className="w-4 h-4 text-chiliz-primary/60 group-hover:text-chiliz-primary transition-colors" />
                 <span className="hidden lg:block">Explorer</span>
@@ -171,25 +171,25 @@ export default function Navigation() {
           {/* Mobile Menu */}
           {isMobileMenuOpen && (
             <div className="md:hidden border-t border-white/10 bg-gradient-to-r from-gray-900/90 to-black/90 backdrop-blur-xl">
-              <div className="px-4 py-4 space-y-2">
+              <div className="px-4 py-4 space-y-4">
                 {/* Docs Link */}
                 <Link 
                   href="/docs" 
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center space-x-3 text-white/70 hover:text-white font-medium transition-all duration-200 p-4 rounded-xl hover:bg-white/10 min-h-[56px] touch-manipulation"
+                  className="flex items-center space-x-3 text-white/70 hover:text-white font-medium transition-all duration-200 p-3 rounded-xl hover:bg-white/10 min-h-[44px]"
                 >
                   <Globe className="w-5 h-5 text-chiliz-primary/60" />
-                  <span className="text-base">Documentation</span>
+                  <span>Documentation</span>
                 </Link>
 
                 {/* Explorer Link */}
                 <Link 
                   href="/explorer" 
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center space-x-3 text-white/70 hover:text-white font-medium transition-all duration-200 p-4 rounded-xl hover:bg-white/10 min-h-[56px] touch-manipulation"
+                  className="flex items-center space-x-3 text-white/70 hover:text-white font-medium transition-all duration-200 p-3 rounded-xl hover:bg-white/10 min-h-[44px]"
                 >
                   <Search className="w-5 h-5 text-chiliz-primary/60" />
-                  <span className="text-base">Explorer</span>
+                  <span>Explorer</span>
                 </Link>
 
                 {/* Mobile Connect Wallet Button */}
