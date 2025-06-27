@@ -1,7 +1,7 @@
 
 # C-TRACE - AI-Powered Chiliz Blockchain Explorer
 
-**C-TRACE** is an advanced AI-powered blockchain explorer and assistant specifically designed for the Chiliz ecosystem. It enables users to explore smart contracts, analyze the Chiliz chain, and interact with fan tokens through natural language queries and intelligent blockchain analysis.
+**C-TRACE** is an AI-powered blockchain explorer and assistant specifically designed for the Chiliz ecosystem. It enables users to explore smart contracts, analyze the Chiliz chain, and interact with fan tokens through natural language queries and intelligent blockchain analysis.
 
 ![image](https://github.com/user-attachments/assets/75cc95e6-415e-4a80-882e-ab69017ab48e)
 
@@ -11,7 +11,7 @@ Experience C-TRACE live: **[c-trace.replit.app](https://c-trace.replit.app)**
 
 Share your feedback: **[Telegram @ch04niverse](https://t.me/ch04niverse)**
 
-## 🎯 What Problem Does It Solve?
+## What Problem Does It Solve? 🎯
 
 C-TRACE bridges the gap between complex blockchain data and user-friendly insights on the Chiliz network. It solves several key challenges:
 
@@ -20,9 +20,8 @@ C-TRACE bridges the gap between complex blockchain data and user-friendly insigh
 - **Smart Contract Analysis**: AI-powered contract analysis without requiring technical expertise
 - **Real-time Data**: Live blockchain data with intelligent interpretation and context
 - **Wallet Integration**: Seamless wallet connectivity with transaction execution capabilities
-- **Cross-platform Integration**: Multi-device support and comprehensive blockchain integration
 
-## 👥 Who Is It For?
+## Who Is It For? 👥 
 
 - **Sports Fans** exploring fan tokens and team-related blockchain activities
 - **Developers** building on the Chiliz network who need quick contract analysis
@@ -31,58 +30,51 @@ C-TRACE bridges the gap between complex blockchain data and user-friendly insigh
 - **Traders** analyzing fan token performance and market trends
 - **Content Creators** seeking blockchain data for sports-related content
 
-## ✨ Key Features
+## Key Features ✨ 
 
-### 🔍 **Smart Contract Explorer**
+### **Smart Contract Explorer** 🔍
 - AI-powered analysis of any Chiliz smart contract
 - Real-time contract interaction capabilities
 - Security analysis and vulnerability detection
 - Gas optimization suggestions
 - ABI and source code analysis
 
-### 🏟️ **Fan Token Intelligence**
+### **Fan Token Intelligence**🏟️
 - Comprehensive fan token database (PSG, BAR, JUV, ACM, ASR, CHZ)
 - Token comparison tools ("compare PSG and BAR")
 - Real-time balance checking for any address
 - Market sentiment analysis for fan tokens
 - Token holder distribution insights
 
-### 🤖 **AI Assistant (Nebula)**
+### **AI Assistant**🤖  
 - Natural language queries for blockchain exploration
 - Context-aware responses with session continuity
 - Interactive chat interface for complex blockchain questions
 - Execute commands for wallet transactions
 - Multi-session conversation memory
 
-### 💳 **Wallet Integration**
+### **Wallet Integration**💳 
 - Native Chiliz Chain (Chain ID: 88888) support
-- Multiple wallet support: MetaMask, Coinbase, Rainbow, Trust Wallet, Phantom
+- Multiple wallet support: MetaMask, Coinbase, Rainbow, Trust Wallet
 - In-app wallets: Email, Google, Apple, Facebook authentication
 - Execute transfer commands directly from chat
 - Real-time transaction confirmation
 
-### 📱 **Modern UI/UX**
+### **Modern UI/UX**📱 
 - Fully responsive design optimized for all devices
 - 3D interactive backgrounds with Spline integration
-- Terminal-style loading screens for enhanced developer experience
-- Gradient-based modern design system with Chiliz branding
+- Terminal-style loading screens
+- Essential tips panels for user guidance
 - Dark mode interface with accessibility features
 
-### 🔗 **Blockchain Integration**
+### **ChilizScan Integration**🔗 
 - Comprehensive blockchain data via ChilizScan API
 - Transaction analysis and detailed insights
 - Address verification and balance checking
 - Contract source code and ABI access
 - Real-time network data
 
-### 🔧 **Developer Tools**
-- ChilizScan API integration for comprehensive data access
-- Smart contract ABI and source code analysis
-- Transaction hash lookup and detailed analysis
-- Address balance checking and token holdings
-- Extensible token database for emerging projects
-
-## 🛠️ Tech Stack
+## Tech Stack 🛠️
 
 ### Frontend
 - **Framework**: Next.js 15.3.4 with React 18
@@ -91,31 +83,30 @@ C-TRACE bridges the gap between complex blockchain data and user-friendly insigh
 - **3D Graphics**: Spline 3D scenes and Three.js integration
 - **Animations**: Framer Motion for smooth interactions
 - **Icons**: Lucide React icon library
-- **State Management**: React hooks and context
 
 ### Backend & APIs
 - **Blockchain SDK**: Thirdweb v5 for wallet connections and blockchain interactions
 - **AI Integration**: Custom Nebula API for intelligent blockchain insights
 - **Data Source**: ChilizScan API for comprehensive blockchain data
-- **Networking**: Native fetch API with custom error handling and retry logic
+- **Web3**: Native fetch API with custom error handling
 
 ### Blockchain & Web3
 - **Primary Network**: Chiliz Mainnet (Chain ID: 88888)
-- **Wallet Support**: MetaMask, Coinbase Wallet, Rainbow, Rabby, Trust Wallet, Phantom
+- **Wallet Support**: MetaMask, Coinbase, Rainbow, Trust Wallet
 - **In-App Wallets**: Email, Google, Apple, Facebook, Phone authentication
 - **Token Standards**: ERC-20, ERC-721, ERC-1155 support
 
 ## 🚀 Live Demo
 
-Experience C-TRACE live: **[c-trace.replit.app](https://c-trace.replit.app)**
+Check out the live version here: [c-trace.replit.app](https://c-trace.replit.app)
 
-We'd love your feedback! [Share your thoughts directly](https://t.me/ch04niverse)
+We'd love your feedback! [Click here to share thoughts directly with me](https://t.me/ch04niverse)
 
 ## Built for Vibe Coding Hackathon 🏆 
 
-C-TRACE was crafted as part of the Vibe Coding Hackathon to showcase the powerful synergy of AI and blockchain technology within the Chiliz ecosystem. Our mission: **democratize access to fan token data and contract exploration for everyone—not just developers.**
+C-TRACE was built as part of the Vibe Coding Hackathon to showcase the power of AI + blockchain in the Chiliz ecosystem. Our goal: simplify and democratize access to fan token data and contract exploration for everyone — not just devs.
 
-## 🔧 How to Run the Project
+## How to Run the Project
 
 ### Prerequisites
 - **Node.js** 18+ installed
@@ -138,11 +129,6 @@ C-TRACE was crafted as part of the Vibe Coding Hackathon to showcase the powerfu
 3. **Environment Configuration**:
    Create a `.env.local` file in the root directory:
    ```env
-   # Thirdweb Configuration (optional)
-   NEXT_PUBLIC_THIRDWEB_CLIENT_ID=your_client_id
-
-   # Additional API keys as needed
-   NEBULA_API_KEY=your_nebula_api_key
    ```
 
 4. **Start development server**:
@@ -171,16 +157,14 @@ src/
 │   │   │   ├── SearchBar.tsx      # Enhanced search interface
 │   │   │   ├── Silk.tsx           # 3D background component
 │   │   │   └── ...
-│   │   ├── BlockchainExplorer.tsx # Main explorer interface
-│   │   ├── Hero.tsx               # Landing page hero section
-│   │   ├── Navigation.tsx         # App navigation with wallet integration
+│   │   ├── BlockchainExplorer.tsx # Main explorer interface with AI chat
+│   │   ├── Hero.tsx               # Landing page with 3D Spline scenes
+│   │   ├── Navigation.tsx         # App navigation with wallet connection
 │   │   ├── LoadingScreen.tsx      # Terminal-style loading screen
 │   │   └── Footer.tsx             # Application footer
 │   ├── explorer/                  # Explorer page route
-│   ├── docs/                      # Documentation pages
+│   ├── docs/                      # Comprehensive documentation
 │   ├── lib/                       # Utilities and configurations
-│   │   ├── features.ts            # Feature flags management
-│   │   └── utils.ts               # Utility functions
 │   ├── client.ts                  # Thirdweb client configuration
 │   ├── globals.css                # Global styles and Tailwind imports
 │   ├── layout.tsx                 # Root layout component
@@ -193,46 +177,31 @@ src/
 └── tests/                         # Test files and examples
 ```
 
-## 🎯 Key Components Deep Dive
+## Key Components
 
-### Hero Component
-- **Interactive 3D Spline scenes** for immersive user experience
-- **Smart search bar** with chain selection and input validation
-- **Responsive design** that adapts to all screen sizes
-- **Error handling** with fallback backgrounds
+### AI-Powered Blockchain Analysis
+- **Natural Language Processing**: Ask questions in plain English
+- **Context Awareness**: Maintains conversation context across queries
+- **Smart Contract Security**: Automated vulnerability detection
+- **Token Discovery**: Intelligent search for fan tokens and contracts
 
-### Blockchain Explorer
-- **AI-powered chat interface** with session management
-- **Smart contract analysis tools** with real-time data
-- **Suggested action buttons** for common blockchain tasks
-- **Real-time blockchain data integration** via multiple APIs
-- **Markdown rendering** for beautiful response formatting
+### Fan Token Expertise
+- **Popular Tokens**: PSG, BAR, JUV, ACM, ASR with complete metadata
+- **Token Comparison**: Side-by-side analysis ("compare PSG and BAR")
+- **Balance Checking**: Real-time wallet balance and token holdings
+- **Contract Analysis**: Deep dive into fan token smart contracts
 
-### Navigation System
-- **Responsive design** with mobile-first approach
-- **Wallet connection integration** (feature-flagged)
-- **Modern gradient styling** consistent with Chiliz branding
-- **Accessibility features** for inclusive design
+### Essential User Tips System
+- **Fan Token Tips**: Right-side panel with key usage tips
+- **Token Comparison**: Left-side panel for comparative analysis
+- **Transfer Commands**: Execute wallet transactions via chat
+- **Network Guidance**: Chiliz Chain setup and configuration help
 
-## 🌟 Notable Features
-
-### AI-Powered Analysis
-- **Natural language processing** for blockchain queries
-- **Context-aware responses** with session continuity
-- **Smart contract security analysis**
-- **Token discovery and comparison tools**
-
-### ChilizScan Integration
-- **Comprehensive token database** with popular fan tokens
-- **Real-time balance checking** for any address
-- **Transaction analysis** with detailed breakdowns
-- **Contract verification** and source code access
-
-### User Experience
-- **Terminal-style loading** for developer appeal
-- **3D interactive backgrounds** for visual engagement
-- **Responsive design** for all devices
-- **Accessibility compliance** with WCAG standards
+### Execute Commands
+- **Transfer CHZ**: `execute transfer 10 CHZ to 0x...`
+- **Wallet Integration**: Direct wallet connection and confirmation
+- **Transaction Execution**: Real-time blockchain transaction processing
+- **Error Handling**: Comprehensive error messages and guidance
 
 ## Example Usage 🌟
 
@@ -260,72 +229,111 @@ src/
 "AC Milan fan token analysis"
 ```
 
-## 🚀 Deployment
+## Deployment 🚀 
 
 This project is optimized for **Replit deployment**:
+
+### Deployment Features
 - **Port Configuration**: Runs on port 5000 with 0.0.0.0 binding for public access
 - **Automatic Dependencies**: Yarn automatically installs packages from package.json
 - **Production Ready**: Optimized build configuration for production deployment
-- **Environment Variables**: Secure handling of API keys and configurations
+- **Environment Variables**: Secure handling of API keys via Replit Secrets
 
-### Deployment Steps on Replit:
+### Deploy on Replit
 1. Fork or import the repository to Replit
 2. Configure environment variables in the Secrets tab
 3. Run the project using the Run button
 4. Access your live application via the generated URL
 
-## 🤝 Contributing
+## User Interface Highlights 🎨 
 
-We welcome contributions from the community! Here's how to get involved:
+### 3D Interactive Experience
+- **Spline Integration**: Immersive 3D backgrounds and animations
+- **Responsive Design**: Optimized for desktop, tablet, and mobile
+- **Loading Screens**: Terminal-style animations for developer appeal
+- **Smooth Transitions**: Framer Motion animations throughout
 
+### Essential Tips Panels
+- **Fan Token Tips**: Key guidance for fan token queries
+- **Transfer Commands**: Wallet transaction execution help
+- **Network Configuration**: Chiliz Chain setup guidance
+- **Best Practices**: User experience optimization tips
+
+### AI Chat Interface
+- **Natural Language**: Ask questions in plain English
+- **Context Retention**: Maintains conversation history
+- **Execute Buttons**: Direct transaction execution from chat
+- **Error Prevention**: Smart input validation and guidance
+
+## Advanced Features  🔧
+
+### ChilizScan Integration
+- **Real-time Data**: Live blockchain data via ChilizScan API
+- **Contract Verification**: Source code and ABI access
+- **Transaction Analysis**: Detailed transaction breakdowns
+- **Address Insights**: Comprehensive address analysis
+
+### Security Features
+- **Smart Contract Analysis**: Automated security scanning
+- **Vulnerability Detection**: Common security issue identification
+- **Risk Assessment**: Contract risk scoring and recommendations
+- **Best Practices**: Security guidance and tips
+
+### Token Database
+- **Verified Tokens**: Complete database of popular Chiliz tokens
+- **Extended Support**: Community tokens with verification status
+- **Real-time Updates**: Live token data and market information
+- **Comparison Tools**: Side-by-side token analysis
+
+## Contributing 🤝
+
+We welcome contributions from the community!
+
+### How to Contribute
 1. **Fork the repository** on GitHub
 2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
 3. **Make your changes** and test thoroughly
 4. **Commit your changes**: `git commit -m 'Add amazing feature'`
 5. **Push to the branch**: `git push origin feature/amazing-feature`
-6. **Submit a pull request** with a detailed description
+6. **Submit a pull request** with detailed description
 
 ### Contribution Guidelines
-- Follow the existing code style and patterns
+- Follow existing code style and patterns
 - Add tests for new functionality
 - Update documentation as needed
 - Ensure responsive design compliance
 - Test on multiple devices and browsers
 
-## 🐛 Bug Reports & Feature Requests
+## Issues & Support 🐛
 
-- **Issues**: Report bugs via GitHub Issues
-- **Features**: Suggest new features through GitHub Discussions
-- **Security**: Report security issues privately via email
-- **Feedback**: Share general feedback on [Telegram](https://t.me/ch04niverse)
+- **Bug Reports**: Submit via GitHub Issues
+- **Feature Requests**: Suggest via GitHub Discussions
+- **Security Issues**: Report privately via email
+- **General Support**: Contact on [Telegram](https://t.me/ch04niverse)
 
-## 📝 License
+## Built for Innovation  🏆 
 
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+C-TRACE was crafted to showcase the powerful synergy of AI and blockchain technology within the Chiliz ecosystem. Our mission: **democratize access to fan token data and contract exploration for everyone—not just developers.**
 
-Feel free to use this project as a foundation for your own blockchain exploration tools and sports-related DApps.
+## Acknowledgments 🙏 
 
-## 🙏 Acknowledgments
-
-- **Chiliz Chain** for providing an innovative sports blockchain platform
+- **Chiliz Chain** for the innovative sports blockchain platform
 - **Thirdweb** for excellent Web3 development tools
 - **Replit** for hosting and development environment
-- **Vibe Coding Hackathon** for the inspiration and platform
-- **Open Source Community** for the amazing tools and libraries
+- **Open Source Community** for amazing tools and libraries
 
-## 📞 Support & Contact
+## Contact 📞 
 
 - **Developer**: ch04niverse
 - **Telegram**: [@ch04niverse](https://t.me/ch04niverse)
-- **GitHub**: [Project Repository](https://github.com/your-username/c-trace)
 - **Live Demo**: [c-trace.replit.app](https://c-trace.replit.app)
 
 ---
 
 **C-TRACE** - *Where AI meets Chiliz: Exploring the future of sports blockchain technology.*
 
-*Crafted with ❤️ by ch04niverse*
+*Crafted with ❤️ by ch04niverse for the global Chiliz community*
 
-### 🔥 Join the Revolution
+### 🚀 Ready to Explore?
 
-Ready to explore the future of sports blockchain? **[Launch C-TRACE](https://c-trace.replit.app)** and discover the power of AI-driven blockchain analysis!
+**[Launch C-TRACE](https://c-trace.replit.app)** and discover the power of AI-driven blockchain analysis on Chiliz Chain!
