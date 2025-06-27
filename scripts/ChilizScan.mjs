@@ -45,10 +45,20 @@ class ChilizScanAPI {
         return null;
       }
 
-      const result = await this.makeRequest(`?module=account&action=balance&address=${address}`);
-      if (result && result.status === "1") {
-        return result.result;
+      // Try multiple endpoints for balance
+      const endpoints = [
+        `?module=account&action=balance&address=${address}&tag=latest`,
+        `?module=account&action=balance&address=${address}`,
+        `?module=proxy&action=eth_getBalance&address=${address}&tag=latest`
+      ];
+
+      for (const endpoint of endpoints) {
+        const result = await this.makeRequest(endpoint);
+        if (result && (result.status === "1" || result.result)) {
+          return result.result;
+        }
       }
+      
       return null;
     } catch (error) {
       console.error("Get account balance failed:", error);

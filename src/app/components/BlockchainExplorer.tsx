@@ -657,7 +657,7 @@ To check your balance, please connect your wallet first using the "Connect Walle
 - Coinbase Wallet
 - Rainbow
 - Rabby Wallet
-- Socios Wallet
+- Chiliz Wallet
 - In-App Wallet (Email, Google, Apple, Facebook, Phone)
 
 Once connected, I'll be able to show you your CHZ balance on Chiliz Chain.`,
@@ -668,140 +668,78 @@ Once connected, I'll be able to show you your CHZ balance on Chiliz Chain.`,
       }
 
       try {
-        // Try multiple methods to get balance
-        let balance = null;
-        let method = "unknown";
+        // First check if wallet is connected to the right network
+        if (account?.chainId !== 88888) {
+          const networkMessage = {
+            role: "system",
+            content: `## ⚠️ Wrong Network
 
-        // Method 1: Direct Chiliz RPC call (most reliable for Chiliz)
-        try {
-          const response = await fetch('https://spicy-rpc.chiliz.com/', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-            },
-            body: JSON.stringify({
-              jsonrpc: '2.0',
-              method: 'eth_getBalance',
-              params: [walletAddress, 'latest'],
-              id: Date.now()
-            })
-          });
+Your wallet is connected to chain ID: ${account?.chainId || 'Unknown'}
 
-          if (response.ok) {
-            const data = await response.json();
-            if (data.result && !data.error) {
-              balance = data.result;
-              method = "Direct Chiliz RPC";
-              console.log("Balance fetched via direct RPC:", balance);
-            } else if (data.error) {
-              console.log("RPC returned error:", data.error);
-            }
-          } else {
-            console.log("RPC request failed with status:", response.status);
-          }
-        } catch (error) {
-          console.log("Direct RPC failed, trying Thirdweb...", error);
+**Please switch to Chiliz Chain:**
+- **Chain ID:** 88888
+- **Network Name:** Chiliz Chain
+- **RPC URL:** https://spicy-rpc.chiliz.com
+- **Currency Symbol:** CHZ
+- **Block Explorer:** https://scan.chiliz.com
+
+Once you switch networks, try checking your balance again.`,
+          };
+          setMessages((prev) => [...prev, networkMessage]);
+          setIsTyping(false);
+          return;
         }
 
-        // Method 2: Direct Chiliz RPC call as fallback
-        if (!balance) {
-          try {
-            const response = await fetch('https://spicy-rpc.chiliz.com/', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                jsonrpc: '2.0',
-                method: 'eth_getBalance',
-                params: [walletAddress, 'latest'],
-                id: 1
-              })
-            });
+        // Fetch balance from ChilizScan API
+        const balance = await chilizScanAPI.getAccountBalance(walletAddress);
 
-            if (response.ok) {
-              const data = await response.json();
-              if (data.result) {
-                balance = data.result;
-                method = "Direct Chiliz RPC";
-                console.log("Balance fetched via direct RPC:", balance);
-              }
-            }
-          } catch (error) {
-            console.log("Direct RPC also failed:", error);
-          }
-        }
-
-        if (balance) {
-          // Convert hex balance to decimal and then to CHZ
-          const balanceInWei = BigInt(balance);
-          const balanceInCHZ = Number(balanceInWei) / Math.pow(10, 18);
-          
-          // Format balance with appropriate decimal places
-          let formattedBalance;
-          if (balanceInCHZ === 0) {
-            formattedBalance = "0.0000";
-          } else if (balanceInCHZ < 0.0001) {
-            formattedBalance = balanceInCHZ.toExponential(4);
-          } else {
-            formattedBalance = balanceInCHZ.toFixed(4);
-          }
-
-          const balanceResponse = `## 💰 Your Wallet Balance
+        if (balance !== null) {
+          const balanceInCHZ = (parseInt(balance) / Math.pow(10, 18)).toFixed(4);
+          const balanceMessage = {
+            role: "system",
+            content: `## Your Chiliz Balance
 
 **Address:** \`${walletAddress}\`
-**Balance:** ${formattedBalance} CHZ
-**Network:** Chiliz Chain (ID: 88888)
-**Method:** ${method}
-**Raw Balance:** ${balance} (wei)
+**Balance:** ${balanceInCHZ} CHZ
 
-💡 **Tip:** Your balance is automatically updated when you make transactions on the Chiliz network.
-
-**Quick Actions:**
-- Type "execute transfer 0.1 CHZ to [address]" to send CHZ
-- Ask about fan tokens to explore PSG, BAR, JUV, and more
-
-**Troubleshooting:**
-If balance shows 0 but you expect more:
-• Verify you're on the correct Chiliz Chain network
-• Check your address on [ChilizScan](https://scan.chiliz.com/address/${walletAddress})
-• Ensure your wallet is properly connected`;
-
-          const aiMessage = {
-            role: "system",
-            content: balanceResponse,
+**Network:** Chiliz Chain (Chain ID: 88888)
+**Explorer:** [View on ChilizScan](https://scan.chiliz.com/address/${walletAddress})`,
           };
-          setMessages((prev) => [...prev, aiMessage]);
+          setMessages((prev) => [...prev, balanceMessage]);
         } else {
-          throw new Error("Failed to fetch balance from all methods");
+          const errorMessage = {
+            role: "system",
+            content: `## ❌ Unable to fetch your balance
+
+**Possible reasons:**
+- Your wallet is not connected to Chiliz Chain
+- Network connectivity issues
+- API rate limiting
+
+**Solutions:**
+1. Make sure your wallet is connected to Chiliz Chain (Chain ID: 88888)
+2. Check your internet connection
+3. Try reconnecting your wallet
+
+**Manual Check:** Visit [ChilizScan](https://scan.chiliz.com/address/${walletAddress}) to view your balance manually.`,
+          };
+          setMessages((prev) => [...prev, errorMessage]);
         }
       } catch (error) {
-        console.error("Error fetching balance:", error);
+        console.error("Balance fetch error:", error);
         const errorMessage = {
           role: "system",
-          content: `## ❌ Balance Fetch Failed
+          content: `## ❌ Unable to fetch your balance. Please ensure your wallet is connected to Chiliz Chain.
 
-Unable to fetch your balance. This might be due to:
-
-**Possible Issues:**
-- Network connectivity problems
-- RPC endpoint temporarily unavailable
-- Wallet not properly connected to Chiliz Chain
-
-**Try these solutions:**
-1. **Reconnect wallet** - Disconnect and reconnect your wallet
-2. **Switch networks** - Make sure you're on Chiliz Chain (ID: 88888)
-3. **Check connection** - Ensure stable internet connection
-4. **Try again** - Sometimes RPC calls need a retry
-
-**Manual Check:**
-Visit [ChilizScan](https://scan.chiliz.com/address/${walletAddress}) to view your balance directly.`,
+**Troubleshooting:**
+- Check your wallet network (should be Chiliz Chain - Chain ID: 88888)
+- Reconnect your wallet
+- Refresh the page and try again`,
         };
         setMessages((prev) => [...prev, errorMessage]);
-      } finally {
-        setIsTyping(false);
       }
+
+      setIsTyping(false);
       return;
     }
 
@@ -871,7 +809,7 @@ Visit [ChilizScan](https://scan.chiliz.com/address/${walletAddress}) to view you
           <div className="flex items-center justify-center gap-2 mb-4">
             <h3 className="text-sm font-bold text-white">Essential Tips</h3>
           </div>
-          
+
           {/* Tips List */}
           <div className="space-y-3">
             <div className="group">
@@ -883,7 +821,7 @@ Visit [ChilizScan](https://scan.chiliz.com/address/${walletAddress}) to view you
                 </div>
               </div>
             </div>
-            
+
             <div className="group">
               <div className="flex items-start gap-2">
                 <div className="w-1.5 h-1.5 bg-red-500 rounded-full mt-1.5 flex-shrink-0"></div>
@@ -893,7 +831,7 @@ Visit [ChilizScan](https://scan.chiliz.com/address/${walletAddress}) to view you
                 </div>
               </div>
             </div>
-            
+
             <div className="group">
               <div className="flex items-start gap-2">
                 <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-1.5 flex-shrink-0"></div>
@@ -903,7 +841,7 @@ Visit [ChilizScan](https://scan.chiliz.com/address/${walletAddress}) to view you
                 </div>
               </div>
             </div>
-            
+
             <div className="group">
               <div className="flex items-start gap-2">
                 <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 flex-shrink-0"></div>
@@ -913,7 +851,7 @@ Visit [ChilizScan](https://scan.chiliz.com/address/${walletAddress}) to view you
                 </div>
               </div>
             </div>
-            
+
             <div className="group">
               <div className="flex items-start gap-2">
                 <div className="w-1.5 h-1.5 bg-purple-500 rounded-full mt-1.5 flex-shrink-0"></div>
@@ -924,7 +862,7 @@ Visit [ChilizScan](https://scan.chiliz.com/address/${walletAddress}) to view you
               </div>
             </div>
           </div>
-          
+
           {/* Footer */}
           <div className="mt-4 pt-3 border-t border-white/10">
             <p className="text-xs text-chiliz-primary font-medium text-center">💡 Pro Tip: Be specific for better results!</p>
@@ -942,8 +880,7 @@ Visit [ChilizScan](https://scan.chiliz.com/address/${walletAddress}) to view you
                           createWallet("com.coinbase.wallet"),
                           createWallet("me.rainbow"),
                           createWallet("io.rabby"),
-                          createWallet("com.socios.fan"),
-                          createWallet("io.trust"),
+                          createWallet("com.socios"),
                           inAppWallet({
                             auth: {
                               options: ["email", "google", "apple", "facebook", "phone"],
