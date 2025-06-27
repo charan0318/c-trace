@@ -80,6 +80,81 @@ async function handleUserMessage(
   chainId,
   contractAddress
 ) {
+  // Check if this is a token search query
+  const tokenSearchPattern = /(?:\$([A-Z]+)|([A-Z]{2,10})\s+token|token\s+([A-Z]{2,10})|search\s+for\s+([A-Z]{2,10})|find\s+([A-Z]{2,10}))/i;
+  const tokenMatch = userMessage.match(tokenSearchPattern);
+  
+  // Extract token symbol from various patterns
+  let tokenSymbol = null;
+  if (tokenMatch) {
+    tokenSymbol = tokenMatch[1] || tokenMatch[2] || tokenMatch[3] || tokenMatch[4] || tokenMatch[5];
+  }
+
+  // Also check for specific token names mentioned in queries
+  const lowerMessage = userMessage.toLowerCase();
+  const tokenNames = ['chilizinu', 'chzinu', 'kayen', 'asr', 'psg', 'bar', 'juv', 'acm'];
+  let foundTokenName = null;
+  
+  for (const tokenName of tokenNames) {
+    if (lowerMessage.includes(tokenName)) {
+      foundTokenName = tokenName;
+      break;
+    }
+  }
+
+  // If we detected a token search, try ChilizScan first
+  if ((tokenSymbol && chainId === "88888") || (foundTokenName && chainId === "88888")) {
+    console.log(`🔍 Detected token search: ${tokenSymbol || foundTokenName} on Chiliz Chain`);
+    
+    try {
+      const searchTerm = tokenSymbol || foundTokenName;
+      const chilizScanResult = await searchChilizScan(searchTerm);
+      
+      // If ChilizScan found results, return them
+      if (chilizScanResult && !chilizScanResult.includes("couldn't find") && !chilizScanResult.includes("No results found")) {
+        console.log("✅ ChilizScan found results");
+        return chilizScanResult;
+      }
+      
+      // If ChilizScan didn't find anything, try lookup with different variations
+      const lookupResult = await lookupToken(searchTerm);
+      if (lookupResult && !lookupResult.includes("couldn't find") && !lookupResult.includes("No results found")) {
+        console.log("✅ ChilizScan lookup found results");
+        return lookupResult;
+      }
+      
+      // If still no results, provide enhanced error message
+      console.log("❌ No results from ChilizScan");
+      return `I searched ChilizScan for "${searchTerm}" but couldn't find this token on Chiliz Chain.
+
+**Possible reasons:**
+1. **Token doesn't exist on Chiliz Chain** - This token might be on a different blockchain
+2. **Different symbol/name** - The token might use a different symbol or name
+3. **New/unlisted token** - Very new tokens might not be indexed yet
+4. **Typo in search** - Please verify the spelling
+
+**What you can try:**
+- ✅ **Provide the contract address** if you have it (most reliable method)
+- ✅ **Check official sources** like the project's website or social media
+- ✅ **Try alternative spellings** or the full token name
+- ✅ **Search on ChilizScan directly**: https://scan.chiliz.com/tokens
+
+**Popular Chiliz tokens you can search for:**
+- $CHZ (Chiliz native token)
+- $PSG (Paris Saint-Germain Fan Token)
+- $BAR (FC Barcelona Fan Token)
+- $JUV (Juventus Fan Token)
+- $ACM (AC Milan Fan Token)
+
+Would you like me to search for any of these instead, or do you have a contract address to check?`;
+      
+    } catch (error) {
+      console.error("Error in ChilizScan search:", error);
+      // Fall through to regular Nebula query
+    }
+  }
+
+  // For non-token searches or if ChilizScan failed, use regular Nebula query
   const response = await apiRequest("/chat", "POST", {
     message: userMessage,
     session_id: sessionId,

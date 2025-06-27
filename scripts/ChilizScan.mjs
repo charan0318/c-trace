@@ -46,17 +46,39 @@ class ChilizScanAPI {
   // Search for tokens by name or symbol
   async searchTokens(query) {
     try {
-      // Try different endpoints for token search
-      const endpoints = [
-        `/v1/tokens?search=${encodeURIComponent(query)}`,
-        `/tokens?q=${encodeURIComponent(query)}`,
-        `/v1/search?q=${encodeURIComponent(query)}&type=token`
+      const cleanQuery = query.trim().toLowerCase();
+      
+      // Try different variations of the query
+      const queryVariations = [
+        cleanQuery,
+        cleanQuery.toUpperCase(),
+        cleanQuery.replace('$', ''),
+        `$${cleanQuery.replace('$', '')}`,
       ];
 
-      for (const endpoint of endpoints) {
-        const result = await this.makeRequest(endpoint);
-        if (result && result.result && result.result.length > 0) {
-          return result.result;
+      // Try different endpoints for token search
+      const endpoints = [
+        `/v1/tokens?search=`,
+        `/tokens?q=`,
+        `/v1/search?q=`,
+        `/v1/token/search?symbol=`,
+        `/api/v1/tokens?filter=`
+      ];
+
+      for (const queryVar of queryVariations) {
+        for (const endpoint of endpoints) {
+          const fullEndpoint = `${endpoint}${encodeURIComponent(queryVar)}`;
+          if (endpoint.includes('search?q=')) {
+            const result = await this.makeRequest(`${endpoint}${encodeURIComponent(queryVar)}&type=token`);
+            if (result && result.result && result.result.length > 0) {
+              return result.result;
+            }
+          } else {
+            const result = await this.makeRequest(fullEndpoint);
+            if (result && result.result && result.result.length > 0) {
+              return result.result;
+            }
+          }
         }
       }
 

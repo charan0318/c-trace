@@ -42,8 +42,8 @@ export default function Hero() {
         const isTokenSymbol = /^[A-Za-z]+$/.test(normalizedInput);
 
         if (isTokenSymbol) {
-        // Handle token symbol queries specially with more specific search
-        const tokenQuery = `Find the contract address and details for ${normalizedInput} token on Chiliz Chain. Search the Chiliz token explorer and provide the exact contract address, total supply, and token information.`;
+        // Handle token symbol queries with ChilizScan integration
+        const tokenQuery = `Search for ${normalizedInput} token on Chiliz Chain using ChilizScan. If found, provide: 1) Contract address 2) Token symbol 3) Total supply 4) Decimals 5) Current holders. If not found on Chiliz, check spelling and suggest alternatives.`;
         console.log('Navigating to explorer with token query:', { query: tokenQuery, chain: finalChain });
         router.push(
           `/explorer?chainId=${finalChain}&query=${encodeURIComponent(tokenQuery)}&searchType=token&symbol=${encodeURIComponent(normalizedInput)}`
