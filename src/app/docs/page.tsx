@@ -8,6 +8,7 @@ import Silk from '../components/ui/Silk';
 const DocsPage = () => {
   const [activeSection, setActiveSection] = useState('welcome');
   const [expandedSections, setExpandedSections] = useState<string[]>(['getting-started']);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleSection = (section: string) => {
     setExpandedSections(prev => 
@@ -633,8 +634,28 @@ const DocsPage = () => {
       <Navigation />
 
       <div className="flex h-screen pt-16">
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="md:hidden fixed top-20 left-4 z-50 p-2 rounded-lg bg-gray-900/80 backdrop-blur-sm border border-white/20 text-white"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+
+        {/* Mobile Menu Overlay */}
+        {isMobileMenuOpen && (
+          <div 
+            className="md:hidden fixed inset-0 bg-black/50 z-30 top-16"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+        )}
+
         {/* Sidebar */}
-        <div className="w-64 bg-gray-900/60 backdrop-blur-sm border-r border-white/10 overflow-y-auto">
+        <div className={`w-64 bg-gray-900/60 backdrop-blur-sm border-r border-white/10 overflow-y-auto fixed md:relative top-16 md:top-0 left-0 h-full z-40 transform transition-transform duration-300 ${
+          isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+        }`}>
           <div className="p-4">
             <h2 className="text-lg font-bold text-white mb-4">Documentation</h2>
             <nav className="space-y-2">
@@ -646,6 +667,8 @@ const DocsPage = () => {
                       if (section.subsections.length > 0) {
                         toggleSection(section.id);
                       }
+                      // Close mobile menu if it's open
+                      setIsMobileMenuOpen(false);
                     }}
                     className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors ${
                       activeSection === section.id
@@ -692,8 +715,8 @@ const DocsPage = () => {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 overflow-y-auto">
-          <div className="max-w-4xl mx-auto p-8">
+        <div className="flex-1 overflow-y-auto md:ml-0">
+          <div className="max-w-4xl mx-auto p-4 md:p-8 pt-16 md:pt-8">
             {renderContent()}
           </div>
         </div>
