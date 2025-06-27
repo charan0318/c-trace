@@ -559,17 +559,22 @@ export function BlockchainExplorer() {
 
       try {
         // Get wallet balance using Thirdweb
-        const balance = await client.getBalance({
-          chain: chilizChain,
-          address: walletAddress
+        const rpcRequest = client.getRpcClient({ chain: chilizChain });
+        const balance = await rpcRequest.request({
+          method: "eth_getBalance",
+          params: [walletAddress, "latest"]
         });
+        
+        // Convert hex balance to decimal and then to CHZ
+        const balanceInWei = BigInt(balance);
+        const balanceInCHZ = Number(balanceInWei) / Math.pow(10, 18);
 
-        const balanceInCHZ = parseFloat(balance.displayValue).toFixed(4);
+        const formattedBalance = balanceInCHZ.toFixed(4);
 
         const balanceResponse = `## 💰 Your Wallet Balance
 
 **Address:** \`${walletAddress}\`
-**Balance:** ${balanceInCHZ} CHZ
+**Balance:** ${formattedBalance} CHZ
 **Network:** Chiliz Chain (ID: 88888)
 
 💡 **Tip:** Your balance is automatically updated when you make transactions on the Chiliz network.`;
