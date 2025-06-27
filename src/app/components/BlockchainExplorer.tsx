@@ -656,8 +656,77 @@ export function BlockchainExplorer() {
       {/* Subtle overlay to enhance visibility */}
       <div className="absolute inset-0 bg-black/30" style={{ zIndex: -5 }} />
 
+      {/* Essential Tips Box - Fixed Position Left Side */}
+      <div className="fixed left-6 top-1/2 -translate-y-1/2 z-40 w-72 max-h-[70vh] overflow-y-auto">
+        <div className="bg-gray-900/60 backdrop-blur-xl border border-white/20 rounded-2xl p-4 shadow-2xl">
+          {/* Header */}
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-2 h-2 bg-chiliz-primary rounded-full animate-pulse"></div>
+            <h3 className="text-sm font-bold text-white">Essential Tips</h3>
+          </div>
+          
+          {/* Tips List */}
+          <div className="space-y-3">
+            <div className="group">
+              <div className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 bg-chiliz-primary rounded-full mt-1.5 flex-shrink-0"></div>
+                <div>
+                  <p className="text-xs text-white/90 font-medium">Execute Commands</p>
+                  <p className="text-xs text-white/60 leading-relaxed">Use "execute" prefix to transfer tokens or interact with contracts</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="group">
+              <div className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 bg-red-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                <div>
+                  <p className="text-xs text-white/90 font-medium">Token Details</p>
+                  <p className="text-xs text-white/60 leading-relaxed">Add "token" suffix for addresses (e.g., "CHZ token", "BAR token")</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="group">
+              <div className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                <div>
+                  <p className="text-xs text-white/90 font-medium">Wallet Connection</p>
+                  <p className="text-xs text-white/60 leading-relaxed">Connect wallet first to check balances and execute transactions</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="group">
+              <div className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                <div>
+                  <p className="text-xs text-white/90 font-medium">Contract Analysis</p>
+                  <p className="text-xs text-white/60 leading-relaxed">Paste contract addresses directly for instant analysis</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="group">
+              <div className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 bg-purple-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                <div>
+                  <p className="text-xs text-white/90 font-medium">Natural Language</p>
+                  <p className="text-xs text-white/60 leading-relaxed">Ask questions in plain English - C-TRACE understands context</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Footer */}
+          <div className="mt-4 pt-3 border-t border-white/10">
+            <p className="text-xs text-chiliz-primary font-medium text-center">💡 Pro Tip: Be specific for better results!</p>
+          </div>
+        </div>
+      </div>
+
       {/* Connect Wallet Button - Fixed Position Top Right */}
-      <div className="fixed top-6 right-6 z-50">
+      <div className="fixed top-6 right-6 z-50"></div>
         <div className="relative overflow-hidden rounded-xl border border-white/20 bg-gradient-to-r from-gray-900/80 to-black/80 backdrop-blur-xl">
           <ConnectButton
                         client={client}
