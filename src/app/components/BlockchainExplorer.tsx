@@ -266,6 +266,7 @@ export function BlockchainExplorer() {
   const searchParams = useSearchParams();
   const chainId = searchParams.get("chainId");
   const contractAddress = searchParams.get("searchTerm");
+  const textQuery = searchParams.get("query");
 
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Array<{ role: string; content: string }>>([]);
@@ -276,8 +277,9 @@ export function BlockchainExplorer() {
   const account = useActiveAccount();
   const walletAddress = account?.address;
 
-  // Check if we have contract details to explore
+  // Check if we have contract details to explore or a text query
   const hasContractToExplore = contractAddress && chainId;
+  const hasTextQuery = textQuery && chainId;
 
   const { scrollRef, isAtBottom, scrollToBottom } = useAutoScroll(messages.length);
 
@@ -344,6 +346,25 @@ export function BlockchainExplorer() {
             },
           ]);
           setIsTyping(false);
+        } else if (hasTextQuery) {
+          console.log("🔍 Text query to process:", textQuery, "on chain:", chainId);
+          setIsTyping(true);
+          const queryResponse = await handleUserMessage(
+            textQuery!,
+            newSessionId,
+            chainId!,
+            ""
+          );
+          console.log("📄 Query response received");
+          setMessages([
+            { role: "system", content: "Welcome to the C-TRACE Blockchain Explorer." },
+            { role: "user", content: textQuery! },
+            {
+              role: "system",
+              content: queryResponse || "No information available for this query.",
+            },
+          ]);
+          setIsTyping(false);
         } else {
           console.log("💬 Loading default welcome message");
           setMessages([
@@ -366,7 +387,7 @@ export function BlockchainExplorer() {
     };
 
     initSession();
-  }, [contractAddress, chainId, hasContractToExplore]);
+  }, [contractAddress, chainId, hasContractToExplore, textQuery, hasTextQuery]);
 
   const handleSend = async () => {
     if (!input.trim() || !sessionId) return;
@@ -390,7 +411,7 @@ export function BlockchainExplorer() {
         const response = await handleUserMessage(
           userMessage,
           sessionId,
-          "88888",
+          chainId || "88888",
           ""
         );
         setMessages((prev) => [...prev, { role: "system", content: response }]);
@@ -632,7 +653,9 @@ export function BlockchainExplorer() {
                   onChange={(e) => setInput(e.target.value)}
                   placeholder={hasContractToExplore 
                     ? "Ask about this Chiliz contract..." 
-                    : "Ask about Chiliz, fan tokens, or CHZ..."}
+                    : hasTextQuery 
+                      ? "Continue your Chiliz exploration..."
+                      : "Ask about Chiliz, fan tokens, or CHZ..."}
                   className="w-full border-0 bg-transparent px-4 md:px-6 py-3 md:py-4 pr-16 md:pr-20 focus:outline-none text-white placeholder:text-white/50 text-sm md:text-base min-h-[48px]"
                   onKeyPress={(e) => e.key === "Enter" && handleSend()}
                 />

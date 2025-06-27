@@ -19,17 +19,32 @@ export default function Hero() {
   const [sceneVersion, setSceneVersion] = useState(Date.now());
   const router = useRouter();
 
-  const handleSearch = useCallback((address: string, chain: string) => {
+  const handleSearch = useCallback((searchInput: string, chain: string) => {
     const finalChain = chain || '88888'; // Default to Chiliz Chain if no chain selected
-    if (!address.trim()) {
+    if (!searchInput.trim()) {
       alert('Please enter a contract address or search term');
       return;
     }
+    
+    const trimmedInput = searchInput.trim();
+    
+    // Check if input looks like a contract address (starts with 0x and is 40-42 characters)
+    const isContractAddress = /^0x[a-fA-F0-9]{40}$/.test(trimmedInput);
+    
     try {
-      console.log('Navigating to explorer with:', { address, chain: finalChain });
-      router.push(
-        `/explorer?chainId=${finalChain}&searchTerm=${encodeURIComponent(address.trim())}`
-      );
+      if (isContractAddress) {
+        // Navigate with contract address
+        console.log('Navigating to explorer with contract address:', { address: trimmedInput, chain: finalChain });
+        router.push(
+          `/explorer?chainId=${finalChain}&searchTerm=${encodeURIComponent(trimmedInput)}`
+        );
+      } else {
+        // Navigate with general text query (no contract address)
+        console.log('Navigating to explorer with text query:', { query: trimmedInput, chain: finalChain });
+        router.push(
+          `/explorer?chainId=${finalChain}&query=${encodeURIComponent(trimmedInput)}`
+        );
+      }
     } catch (error) {
       console.error('Navigation error:', error);
       alert('Failed to navigate to explorer');
@@ -130,7 +145,7 @@ export default function Hero() {
           onSearch={handleSearch}
           onAddressChange={handleAddressChange}
           onChainChange={handleChainChange}
-          placeholder="Enter contract address or question..."
+          placeholder="Enter contract address or ask about Chiliz..."
           chains={blockchains}
           className="w-full"
         />
