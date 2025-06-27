@@ -158,19 +158,15 @@ class ChilizScanAPI {
         return [knownToken];
       }
 
-      // For unknown tokens, try API search but don't depend on it
-      console.log(`❌ No known token found for: ${cleanQuery}`);
-      
-      // Try a few API endpoints as fallback (these may fail)
-      try {
-        const apiResult = await this.makeRequest(`?module=token&action=getToken&contractaddress=${cleanQuery}`);
-        if (apiResult && apiResult.status === "1") {
-          return [apiResult.result];
-        }
-      } catch (error) {
-        console.log("API search failed, continuing with known tokens only");
+      // For unknown tokens, try to find in extended token list
+      const extendedToken = this.getExtendedTokenInfo(cleanQuery);
+      if (extendedToken) {
+        console.log(`✅ Found extended token: ${extendedToken.name} (${extendedToken.symbol})`);
+        return [extendedToken];
       }
 
+      // For unknown tokens, provide helpful guidance
+      console.log(`❌ No token found for: ${cleanQuery}`);
       return null;
     } catch (error) {
       console.error("Token search failed:", error);
@@ -234,6 +230,50 @@ class ChilizScanAPI {
     return knownTokens[symbol.toLowerCase()] || null;
   }
 
+  // Extended token database for newer/community tokens
+  getExtendedTokenInfo(symbol) {
+    const extendedTokens = {
+      'chilizinu': {
+        name: "ChilizInu",
+        symbol: "CHILIZINU",
+        contractAddress: "Not verified on Chiliz Chain",
+        decimals: "Unknown",
+        type: "Community Token",
+        totalSupply: "Unknown",
+        status: "Unverified - Please provide contract address for verification"
+      },
+      'chzinu': {
+        name: "ChilizInu",
+        symbol: "CHZINU",
+        contractAddress: "Not verified on Chiliz Chain",
+        decimals: "Unknown",
+        type: "Community Token",
+        totalSupply: "Unknown",
+        status: "Unverified - Please provide contract address for verification"
+      },
+      'pepper': {
+        name: "Pepper Token",
+        symbol: "PEPPER",
+        contractAddress: "Not verified on Chiliz Chain",
+        decimals: "Unknown",
+        type: "Community Token",
+        totalSupply: "Unknown",
+        status: "Unverified - Please provide contract address for verification"
+      },
+      'kayen': {
+        name: "Kayen Token",
+        symbol: "KAYEN",
+        contractAddress: "Not verified on Chiliz Chain",
+        decimals: "Unknown",
+        type: "Community Token",
+        totalSupply: "Unknown",
+        status: "Unverified - Please provide contract address for verification"
+      }
+    };
+
+    return extendedTokens[symbol.toLowerCase()] || null;
+  }
+
   // General search function
   async generalSearch(query) {
     try {
@@ -294,6 +334,29 @@ class ChilizScanAPI {
 🔢 **Total Supply:** ${knownToken.totalSupply}
 ⚽ **Type:** ${knownToken.type}
 🔗 **ChilizScan:** ${this.explorerURL}/token/${knownToken.contractAddress}`;
+      }
+
+      // Check if it's a known unverified token
+      const unverifiedToken = this.getExtendedTokenInfo(query.toLowerCase().replace('$', ''));
+      if (unverifiedToken) {
+        return `## ${unverifiedToken.name} (${unverifiedToken.symbol})
+
+⚠️ **Status:** ${unverifiedToken.status}
+
+**What we know:**
+- **Token Name:** ${unverifiedToken.name}
+- **Symbol:** ${unverifiedToken.symbol}
+- **Type:** ${unverifiedToken.type}
+- **Contract Address:** ${unverifiedToken.contractAddress}
+
+**To get complete information:**
+1. Provide the verified contract address for this token
+2. Check if this token exists on other networks (Ethereum, BSC, etc.)
+3. Verify the token details on official project channels
+
+**Popular verified Chiliz tokens:**
+• CHZ (native token)
+• PSG, BAR, JUV, ACM, ASR (fan tokens)`;
       }
 
       return `❌ Token "${query}" not found on Chiliz Chain.
@@ -376,22 +439,24 @@ Try searching with a contract address for better results.`;
           if (token.totalSupply) {
             formatted += `**Total Supply:** ${token.totalSupply}\n`;
           }
-          formatted += `**ChilizScan:** ${this.explorerURL}/token/${token.contractAddress || ''}\n\n`;
-        });
-
-        // Add comparison summary
-        formatted += `### 📊 Quick Comparison\n`;
-        formatted += `| Token | Contract | Supply | Type |\n`;
-        formatted += `|-------|----------|--------|------|\n`;
-        results.results.forEach(token => {
-          formatted += `| ${token.symbol} | \`${token.contractAddress?.slice(0,10)}...\` | ${token.totalSupply} | ${token.type} |\n`;
+          if (token.status) {
+            formatted += `**Status:** ${token.status}\n`;
+          }
+          if (token.contractAddress && !token.contractAddress.includes('Not verified')) {
+            formatted += `**ChilizScan:** ${this.explorerURL}/token/${token.contractAddress}\n`;
+          }
+          formatted += '\n';
         });
 
         return formatted;
       } else {
-        let formatted = `## ${results.results[0].name} (${results.results[0].symbol})\n\n`;
-
         const token = results.results[0];
+        let formatted = `## ${token.name} (${token.symbol})\n\n`;
+
+        if (token.status) {
+          formatted += `⚠️ **Status:** ${token.status}\n\n`;
+        }
+
         formatted += `📍 **Contract:** \`${token.contractAddress}\`\n`;
         if (token.totalSupply) {
           formatted += `📊 **Supply:** ${token.totalSupply}\n`;
@@ -399,7 +464,16 @@ Try searching with a contract address for better results.`;
         if (token.type) {
           formatted += `⚽ **Type:** ${token.type}\n`;
         }
-        formatted += `🔗 **ChilizScan:** ${this.explorerURL}/token/${token.contractAddress}\n`;
+        if (token.contractAddress && !token.contractAddress.includes('Not verified')) {
+          formatted += `🔗 **ChilizScan:** ${this.explorerURL}/token/${token.contractAddress}\n`;
+        }
+
+        if (token.status && token.status.includes('Unverified')) {
+          formatted += `\n**Next Steps:**\n`;
+          formatted += `• Provide the verified contract address for complete details\n`;
+          formatted += `• Check official project channels for token information\n`;
+          formatted += `• Verify if this token exists on other blockchains\n`;
+        }
 
         return formatted;
       }
