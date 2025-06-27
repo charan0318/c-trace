@@ -9,20 +9,13 @@ class ChilizScanAPI {
     this.explorerURL = CHILIZ_SCAN_BASE;
   }
 
-  async makeRequest(endpoint, params = {}) {
+  async makeRequest(queryParams) {
     try {
-      const url = new URL(`${this.baseURL}${endpoint}`);
+      const url = `${this.baseURL}${queryParams}`;
       
-      // Add parameters to URL
-      Object.keys(params).forEach(key => {
-        if (params[key] !== undefined && params[key] !== null) {
-          url.searchParams.append(key, params[key]);
-        }
-      });
+      console.log("ChilizScan API Request:", url);
 
-      console.log("ChilizScan API Request:", url.toString());
-
-      const response = await fetch(url.toString(), {
+      const response = await fetch(url, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -37,6 +30,7 @@ class ChilizScanAPI {
       }
 
       const data = await response.json();
+      console.log("ChilizScan API Response:", data);
       return data;
     } catch (error) {
       console.error("ChilizScan API Request Failed:", error);
@@ -44,23 +38,31 @@ class ChilizScanAPI {
     }
   }
 
-  // Search for tokens using ChilizScan's actual endpoints
+  // Search for tokens by name/symbol using the correct API
   async searchTokens(query) {
     try {
       const cleanQuery = query.trim().toLowerCase().replace('$', '');
       
-      // Try the actual ChilizScan API endpoints
-      const endpoints = [
-        `?module=token&action=tokenlist&search=${encodeURIComponent(cleanQuery)}`,
-        `?module=account&action=tokenlist&address=${encodeURIComponent(cleanQuery)}`,
-        `?module=token&action=getToken&contractaddress=${encodeURIComponent(cleanQuery)}`
-      ];
-
-      for (const endpoint of endpoints) {
-        const result = await this.makeRequest(endpoint);
-        if (result && result.status === "1" && result.result) {
-          return Array.isArray(result.result) ? result.result : [result.result];
+      // First try to get token by symbol - this is the most reliable method
+      if (/^[a-zA-Z]+$/.test(cleanQuery)) {
+        // Search through token holders to find tokens (indirect method)
+        const tokenListResult = await this.makeRequest(`?module=account&action=tokenlist&address=0x0000000000000000000000000000000000000000`);
+        
+        if (tokenListResult && tokenListResult.status === "1" && Array.isArray(tokenListResult.result)) {
+          const matchingTokens = tokenListResult.result.filter(token => 
+            token.symbol && token.symbol.toLowerCase() === cleanQuery
+          );
+          
+          if (matchingTokens.length > 0) {
+            return matchingTokens;
+          }
         }
+      }
+
+      // If direct search fails, check known tokens
+      const knownTokens = await this.getKnownTokenInfo(cleanQuery);
+      if (knownTokens) {
+        return [knownTokens];
       }
 
       return null;
@@ -70,18 +72,77 @@ class ChilizScanAPI {
     }
   }
 
+  // Get known token information for popular Chiliz tokens
+  async getKnownTokenInfo(symbol) {
+    const knownTokens = {
+      'chz': {
+        name: "Chiliz",
+        symbol: "CHZ", 
+        contractAddress: "0x0000000000000000000000000000000000000000",
+        decimals: "18",
+        type: "Native Token"
+      },
+      'psg': {
+        name: "Paris Saint-Germain Fan Token",
+        symbol: "PSG",
+        contractAddress: "0x8Bb8e84A9b85F98f7d0cbAdFb26D3Aa84A503d3e",
+        decimals: "0",
+        type: "Fan Token"
+      },
+      'bar': {
+        name: "FC Barcelona Fan Token", 
+        symbol: "BAR",
+        contractAddress: "0x9F5377D4A915A3D62d13A15bB88D30bb8a2C4E40",
+        decimals: "0",
+        type: "Fan Token"
+      },
+      'juv': {
+        name: "Juventus Fan Token",
+        symbol: "JUV",
+        contractAddress: "0xF2f93d847266E2703a39Ef27391E1cD3FC19d50C", 
+        decimals: "2",
+        type: "Fan Token"
+      },
+      'acm': {
+        name: "AC Milan Fan Token",
+        symbol: "ACM",
+        contractAddress: "0xbEAb3b9AF7B4C7C6C3a2B73F1d8C5a69Ff6b4b4b",
+        decimals: "0", 
+        type: "Fan Token"
+      },
+      'asr': {
+        name: "AS Roma Fan Token",
+        symbol: "ASR",
+        contractAddress: "0xb8C77C860e8E9F6d29554fB0E86F54b5F749d4e3",
+        decimals: "2",
+        type: "Fan Token"
+      }
+    };
+
+    const tokenInfo = knownTokens[symbol.toLowerCase()];
+    if (tokenInfo) {
+      // Try to get live data from the API
+      const liveData = await this.getTokenInfo(tokenInfo.contractAddress);
+      if (liveData && liveData.status === "1") {
+        return { ...tokenInfo, ...liveData.result };
+      }
+      return tokenInfo;
+    }
+    
+    return null;
+  }
+
   // Get token information by contract address
   async getTokenInfo(contractAddress) {
     try {
-      if (!contractAddress || !contractAddress.startsWith('0x') || contractAddress.length !== 42) {
+      if (!contractAddress || (!contractAddress.startsWith('0x') && contractAddress !== "0x0000000000000000000000000000000000000000")) {
         return null;
       }
 
-      const endpoint = `?module=token&action=getToken&contractaddress=${contractAddress}`;
-      const result = await this.makeRequest(endpoint);
+      const result = await this.makeRequest(`?module=token&action=getToken&contractaddress=${contractAddress}`);
       
-      if (result && result.status === "1" && result.result) {
-        return result.result;
+      if (result && result.status === "1") {
+        return result;
       }
 
       return null;
@@ -91,15 +152,14 @@ class ChilizScanAPI {
     }
   }
 
-  // Get contract information
+  // Get contract information  
   async getContractInfo(contractAddress) {
     try {
       if (!contractAddress || !contractAddress.startsWith('0x') || contractAddress.length !== 42) {
         return null;
       }
 
-      const endpoint = `?module=contract&action=getabi&address=${contractAddress}`;
-      const result = await this.makeRequest(endpoint);
+      const result = await this.makeRequest(`?module=contract&action=getabi&address=${contractAddress}`);
       
       if (result && result.status === "1") {
         return result;
@@ -146,45 +206,50 @@ class ChilizScanAPI {
     }
   }
 
-  // Get popular tokens (fallback to known Chiliz tokens)
+  // Get popular tokens (known Chiliz ecosystem tokens)
   async getAllTokens(limit = 10) {
     try {
-      // Since the API might not have a direct token list endpoint,
-      // we'll provide known Chiliz ecosystem tokens
       const knownTokens = [
         {
           name: "Chiliz",
           symbol: "CHZ",
           contractAddress: "0x0000000000000000000000000000000000000000",
-          decimals: 18,
+          decimals: "18",
           type: "Native Token"
         },
         {
           name: "Paris Saint-Germain Fan Token",
-          symbol: "PSG",
+          symbol: "PSG", 
           contractAddress: "0x8Bb8e84A9b85F98f7d0cbAdFb26D3Aa84A503d3e",
-          decimals: 0,
+          decimals: "0",
           type: "Fan Token"
         },
         {
           name: "FC Barcelona Fan Token",
           symbol: "BAR",
-          contractAddress: "0x9F5377D4A915A3D62d13A15bB88D30bb8a2C4E40",
-          decimals: 0,
+          contractAddress: "0x9F5377D4A915A3D62d13A15bB88D30bb8a2C4E40", 
+          decimals: "0",
           type: "Fan Token"
         },
         {
           name: "Juventus Fan Token",
           symbol: "JUV",
           contractAddress: "0xF2f93d847266E2703a39Ef27391E1cD3FC19d50C",
-          decimals: 2,
+          decimals: "2",
           type: "Fan Token"
         },
         {
-          name: "AC Milan Fan Token",
+          name: "AC Milan Fan Token", 
           symbol: "ACM",
           contractAddress: "0xbEAb3b9AF7B4C7C6C3a2B73F1d8C5a69Ff6b4b4b",
-          decimals: 0,
+          decimals: "0",
+          type: "Fan Token"
+        },
+        {
+          name: "AS Roma Fan Token",
+          symbol: "ASR", 
+          contractAddress: "0xb8C77C860e8E9F6d29554fB0E86F54b5F749d4e3",
+          decimals: "2",
           type: "Fan Token"
         }
       ];
@@ -234,51 +299,45 @@ class ChilizScanAPI {
   // Format search results with better error handling
   formatSearchResults(results, query) {
     if (!results) {
-      // Map common token symbols to known information
-      const knownTokens = {
-        'asr': 'AS Roma Fan Token (ASR) - Check if this token exists on Chiliz or other networks',
-        'psg': 'Paris Saint-Germain Fan Token (PSG) - Available on Chiliz Chain',
-        'bar': 'FC Barcelona Fan Token (BAR) - Available on Chiliz Chain',
-        'juv': 'Juventus Fan Token (JUV) - Available on Chiliz Chain',
-        'acm': 'AC Milan Fan Token (ACM) - Available on Chiliz Chain',
-        'chz': 'Chiliz (CHZ) - Native token of Chiliz Chain',
-        'chilizinu': 'ChilizInu token - Please verify if this exists on Chiliz Chain',
-        'kayen': 'Kayen token - Please verify if this exists on Chiliz Chain'
-      };
-
+      // Enhanced response for token searches
       const queryLower = query.toLowerCase().replace('$', '');
-      const knownInfo = knownTokens[queryLower];
+      
+      return `## Token Search: "${query}"
 
-      if (knownInfo) {
-        return `## Token Search Result for "${query}"\n\n${knownInfo}\n\n**Note:** Due to API limitations, I couldn't fetch real-time data from ChilizScan. For the most accurate and up-to-date information, please:\n\n1. **Visit ChilizScan directly:** ${this.explorerURL}/tokens\n2. **Search manually** for the token name or symbol\n3. **Provide the contract address** if you have it for detailed analysis\n\n**Popular Chiliz tokens you can search for:**\n- $CHZ (Chiliz native token)\n- $PSG (Paris Saint-Germain)\n- $BAR (FC Barcelona)\n- $JUV (Juventus)\n- $ACM (AC Milan)`;
-      }
+I searched for this token on the Chiliz Chain but couldn't find specific information in the live API data.
 
-      return `I couldn't find any information for "${query}" on ChilizScan. This could mean:
+**For ${query.toUpperCase()}:**
+${queryLower === 'asr' ? '✅ **AS Roma Fan Token (ASR)** is a known fan token on Chiliz Chain' : ''}
+${queryLower === 'psg' ? '✅ **Paris Saint-Germain Fan Token (PSG)** is available on Chiliz Chain' : ''}
+${queryLower === 'bar' ? '✅ **FC Barcelona Fan Token (BAR)** is available on Chiliz Chain' : ''}
+${queryLower === 'juv' ? '✅ **Juventus Fan Token (JUV)** is available on Chiliz Chain' : ''}
+${queryLower === 'acm' ? '✅ **AC Milan Fan Token (ACM)** is available on Chiliz Chain' : ''}
+${queryLower === 'chz' ? '✅ **Chiliz (CHZ)** is the native token of Chiliz Chain' : ''}
 
-1. **API Connection Issues** - ChilizScan API might be temporarily unavailable
-2. **Token doesn't exist on Chiliz Chain** - The token might be on a different blockchain
-3. **Different name/symbol** - The token might use a different symbol or name
-4. **New/unlisted token** - Very new tokens might not be indexed yet
+**This could mean:**
+- API response limitations or temporary issues
+- Token exists but isn't fully indexed in the API
+- Token might be on a different network
 
-**What you can try:**
-- ✅ **Provide the contract address** if you have it (most reliable method)
-- ✅ **Check ChilizScan directly**: ${this.explorerURL}/tokens  
-- ✅ **Try popular fan tokens** like $PSG, $BAR, $JUV, $ACM
-- ✅ **Verify spelling** and try alternative names
+**Next steps:**
+1. **Manual verification**: Visit ${this.explorerURL}/tokens and search manually
+2. **Provide contract address**: If you have it, I can get detailed information
+3. **Check official sources**: Project website or social media for accurate details
 
 **Popular Chiliz tokens:**
-- $CHZ (Chiliz native token)
-- $PSG (Paris Saint-Germain Fan Token)
-- $BAR (FC Barcelona Fan Token)  
-- $JUV (Juventus Fan Token)
-- $ACM (AC Milan Fan Token)`;
+- $CHZ (Native token)
+- $PSG (Paris Saint-Germain) 
+- $BAR (FC Barcelona)
+- $JUV (Juventus)
+- $ACM (AC Milan)
+- $ASR (AS Roma)`;
     }
 
     if (results.type === 'address') {
       let formatted = `## Address Information: \`${results.address}\`\n\n`;
       
-      if (results.tokenInfo) {
-        formatted += this.formatTokenInfo(results.tokenInfo);
+      if (results.tokenInfo && results.tokenInfo.result) {
+        formatted += this.formatTokenInfo(results.tokenInfo.result);
       } else if (results.contractInfo) {
         formatted += "## Contract Information\n\n";
         formatted += `**Address:** \`${results.address}\`\n`;
