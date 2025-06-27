@@ -154,16 +154,11 @@ class ChilizScanAPI {
       // Check known popular tokens first
       const knownToken = this.getKnownTokenInfo(cleanQuery);
       if (knownToken) {
-        // Try to get live data if contract address exists
-        if (knownToken.contractAddress && knownToken.contractAddress !== "0x0000000000000000000000000000000000000000") {
-          const liveData = await this.getTokenInfo(knownToken.contractAddress);
-          if (liveData && liveData.status === "1") {
-            return [{ ...knownToken, ...liveData.result }];
-          }
-        }
+        console.log(`Found known token: ${knownToken.name} (${knownToken.symbol})`);
         return [knownToken];
       }
 
+      console.log(`No known token found for: ${cleanQuery}`);
       return null;
     } catch (error) {
       console.error("Token search failed:", error);
