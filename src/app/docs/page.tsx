@@ -1444,7 +1444,6 @@ const DocsPage = () => {
 
               <div className="bg-gradient-to-r from-chiliz-primary/20 to-chiliz-secondary/20 p-8 rounded-2xl border border-chiliz-primary/30 text-center">
                 <div className="flex items-center justify-center gap-2 mb-4">
-                  <Heart className="w-6 h-6 text-chiliz-primary" />
                   <span className="text-2xl font-bold text-white">Built with ❤️ by ch04niverse</span>
                 </div>
                 <p className="text-white/80 mb-4">
