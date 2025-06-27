@@ -904,7 +904,8 @@ Once connected, I'll be able to show you your CHZ balance on Chiliz Chain.`,
             <div className="group">
               <div className="flex items-start gap-2">
                 <div className="w-1.5 h-1.5 bg-purple-500 rounded-full mt-1.5 flexshrink-0"></div>
-                <div>
+```text
+<div>
                   <p className="text-xs text-white/90 font-medium">Natural Language</p>
                   <p className="text-xs text-white/60 leading-relaxed">Ask questions in plain English - C-TRACE understands context</p>
                 </div>
