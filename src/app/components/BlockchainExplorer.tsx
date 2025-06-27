@@ -564,7 +564,7 @@ export function BlockchainExplorer() {
           method: "eth_getBalance",
           params: [walletAddress, "latest"]
         });
-        
+
         // Convert hex balance to decimal and then to CHZ
         const balanceInWei = BigInt(balance);
         const balanceInCHZ = Number(balanceInWei) / Math.pow(10, 18);
@@ -844,7 +844,10 @@ export function BlockchainExplorer() {
               <form 
                 onSubmit={(e) => {
                   e.preventDefault();
-                  handleSendMessage(input);
+                  if (input.trim()) {
+                    handleSendMessage(input);
+                    setInput("");
+                  }
                 }} 
                 className="relative"
               >
@@ -858,7 +861,6 @@ export function BlockchainExplorer() {
                       ? "Continue your Chiliz exploration..."
                       : "Ask about Chiliz, fan tokens, or CHZ..."}
                   className="w-full border-0 bg-transparent px-4 md:px-6 py-3 md:py-4 pr-16 md:pr-20 focus:outline-none text-white placeholder:text-white/50 text-sm md:text-base min-h-[48px]"
-                  onKeyPress={(e) => e.key === "Enter" && handleSendMessage(input)}
                 />
                 <div className="absolute right-2 md:right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 md:gap-2">
                   {/* Lightning Quick Action Button with Dropdown */}
