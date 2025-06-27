@@ -554,9 +554,10 @@ export function BlockchainExplorer() {
             client={client}
             wallets={[
               createWallet("io.metamask"),
-              createWallet("com.coinbase.wallet"),
+              createWallet("com.coinbase.wallet"), 
               createWallet("me.rainbow"),
               createWallet("io.rabby"),
+              createWallet("com.socios"),
               inAppWallet({
                 auth: {
                   options: ["email", "google", "apple", "facebook", "phone"],

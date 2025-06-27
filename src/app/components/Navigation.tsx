@@ -45,10 +45,10 @@ export default function Navigation() {
     };
 
     checkLoadingScreen();
-    
+
     // Check periodically for loading screen
     const interval = setInterval(checkLoadingScreen, 100);
-    
+
     return () => clearInterval(interval);
   }, []);
 
@@ -123,6 +123,7 @@ export default function Navigation() {
                           createWallet("com.coinbase.wallet"),
                           createWallet("me.rainbow"),
                           createWallet("io.rabby"),
+                          createWallet("com.socios"),
                           inAppWallet({
                             auth: {
                               options: ["email", "google", "apple", "facebook", "phone"],
@@ -203,6 +204,7 @@ export default function Navigation() {
                           createWallet("com.coinbase.wallet"),
                           createWallet("me.rainbow"),
                           createWallet("io.rabby"),
+                          createWallet("com.socios"),
                           inAppWallet({
                             auth: {
                               options: ["email", "google", "apple", "facebook", "phone"],
