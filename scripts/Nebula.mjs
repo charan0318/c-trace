@@ -80,6 +80,22 @@ async function handleUserMessage(
   chainId,
   contractAddress
 ) {
+  // Check if this is a transaction hash analysis request
+  const txHashPattern = /(0x[a-fA-F0-9]{64})/;
+  const txHashMatch = userMessage.match(txHashPattern);
+  
+  if (txHashMatch && chainId === "88888") {
+    const txHash = txHashMatch[1];
+    console.log(`🔍 Detected transaction analysis request: ${txHash} on Chiliz Chain`);
+    
+    try {
+      const analysisResult = await analyzeTransaction(txHash);
+      return analysisResult;
+    } catch (error) {
+      console.error("Error in transaction analysis:", error);
+    }
+  }
+
   // Check if this is an address analysis request
   const addressPattern = /(?:analyze|history|transactions|activity).*?(0x[a-fA-F0-9]{40})|(?:0x[a-fA-F0-9]{40}).*?(?:analyze|history|transactions|activity)/i;
   const addressMatch = userMessage.match(addressPattern);
@@ -99,6 +115,22 @@ async function handleUserMessage(
         console.error("Error in address analysis:", error);
         // Fall through to regular Nebula query
       }
+    }
+  }
+
+  // Check if this is a token holder analysis request
+  const holderPattern = /(?:holders?|distribution).*?(0x[a-fA-F0-9]{40})|(?:0x[a-fA-F0-9]{40}).*?(?:holders?|distribution)/i;
+  const holderMatch = userMessage.match(holderPattern);
+  
+  if (holderMatch && chainId === "88888") {
+    const contractAddr = holderMatch[1] || holderMatch[2];
+    console.log(`🔍 Detected token holder analysis request: ${contractAddr} on Chiliz Chain`);
+    
+    try {
+      const analysisResult = await analyzeTokenHolders(contractAddr);
+      return analysisResult;
+    } catch (error) {
+      console.error("Error in token holder analysis:", error);
     }
   }
 
@@ -255,7 +287,13 @@ async function executeCommand(
 }
 
 // Import ChilizScan integration
-import { searchChilizScan, lookupToken, getPopularTokens, analyzeAddressHistory } from './ChilizScan.mjs';
+import { 
+  searchChilizScan, 
+  lookupToken, 
+  analyzeAddressHistory, 
+  analyzeTransaction, 
+  analyzeTokenHolders 
+} from './ChilizScan.mjs';
 
 export {
   createSession,
@@ -268,6 +306,7 @@ export {
   // Export ChilizScan functions
   searchChilizScan,
   lookupToken,
-  getPopularTokens,
   analyzeAddressHistory,
+  analyzeTransaction,
+  analyzeTokenHolders,
 };

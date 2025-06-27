@@ -9,71 +9,7 @@ class ChilizScanAPI {
     this.explorerURL = CHILIZ_SCAN_BASE;
   }
 
-  // Get transaction history for an address
-  async getTransactionHistory(address, page = 1, offset = 10) {
-    try {
-      if (!address || !address.startsWith('0x') || address.length !== 42) {
-        return null;
-      }
-
-      // Try multiple endpoints for transaction history
-      const endpoints = [
-        `?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=${page}&offset=${offset}&sort=desc`,
-        `?module=account&action=txlistinternal&address=${address}&startblock=0&endblock=99999999&page=${page}&offset=${offset}&sort=desc`,
-        `?module=account&action=tokentx&address=${address}&startblock=0&endblock=99999999&page=${page}&offset=${offset}&sort=desc`
-      ];
-
-      const results = {};
-      
-      for (let i = 0; i < endpoints.length; i++) {
-        const endpoint = endpoints[i];
-        const result = await this.makeRequest(endpoint);
-        
-        if (result && result.status === "1" && Array.isArray(result.result)) {
-          const type = i === 0 ? 'normal' : i === 1 ? 'internal' : 'token';
-          results[type] = result.result;
-        }
-      }
-
-      return Object.keys(results).length > 0 ? results : null;
-    } catch (error) {
-      console.error("Get transaction history failed:", error);
-      return null;
-    }
-  }
-
-  // Get account balance and basic info
-  async getAccountInfo(address) {
-    try {
-      if (!address || !address.startsWith('0x') || address.length !== 42) {
-        return null;
-      }
-
-      const endpoints = [
-        `?module=account&action=balance&address=${address}&tag=latest`,
-        `?module=account&action=tokenlist&address=${address}`,
-        `?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=1&sort=desc`
-      ];
-
-      const results = {};
-      
-      for (let i = 0; i < endpoints.length; i++) {
-        const endpoint = endpoints[i];
-        const result = await this.makeRequest(endpoint);
-        
-        if (result && result.status === "1") {
-          const type = i === 0 ? 'balance' : i === 1 ? 'tokens' : 'lastTx';
-          results[type] = result.result;
-        }
-      }
-
-      return Object.keys(results).length > 0 ? results : null;
-    } catch (error) {
-      console.error("Get account info failed:", error);
-      return null;
-    }
-  }
-
+  // Make API request with proper error handling
   async makeRequest(queryParams) {
     try {
       const url = `${this.baseURL}${queryParams}`;
@@ -92,12 +28,6 @@ class ChilizScanAPI {
 
       if (!response.ok) {
         console.warn(`ChilizScan API Error: ${response.status} ${response.statusText}`);
-        
-        // If main API fails, try alternative approach
-        if (response.status === 400 || response.status === 404) {
-          console.log("Trying alternative API approach...");
-          return this.tryAlternativeAPI(queryParams);
-        }
         return null;
       }
 
@@ -106,67 +36,202 @@ class ChilizScanAPI {
       return data;
     } catch (error) {
       console.error("ChilizScan API Request Failed:", error);
-      
-      // Try alternative approach on network errors
-      console.log("Trying alternative API approach due to network error...");
-      return this.tryAlternativeAPI(queryParams);
-    }
-  }
-
-  // Alternative API approach when main endpoints fail
-  async tryAlternativeAPI(queryParams) {
-    try {
-      // Parse the query to understand what we're looking for
-      const params = new URLSearchParams(queryParams.substring(1));
-      const module = params.get('module');
-      const action = params.get('action');
-      const address = params.get('address');
-      
-      // For now, return mock data structure to avoid complete failures
-      if (module === 'account' && action === 'txlist' && address) {
-        return {
-          status: "0",
-          message: "API limitations - providing alternative analysis",
-          result: []
-        };
-      }
-
-      return {
-        status: "0",
-        message: "API endpoint temporarily unavailable",
-        result: null
-      };
-    } catch (error) {
-      console.error("Alternative API approach failed:", error);
       return null;
     }
   }
 
-  // Search for tokens by name/symbol using the correct API
+  // Get transaction history for an address using proper API
+  async getTransactionHistory(address, page = 1, offset = 10) {
+    try {
+      if (!address || !address.startsWith('0x') || address.length !== 42) {
+        return null;
+      }
+
+      const results = {};
+      
+      // Get normal transactions
+      const normalTx = await this.makeRequest(`?module=account&action=txlist&address=${address}&page=${page}&offset=${offset}&sort=desc`);
+      if (normalTx && normalTx.status === "1") {
+        results.normal = normalTx.result;
+      }
+
+      // Get internal transactions
+      const internalTx = await this.makeRequest(`?module=account&action=txlistinternal&address=${address}&page=${page}&offset=${offset}&sort=desc`);
+      if (internalTx && internalTx.status === "1") {
+        results.internal = internalTx.result;
+      }
+
+      // Get token transfers
+      const tokenTx = await this.makeRequest(`?module=account&action=tokentx&address=${address}&page=${page}&offset=${offset}&sort=desc`);
+      if (tokenTx && tokenTx.status === "1") {
+        results.token = tokenTx.result;
+      }
+
+      return Object.keys(results).length > 0 ? results : null;
+    } catch (error) {
+      console.error("Get transaction history failed:", error);
+      return null;
+    }
+  }
+
+  // Get account balance and token list
+  async getAccountInfo(address) {
+    try {
+      if (!address || !address.startsWith('0x') || address.length !== 42) {
+        return null;
+      }
+
+      const results = {};
+      
+      // Get CHZ balance
+      const balance = await this.makeRequest(`?module=account&action=balance&address=${address}`);
+      if (balance && balance.status === "1") {
+        results.balance = balance.result;
+      }
+
+      // Get token list
+      const tokens = await this.makeRequest(`?module=account&action=tokenlist&address=${address}`);
+      if (tokens && tokens.status === "1") {
+        results.tokens = tokens.result;
+      }
+
+      return Object.keys(results).length > 0 ? results : null;
+    } catch (error) {
+      console.error("Get account info failed:", error);
+      return null;
+    }
+  }
+
+  // Get token information by contract address
+  async getTokenInfo(contractAddress) {
+    try {
+      if (!contractAddress || !contractAddress.startsWith('0x')) {
+        return null;
+      }
+
+      const result = await this.makeRequest(`?module=token&action=getToken&contractaddress=${contractAddress}`);
+      
+      if (result && result.status === "1") {
+        return result;
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Get token info failed:", error);
+      return null;
+    }
+  }
+
+  // Get token holders
+  async getTokenHolders(contractAddress, page = 1, offset = 10) {
+    try {
+      if (!contractAddress || !contractAddress.startsWith('0x')) {
+        return null;
+      }
+
+      const result = await this.makeRequest(`?module=token&action=getTokenHolders&contractaddress=${contractAddress}&page=${page}&offset=${offset}`);
+      
+      if (result && result.status === "1") {
+        return result.result;
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Get token holders failed:", error);
+      return null;
+    }
+  }
+
+  // Get contract ABI and source code
+  async getContractInfo(contractAddress) {
+    try {
+      if (!contractAddress || !contractAddress.startsWith('0x') || contractAddress.length !== 42) {
+        return null;
+      }
+
+      const results = {};
+
+      // Get ABI
+      const abi = await this.makeRequest(`?module=contract&action=getabi&address=${contractAddress}`);
+      if (abi && abi.status === "1") {
+        results.abi = abi.result;
+      }
+
+      // Get source code
+      const sourceCode = await this.makeRequest(`?module=contract&action=getsourcecode&address=${contractAddress}`);
+      if (sourceCode && sourceCode.status === "1") {
+        results.sourceCode = sourceCode.result;
+      }
+
+      return Object.keys(results).length > 0 ? results : null;
+    } catch (error) {
+      console.error("Get contract info failed:", error);
+      return null;
+    }
+  }
+
+  // Get transaction details
+  async getTransactionInfo(txHash) {
+    try {
+      if (!txHash || !txHash.startsWith('0x')) {
+        return null;
+      }
+
+      const result = await this.makeRequest(`?module=transaction&action=gettxinfo&txhash=${txHash}`);
+      
+      if (result && result.status === "1") {
+        return result.result;
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Get transaction info failed:", error);
+      return null;
+    }
+  }
+
+  // Get transaction receipt status
+  async getTransactionStatus(txHash) {
+    try {
+      if (!txHash || !txHash.startsWith('0x')) {
+        return null;
+      }
+
+      const results = {};
+
+      // Get receipt status
+      const receipt = await this.makeRequest(`?module=transaction&action=gettxreceiptstatus&txhash=${txHash}`);
+      if (receipt && receipt.status === "1") {
+        results.receipt = receipt.result;
+      }
+
+      // Get error status
+      const status = await this.makeRequest(`?module=transaction&action=getstatus&txhash=${txHash}`);
+      if (status && status.status === "1") {
+        results.status = status.result;
+      }
+
+      return Object.keys(results).length > 0 ? results : null;
+    } catch (error) {
+      console.error("Get transaction status failed:", error);
+      return null;
+    }
+  }
+
+  // Search for tokens by name/symbol using known tokens and API
   async searchTokens(query) {
     try {
       const cleanQuery = query.trim().toLowerCase().replace('$', '');
       
-      // First try to get token by symbol - this is the most reliable method
-      if (/^[a-zA-Z]+$/.test(cleanQuery)) {
-        // Search through token holders to find tokens (indirect method)
-        const tokenListResult = await this.makeRequest(`?module=account&action=tokenlist&address=0x0000000000000000000000000000000000000000`);
-        
-        if (tokenListResult && tokenListResult.status === "1" && Array.isArray(tokenListResult.result)) {
-          const matchingTokens = tokenListResult.result.filter(token => 
-            token.symbol && token.symbol.toLowerCase() === cleanQuery
-          );
-          
-          if (matchingTokens.length > 0) {
-            return matchingTokens;
-          }
+      // First check known popular tokens
+      const knownToken = this.getKnownTokenInfo(cleanQuery);
+      if (knownToken) {
+        // Try to get live data
+        const liveData = await this.getTokenInfo(knownToken.contractAddress);
+        if (liveData && liveData.status === "1") {
+          return [{ ...knownToken, ...liveData.result }];
         }
-      }
-
-      // If direct search fails, check known tokens
-      const knownTokens = await this.getKnownTokenInfo(cleanQuery);
-      if (knownTokens) {
-        return [knownTokens];
+        return [knownToken];
       }
 
       return null;
@@ -177,7 +242,7 @@ class ChilizScanAPI {
   }
 
   // Get known token information for popular Chiliz tokens
-  async getKnownTokenInfo(symbol) {
+  getKnownTokenInfo(symbol) {
     const knownTokens = {
       'chz': {
         name: "Chiliz",
@@ -223,60 +288,10 @@ class ChilizScanAPI {
       }
     };
 
-    const tokenInfo = knownTokens[symbol.toLowerCase()];
-    if (tokenInfo) {
-      // Try to get live data from the API
-      const liveData = await this.getTokenInfo(tokenInfo.contractAddress);
-      if (liveData && liveData.status === "1") {
-        return { ...tokenInfo, ...liveData.result };
-      }
-      return tokenInfo;
-    }
-    
-    return null;
+    return knownTokens[symbol.toLowerCase()] || null;
   }
 
-  // Get token information by contract address
-  async getTokenInfo(contractAddress) {
-    try {
-      if (!contractAddress || (!contractAddress.startsWith('0x') && contractAddress !== "0x0000000000000000000000000000000000000000")) {
-        return null;
-      }
-
-      const result = await this.makeRequest(`?module=token&action=getToken&contractaddress=${contractAddress}`);
-      
-      if (result && result.status === "1") {
-        return result;
-      }
-
-      return null;
-    } catch (error) {
-      console.error("Get token info failed:", error);
-      return null;
-    }
-  }
-
-  // Get contract information  
-  async getContractInfo(contractAddress) {
-    try {
-      if (!contractAddress || !contractAddress.startsWith('0x') || contractAddress.length !== 42) {
-        return null;
-      }
-
-      const result = await this.makeRequest(`?module=contract&action=getabi&address=${contractAddress}`);
-      
-      if (result && result.status === "1") {
-        return result;
-      }
-
-      return null;
-    } catch (error) {
-      console.error("Get contract info failed:", error);
-      return null;
-    }
-  }
-
-  // Search for any address or transaction
+  // General search function
   async generalSearch(query) {
     try {
       const cleanQuery = query.trim().toLowerCase();
@@ -291,6 +306,19 @@ class ChilizScanAPI {
           address: cleanQuery,
           contractInfo,
           tokenInfo
+        };
+      }
+
+      // Check if it's a transaction hash
+      if (cleanQuery.startsWith('0x') && cleanQuery.length === 66) {
+        const txInfo = await this.getTransactionInfo(cleanQuery);
+        const txStatus = await this.getTransactionStatus(cleanQuery);
+        
+        return {
+          type: 'transaction',
+          hash: cleanQuery,
+          txInfo,
+          txStatus
         };
       }
 
@@ -310,105 +338,14 @@ class ChilizScanAPI {
     }
   }
 
-  // Get popular tokens (known Chiliz ecosystem tokens)
-  async getAllTokens(limit = 10) {
-    try {
-      const knownTokens = [
-        {
-          name: "Chiliz",
-          symbol: "CHZ",
-          contractAddress: "0x0000000000000000000000000000000000000000",
-          decimals: "18",
-          type: "Native Token"
-        },
-        {
-          name: "Paris Saint-Germain Fan Token",
-          symbol: "PSG", 
-          contractAddress: "0x8Bb8e84A9b85F98f7d0cbAdFb26D3Aa84A503d3e",
-          decimals: "0",
-          type: "Fan Token"
-        },
-        {
-          name: "FC Barcelona Fan Token",
-          symbol: "BAR",
-          contractAddress: "0x9F5377D4A915A3D62d13A15bB88D30bb8a2C4E40", 
-          decimals: "0",
-          type: "Fan Token"
-        },
-        {
-          name: "Juventus Fan Token",
-          symbol: "JUV",
-          contractAddress: "0xF2f93d847266E2703a39Ef27391E1cD3FC19d50C",
-          decimals: "2",
-          type: "Fan Token"
-        },
-        {
-          name: "AC Milan Fan Token", 
-          symbol: "ACM",
-          contractAddress: "0xbEAb3b9AF7B4C7C6C3a2B73F1d8C5a69Ff6b4b4b",
-          decimals: "0",
-          type: "Fan Token"
-        },
-        {
-          name: "AS Roma Fan Token",
-          symbol: "ASR", 
-          contractAddress: "0xb8C77C860e8E9F6d29554fB0E86F54b5F749d4e3",
-          decimals: "2",
-          type: "Fan Token"
-        }
-      ];
-
-      return knownTokens.slice(0, limit);
-    } catch (error) {
-      console.error("Get all tokens failed:", error);
-      return null;
-    }
-  }
-
-  // Format token information for display
-  formatTokenInfo(tokenInfo) {
-    if (!tokenInfo) return "No token information found.";
-
-    let formatted = "## Token Information\n\n";
-    
-    if (tokenInfo.name) {
-      formatted += `**Name:** ${tokenInfo.name}\n`;
-    }
-    
-    if (tokenInfo.symbol) {
-      formatted += `**Symbol:** ${tokenInfo.symbol}\n`;
-    }
-    
-    if (tokenInfo.contractAddress) {
-      formatted += `**Contract Address:** \`${tokenInfo.contractAddress}\`\n`;
-    }
-    
-    if (tokenInfo.decimals) {
-      formatted += `**Decimals:** ${tokenInfo.decimals}\n`;
-    }
-    
-    if (tokenInfo.totalSupply || tokenInfo.total_supply) {
-      formatted += `**Total Supply:** ${tokenInfo.totalSupply || tokenInfo.total_supply}\n`;
-    }
-    
-    if (tokenInfo.type) {
-      formatted += `**Type:** ${tokenInfo.type}\n`;
-    }
-
-    formatted += `\n**ChilizScan Link:** ${this.explorerURL}/token/${tokenInfo.contractAddress || 'unknown'}`;
-    
-    return formatted;
-  }
-
-  // Format search results with better error handling
+  // Format search results
   formatSearchResults(results, query) {
     if (!results) {
-      // Enhanced response for token searches
       const queryLower = query.toLowerCase().replace('$', '');
       
       return `## Token Search: "${query}"
 
-I searched for this token on the Chiliz Chain but couldn't find specific information in the live API data.
+I searched ChilizScan API for this token but couldn't find it in the current data.
 
 **For ${query.toUpperCase()}:**
 ${queryLower === 'asr' ? '✅ **AS Roma Fan Token (ASR)** is a known fan token on Chiliz Chain' : ''}
@@ -419,14 +356,14 @@ ${queryLower === 'acm' ? '✅ **AC Milan Fan Token (ACM)** is available on Chili
 ${queryLower === 'chz' ? '✅ **Chiliz (CHZ)** is the native token of Chiliz Chain' : ''}
 
 **This could mean:**
-- API response limitations or temporary issues
-- Token exists but isn't fully indexed in the API
-- Token might be on a different network
+- Token exists but API data is limited
+- Token might be very new or unlisted
+- Alternative spelling or symbol needed
 
 **Next steps:**
-1. **Manual verification**: Visit ${this.explorerURL}/tokens and search manually
-2. **Provide contract address**: If you have it, I can get detailed information
-3. **Check official sources**: Project website or social media for accurate details
+1. **Manual verification**: Visit ${this.explorerURL}/tokens
+2. **Provide contract address**: For detailed token analysis
+3. **Check popular tokens**: Try searching for known fan tokens
 
 **Popular Chiliz tokens:**
 - $CHZ (Native token)
@@ -438,26 +375,64 @@ ${queryLower === 'chz' ? '✅ **Chiliz (CHZ)** is the native token of Chiliz Cha
     }
 
     if (results.type === 'address') {
-      let formatted = `## Address Information: \`${results.address}\`\n\n`;
+      let formatted = `## Address Analysis: \`${results.address}\`\n\n`;
       
       if (results.tokenInfo && results.tokenInfo.result) {
-        formatted += this.formatTokenInfo(results.tokenInfo.result);
-      } else if (results.contractInfo) {
-        formatted += "## Contract Information\n\n";
-        formatted += `**Address:** \`${results.address}\`\n`;
-        formatted += `**Type:** Smart Contract\n`;
-      } else {
-        formatted += "This appears to be a regular wallet address or an unverified contract.";
+        formatted += "### Token Information\n";
+        const token = results.tokenInfo.result;
+        if (token.name) formatted += `**Name:** ${token.name}\n`;
+        if (token.symbol) formatted += `**Symbol:** ${token.symbol}\n`;
+        if (token.decimals) formatted += `**Decimals:** ${token.decimals}\n`;
+        if (token.totalSupply) formatted += `**Total Supply:** ${token.totalSupply}\n`;
       }
       
-      formatted += `\n\n**ChilizScan Link:** ${this.explorerURL}/address/${results.address}`;
+      if (results.contractInfo) {
+        formatted += "\n### Contract Information\n";
+        if (results.contractInfo.abi) {
+          formatted += "**Status:** Verified Contract\n";
+          formatted += "**ABI:** Available\n";
+        }
+        if (results.contractInfo.sourceCode && results.contractInfo.sourceCode[0]) {
+          const source = results.contractInfo.sourceCode[0];
+          if (source.ContractName) formatted += `**Contract Name:** ${source.ContractName}\n`;
+          if (source.CompilerVersion) formatted += `**Compiler:** ${source.CompilerVersion}\n`;
+        }
+      }
+      
+      formatted += `\n**ChilizScan Link:** ${this.explorerURL}/address/${results.address}`;
+      return formatted;
+    }
+
+    if (results.type === 'transaction') {
+      let formatted = `## Transaction Details: \`${results.hash}\`\n\n`;
+      
+      if (results.txInfo) {
+        const tx = results.txInfo;
+        if (tx.blockNumber) formatted += `**Block:** ${tx.blockNumber}\n`;
+        if (tx.from) formatted += `**From:** \`${tx.from}\`\n`;
+        if (tx.to) formatted += `**To:** \`${tx.to}\`\n`;
+        if (tx.value) formatted += `**Value:** ${(parseInt(tx.value) / Math.pow(10, 18)).toFixed(4)} CHZ\n`;
+        if (tx.gasUsed) formatted += `**Gas Used:** ${tx.gasUsed}\n`;
+      }
+
+      if (results.txStatus) {
+        formatted += "\n### Transaction Status\n";
+        if (results.txStatus.receipt) {
+          formatted += `**Status:** ${results.txStatus.receipt.status === "1" ? "Success" : "Failed"}\n`;
+        }
+        if (results.txStatus.status && results.txStatus.status.errDescription) {
+          formatted += `**Error:** ${results.txStatus.status.errDescription}\n`;
+        }
+      }
+
+      formatted += `\n**ChilizScan Link:** ${this.explorerURL}/tx/${results.hash}`;
       return formatted;
     }
 
     if (results.type === 'tokens' && results.results.length > 0) {
       let formatted = `## Found ${results.results.length} token(s) matching "${query}":\n\n`;
       
-      results.results.slice(0, 5).forEach((token, index) => {
+      results.results.forEach((token, index) => {
         formatted += `### ${index + 1}. ${token.name || 'Unknown'} (${token.symbol || 'N/A'})\n`;
         if (token.contractAddress) {
           formatted += `**Contract:** \`${token.contractAddress}\`\n`;
@@ -471,10 +446,6 @@ ${queryLower === 'chz' ? '✅ **Chiliz (CHZ)** is the native token of Chiliz Cha
         formatted += `**ChilizScan:** ${this.explorerURL}/token/${token.contractAddress || ''}\n\n`;
       });
 
-      if (results.results.length > 5) {
-        formatted += `... and ${results.results.length - 5} more results.\n`;
-      }
-
       return formatted;
     }
 
@@ -485,7 +456,7 @@ ${queryLower === 'chz' ? '✅ **Chiliz (CHZ)** is the native token of Chiliz Cha
 // Export the API instance
 export const chilizScanAPI = new ChilizScanAPI();
 
-// Main search function that integrates with the chat system
+// Main search function
 export async function searchChilizScan(query) {
   console.log("Searching ChilizScan for:", query);
   
@@ -493,7 +464,7 @@ export async function searchChilizScan(query) {
   return chilizScanAPI.formatSearchResults(results, query);
 }
 
-// Specific token lookup function
+// Token lookup function
 export async function lookupToken(tokenNameOrSymbol) {
   console.log("Looking up token:", tokenNameOrSymbol);
   
@@ -501,31 +472,7 @@ export async function lookupToken(tokenNameOrSymbol) {
   return chilizScanAPI.formatSearchResults({ type: 'tokens', results }, tokenNameOrSymbol);
 }
 
-// Get popular tokens
-export async function getPopularTokens() {
-  console.log("Fetching popular Chiliz tokens...");
-  
-  const tokens = await chilizScanAPI.getAllTokens(10);
-  if (!tokens) {
-    return "Unable to fetch popular tokens from ChilizScan at the moment.";
-  }
-
-  let formatted = "## Popular Chiliz Tokens\n\n";
-  tokens.forEach((token, index) => {
-    formatted += `### ${index + 1}. ${token.name || 'Unknown'} (${token.symbol || 'N/A'})\n`;
-    if (token.contractAddress && token.contractAddress !== "0x0000000000000000000000000000000000000000") {
-      formatted += `**Contract:** \`${token.contractAddress}\`\n`;
-    }
-    if (token.type) {
-      formatted += `**Type:** ${token.type}\n`;
-    }
-    formatted += `**ChilizScan:** ${chilizScanAPI.explorerURL}/token/${token.contractAddress || ''}\n\n`;
-  });
-
-  return formatted;
-}
-
-// Analyze address transaction history
+// Analyze address with comprehensive data
 export async function analyzeAddressHistory(address) {
   console.log("Analyzing address history for:", address);
   
@@ -534,101 +481,82 @@ export async function analyzeAddressHistory(address) {
   }
 
   try {
-    // Get account info first
+    // Get comprehensive address data
     const accountInfo = await chilizScanAPI.getAccountInfo(address);
-    
-    // Get transaction history
     const txHistory = await chilizScanAPI.getTransactionHistory(address, 1, 20);
+    const contractInfo = await chilizScanAPI.getContractInfo(address);
     
-    let analysis = `## Address Analysis: \`${address}\`\n\n`;
+    let analysis = `## Comprehensive Address Analysis: \`${address}\`\n\n`;
     
     // Account overview
     analysis += "### Account Overview\n";
-    if (accountInfo) {
-      if (accountInfo.balance) {
-        const balanceInCHZ = (parseInt(accountInfo.balance) / Math.pow(10, 18)).toFixed(4);
-        analysis += `**CHZ Balance:** ${balanceInCHZ} CHZ\n`;
-      }
-      
-      if (accountInfo.tokens && Array.isArray(accountInfo.tokens)) {
-        analysis += `**Token Holdings:** ${accountInfo.tokens.length} different tokens\n`;
-      }
-      
-      if (accountInfo.lastTx && Array.isArray(accountInfo.lastTx) && accountInfo.lastTx.length > 0) {
-        const lastTx = accountInfo.lastTx[0];
-        analysis += `**Last Transaction:** Block ${lastTx.blockNumber}\n`;
-      }
-    } else {
-      analysis += "**Status:** Unable to fetch account data from API\n";
+    if (accountInfo && accountInfo.balance) {
+      const balanceInCHZ = (parseInt(accountInfo.balance) / Math.pow(10, 18)).toFixed(4);
+      analysis += `**CHZ Balance:** ${balanceInCHZ} CHZ\n`;
     }
     
-    analysis += `**ChilizScan Link:** ${chilizScanAPI.explorerURL}/address/${address}\n\n`;
+    if (accountInfo && accountInfo.tokens && Array.isArray(accountInfo.tokens)) {
+      analysis += `**Token Holdings:** ${accountInfo.tokens.length} different tokens\n`;
+      if (accountInfo.tokens.length > 0) {
+        analysis += "**Top Tokens:**\n";
+        accountInfo.tokens.slice(0, 5).forEach((token, i) => {
+          analysis += `  ${i + 1}. ${token.name || 'Unknown'} (${token.symbol || 'N/A'})\n`;
+        });
+      }
+    }
+    
+    // Contract analysis if applicable
+    if (contractInfo) {
+      analysis += "\n### Contract Analysis\n";
+      analysis += "**Type:** Smart Contract\n";
+      if (contractInfo.abi) {
+        analysis += "**Status:** Verified\n";
+      }
+      if (contractInfo.sourceCode && contractInfo.sourceCode[0]) {
+        const source = contractInfo.sourceCode[0];
+        if (source.ContractName) analysis += `**Name:** ${source.ContractName}\n`;
+        if (source.CompilerVersion) analysis += `**Compiler:** ${source.CompilerVersion}\n`;
+      }
+    }
     
     // Transaction analysis
-    analysis += "### Transaction History Analysis\n\n";
-    
-    if (txHistory && (txHistory.normal || txHistory.internal || txHistory.token)) {
+    analysis += "\n### Transaction History\n";
+    if (txHistory) {
       let totalTxs = 0;
       
       if (txHistory.normal && txHistory.normal.length > 0) {
         totalTxs += txHistory.normal.length;
-        analysis += `**Normal Transactions:** ${txHistory.normal.length} found\n`;
+        analysis += `**Normal Transactions:** ${txHistory.normal.length}\n`;
       }
       
       if (txHistory.internal && txHistory.internal.length > 0) {
         totalTxs += txHistory.internal.length;
-        analysis += `**Internal Transactions:** ${txHistory.internal.length} found\n`;
+        analysis += `**Internal Transactions:** ${txHistory.internal.length}\n`;
       }
       
       if (txHistory.token && txHistory.token.length > 0) {
         totalTxs += txHistory.token.length;
-        analysis += `**Token Transfers:** ${txHistory.token.length} found\n`;
+        analysis += `**Token Transfers:** ${txHistory.token.length}\n`;
       }
       
       if (totalTxs > 0) {
-        analysis += `\n**Total Activity:** ${totalTxs} transactions analyzed\n`;
+        analysis += `\n**Total Activity:** ${totalTxs} transactions\n`;
         
-        // Analyze recent activity
+        // Recent activity
         if (txHistory.normal && txHistory.normal.length > 0) {
-          const recentTx = txHistory.normal.slice(0, 5);
-          analysis += "\n### Recent Normal Transactions:\n";
-          recentTx.forEach((tx, i) => {
+          analysis += "\n#### Recent Normal Transactions:\n";
+          txHistory.normal.slice(0, 3).forEach((tx, i) => {
             const value = (parseInt(tx.value || '0') / Math.pow(10, 18)).toFixed(4);
-            analysis += `${i + 1}. **Hash:** \`${tx.hash}\` - **Value:** ${value} CHZ\n`;
+            analysis += `${i + 1}. **Block ${tx.blockNumber}** - ${value} CHZ to \`${tx.to}\`\n`;
           });
         }
       }
     } else {
-      analysis += `⚠️ **Limited API Access**: ChilizScan API returned limited data for this address.
-
-**Alternative Analysis Options:**
-
-1. **Manual ChilizScan Review:**
-   - Visit: ${chilizScanAPI.explorerURL}/address/${address}
-   - Review transaction history directly on the explorer
-   - Check token balances and NFT holdings
-
-2. **Address Activity Patterns:**
-   - Check for recent transactions manually
-   - Look for smart contract interactions
-   - Identify token transfers and swaps
-
-3. **Workarounds for Analysis:**
-   - Use the address in contract interaction queries
-   - Check specific token balances if you have contract addresses
-   - Monitor the address for future activity
-
-**Why this happens:**
-- Chiliz Chain API may have rate limits or access restrictions
-- Some addresses might not have recent activity
-- API endpoints might be temporarily limited
-
-**Next Steps:**
-- Try searching for specific token contracts this address might have interacted with
-- Use contract analysis features for any smart contracts this address deployed`;
+      analysis += "**Status:** No recent transaction data available from API\n";
     }
     
-    analysis += `\n\n**💡 Tip:** For deeper analysis, try asking about specific contracts or tokens this address might have interacted with.`;
+    analysis += `\n**ChilizScan Link:** ${chilizScanAPI.explorerURL}/address/${address}\n`;
+    analysis += `\n**💡 Tip:** This analysis used the official ChilizScan API for comprehensive data.`;
     
     return analysis;
     
@@ -636,21 +564,70 @@ export async function analyzeAddressHistory(address) {
     console.error("Address analysis error:", error);
     return `## Address Analysis Error
 
-I encountered difficulties analyzing the address \`${address}\` on Chiliz Chain.
+Error analyzing address \`${address}\` using ChilizScan API.
 
 **What you can do:**
+1. **Manual Review**: Visit ${chilizScanAPI.explorerURL}/address/${address}
+2. **Try Again**: API might be temporarily unavailable
+3. **Alternative Analysis**: Try searching for specific tokens or contracts
 
-1. **Manual Review**: Visit ${chilizScanAPI.explorerURL}/address/${address} directly
-2. **Contract Analysis**: If this is a contract address, try the contract analysis feature
-3. **Token Search**: Search for specific tokens this address might hold
-4. **Try Again**: API issues may be temporary
+The ChilizScan API provides comprehensive blockchain data when available.`;
+  }
+}
 
-**Common Reasons for Analysis Limitations:**
-- API rate limiting or access restrictions
-- Address has no recent activity
-- Network connectivity issues
-- Chiliz Chain API maintenance
+// Get transaction details
+export async function analyzeTransaction(txHash) {
+  console.log("Analyzing transaction:", txHash);
+  
+  if (!txHash || !txHash.startsWith('0x') || txHash.length !== 66) {
+    return "Invalid transaction hash format. Please provide a valid transaction hash (0x followed by 64 characters).";
+  }
 
-Would you like me to help you with a different type of analysis or search for specific contracts/tokens instead?`;
+  try {
+    const results = await chilizScanAPI.generalSearch(txHash);
+    return chilizScanAPI.formatSearchResults(results, txHash);
+  } catch (error) {
+    console.error("Transaction analysis error:", error);
+    return `Error analyzing transaction ${txHash}. Please try again or check the hash manually on ChilizScan.`;
+  }
+}
+
+// Get token holders analysis
+export async function analyzeTokenHolders(contractAddress) {
+  console.log("Analyzing token holders for:", contractAddress);
+  
+  try {
+    const tokenInfo = await chilizScanAPI.getTokenInfo(contractAddress);
+    const holders = await chilizScanAPI.getTokenHolders(contractAddress, 1, 50);
+    
+    let analysis = `## Token Holder Analysis: \`${contractAddress}\`\n\n`;
+    
+    if (tokenInfo && tokenInfo.result) {
+      const token = tokenInfo.result;
+      analysis += "### Token Information\n";
+      if (token.name) analysis += `**Name:** ${token.name}\n`;
+      if (token.symbol) analysis += `**Symbol:** ${token.symbol}\n`;
+      if (token.totalSupply) analysis += `**Total Supply:** ${token.totalSupply}\n`;
+    }
+    
+    if (holders && holders.length > 0) {
+      analysis += `\n### Holder Distribution\n`;
+      analysis += `**Total Holders Analyzed:** ${holders.length}\n\n`;
+      
+      analysis += "#### Top Holders:\n";
+      holders.slice(0, 10).forEach((holder, i) => {
+        const percentage = holder.percentage || 'N/A';
+        analysis += `${i + 1}. \`${holder.address}\` - ${holder.value || 'N/A'} tokens (${percentage}%)\n`;
+      });
+    } else {
+      analysis += "\n**Status:** Unable to retrieve holder data from API\n";
+    }
+    
+    analysis += `\n**ChilizScan Link:** ${chilizScanAPI.explorerURL}/token/${contractAddress}`;
+    
+    return analysis;
+  } catch (error) {
+    console.error("Token holder analysis error:", error);
+    return `Error analyzing token holders for ${contractAddress}. Please try again.`;
   }
 }
