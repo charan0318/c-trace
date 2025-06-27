@@ -140,14 +140,14 @@ class ChilizScanAPI {
       if (comparisonMatch) {
         const token1 = comparisonMatch[1].toLowerCase();
         const token2 = comparisonMatch[2].toLowerCase();
-        
+
         const token1Info = this.getKnownTokenInfo(token1);
         const token2Info = this.getKnownTokenInfo(token2);
-        
+
         const results = [];
         if (token1Info) results.push(token1Info);
         if (token2Info) results.push(token2Info);
-        
+
         return results.length > 0 ? results : null;
       }
 
@@ -279,9 +279,7 @@ class ChilizScanAPI {
     if (!results) {
       const queryLower = query.toLowerCase().replace('$', '');
 
-      return `## Token Search: "${query}"
-
-I searched for this token but couldn't find detailed API data. However, here's what I know:
+      return `I searched ChilizScan for "${query}" but couldn't find detailed API data. However, here's what I know:
 
 **For ${query.toUpperCase()}:**
 ${queryLower === 'asr' ? '✅ **AS Roma Fan Token (ASR)** is available on Chiliz Chain\n📍 **Contract:** 0xb8C77C860e8E9F6d29554fB0E86F54b5F749d4e3' : ''}
@@ -349,10 +347,10 @@ ${queryLower === 'chz' ? '✅ **Chiliz (CHZ)** is the native token of Chiliz Cha
     if (results.type === 'tokens' && results.results.length > 0) {
       // Check if this is a comparison query
       const isComparison = query.toLowerCase().includes('compare') && results.results.length > 1;
-      
+
       if (isComparison) {
         let formatted = `## Token Comparison: ${results.results.map(t => t.symbol).join(' vs ')}\n\n`;
-        
+
         results.results.forEach((token, index) => {
           formatted += `### ${index + 1}. ${token.name || 'Unknown'} (${token.symbol || 'N/A'})\n`;
           if (token.contractAddress) {
@@ -369,7 +367,7 @@ ${queryLower === 'chz' ? '✅ **Chiliz (CHZ)** is the native token of Chiliz Cha
           }
           formatted += `**ChilizScan:** ${this.explorerURL}/token/${token.contractAddress || ''}\n\n`;
         });
-        
+
         // Add comparison summary
         formatted += `### 📊 Quick Comparison\n`;
         formatted += `| Token | Contract | Supply | Type |\n`;
@@ -377,7 +375,7 @@ ${queryLower === 'chz' ? '✅ **Chiliz (CHZ)** is the native token of Chiliz Cha
         results.results.forEach(token => {
           formatted += `| ${token.symbol} | \`${token.contractAddress?.slice(0,10)}...\` | ${token.totalSupply} | ${token.type} |\n`;
         });
-        
+
         return formatted;
       } else {
         let formatted = `## Found ${results.results.length} token(s) matching "${query}":\n\n`;
@@ -403,7 +401,7 @@ ${queryLower === 'chz' ? '✅ **Chiliz (CHZ)** is the native token of Chiliz Cha
       }
     }
 
-    return `No results found for "${query}" on ChilizScan.`;
+    return `I searched ChilizScan for "${query}" on Chiliz Chain.`;
   }
 }
 
