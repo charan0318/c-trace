@@ -82,13 +82,11 @@ export default function Navigation() {
                   <span className="text-lg md:text-xl font-black tracking-tight bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
                     C-TRACE
                   </span>
-                  <span className="absolute -top-1 -right-2 px-1 py-0.5 text-[7px] md:text-[8px] font-bold text-white rounded uppercase tracking-wider">
+                  <span className="absolute -top-3 -right-4 px-1 py-0.5 text-[7px] md:text-[8px] font-bold text-chiliz-primary rounded uppercase tracking-wider">
                     BETA
                   </span>
                 </div>
-                <span className="text-xs font-medium text-chiliz-primary/80 tracking-wider uppercase hidden sm:block">
-                  AI Explorer
-                </span>
+               
               </div>
             </Link>
 
