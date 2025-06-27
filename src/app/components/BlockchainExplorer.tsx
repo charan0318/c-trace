@@ -526,13 +526,26 @@ export function BlockchainExplorer() {
         const transactionData = JSON.parse(action.data);
         console.log("Transaction data:", transactionData);
 
-        // Prepare the transaction
+        // Ensure we have a valid value - convert to BigInt properly
+        let txValue = BigInt(0);
+        if (transactionData.value) {
+          // Handle both hex and decimal values
+          if (typeof transactionData.value === 'string' && transactionData.value.startsWith('0x')) {
+            txValue = BigInt(transactionData.value);
+          } else {
+            txValue = BigInt(transactionData.value);
+          }
+        }
+
+        // Prepare the transaction with correct parameters
         const preparedTransaction = prepareTransaction({
           to: transactionData.to,
-          value: BigInt(transactionData.value || 0),
-          data: transactionData.data,
+          value: txValue,
+          data: transactionData.data || "0x",
           chain: chilizChain,
           client,
+          gas: transactionData.gas ? BigInt(transactionData.gas) : undefined,
+          gasPrice: transactionData.gasPrice ? BigInt(transactionData.gasPrice) : undefined,
         });
 
         console.log("Prepared transaction:", preparedTransaction);
@@ -542,15 +555,20 @@ export function BlockchainExplorer() {
           ...prev.slice(0, -1), // Remove the preparing message
           {
             role: "system",
-            content: "💰 **Transaction Ready!** Please approve the transaction in your wallet to continue.",
+            content: "💰 **Transaction Ready!** 🚨 **WALLET POPUP SHOULD APPEAR NOW** - Please check your wallet extension and approve the transaction.",
           },
         ]);
 
         // Send transaction with proper wallet approval
         try {
           console.log("📤 Sending transaction to wallet for approval...");
+          console.log("📱 Transaction details:", {
+            to: transactionData.to,
+            value: txValue.toString(),
+            chain: "Chiliz Chain (88888)"
+          });
           
-          // This will trigger the wallet popup for user approval
+          // Force wallet interaction - this MUST trigger popup
           const receipt = await sendAndConfirmTransaction({
             transaction: preparedTransaction,
             account,
@@ -566,18 +584,19 @@ export function BlockchainExplorer() {
 
 **Transaction Hash:** \`${receipt.transactionHash}\`
 **Status:** Confirmed
-**Network:** Chiliz Chain
+**Network:** Chiliz Chain (ID: 88888)
+**Gas Used:** ${receipt.gasUsed || 'N/A'}
 
 🔗 **View on ChilizScan:** [${receipt.transactionHash}](https://scan.chiliz.com/tx/${receipt.transactionHash})
 
-Your transaction has been successfully executed and confirmed on the blockchain.`,
+Your CHZ transfer has been successfully executed and confirmed on the blockchain! 🎉`,
             },
           ]);
         } catch (txError) {
           console.error("❌ Transaction execution failed:", txError);
           
-          // Handle specific error types
-          if (txError.message?.includes('User rejected')) {
+          // Handle specific error types with better messaging
+          if (txError.message?.includes('User rejected') || txError.message?.includes('user rejected')) {
             setMessages((prev) => [
               ...prev.slice(0, -1),
               {
@@ -587,11 +606,12 @@ Your transaction has been successfully executed and confirmed on the blockchain.
 You cancelled the transaction in your wallet. This is normal if you decided not to proceed.
 
 **To try again:**
-- Use the same command again
-- Make sure you approve the transaction in your wallet popup`,
+- Use the same execute command again
+- Make sure you approve the transaction when the wallet popup appears
+- Check that your wallet is unlocked`,
               },
             ]);
-          } else if (txError.message?.includes('insufficient funds')) {
+          } else if (txError.message?.includes('insufficient funds') || txError.message?.includes('insufficient balance')) {
             setMessages((prev) => [
               ...prev.slice(0, -1),
               {
@@ -602,8 +622,10 @@ You don't have enough CHZ to complete this transaction.
 
 **Solutions:**
 1. Check your balance: "what is my balance"
-2. Reduce the transaction amount
-3. Make sure you have CHZ for gas fees (~0.001 CHZ)`,
+2. Reduce the transaction amount (you tried to send 10 CHZ)
+3. Make sure you have extra CHZ for gas fees (~0.001-0.01 CHZ)
+
+**Current transaction:** 10 CHZ to \`0x67f6d0F49F43a48D5f5A75205AF95c72b5186d9f\``,
               },
             ]);
           } else {
@@ -615,19 +637,17 @@ You don't have enough CHZ to complete this transaction.
 
 **Error:** ${txError.message || 'Transaction execution failed'}
 
-**Common Issues:**
-- User rejected the transaction in wallet
-- Insufficient balance for transaction + gas fees
-- Invalid recipient address
-- Network connectivity issues
-- Wrong network (ensure you're on Chiliz Chain ID: 88888)
+**Troubleshooting Steps:**
+1. **Check Network:** Ensure you're on Chiliz Chain (ID: 88888)
+2. **Check Balance:** "what is my balance" 
+3. **Wallet Connection:** Make sure your wallet is connected and unlocked
+4. **Popup Blockers:** Disable popup blockers for this site
+5. **Browser Extensions:** Try disabling other wallet extensions temporarily
 
-**Solutions:**
-1. Check your wallet balance: "what is my balance"
-2. Ensure you're connected to Chiliz Chain (ID: 88888)
-3. Try reducing the transaction amount
-4. Check recipient address is valid
-5. Make sure your wallet is unlocked`,
+**If wallet popup didn't appear:**
+- Click the wallet extension icon manually
+- Refresh the page and try again
+- Switch to a different browser or incognito mode`,
               },
             ]);
           }
@@ -639,17 +659,17 @@ You don't have enough CHZ to complete this transaction.
             role: "system",
             content: `## ❌ Transaction Preparation Failed
 
-No valid transaction data received from the command.
+No valid transaction data received from the Nebula API.
 
 **Debug Info:**
-- Response: ${JSON.stringify(executeResponse, null, 2)}
+- Execute Response: ${JSON.stringify(executeResponse, null, 2)}
 
 **Possible Issues:**
 - Invalid command format
-- Unsupported transaction type
+- Nebula API didn't parse the transaction correctly
 - Missing required parameters
 
-Please check your command format and try again. Example: "execute transfer 0.1 CHZ to 0x..."`,
+**Try this exact format:** "execute transfer 10 CHZ to 0x67f6d0F49F43a48D5f5A75205AF95c72b5186d9f"`,
           },
         ]);
       }
@@ -665,19 +685,19 @@ Please check your command format and try again. Example: "execute transfer 0.1 C
 
 **Error:** ${error.message || 'Unknown error occurred'}
 
-**Error Type:** ${error.name || 'Unknown'}
+**Detailed Error Info:**
+- **Type:** ${error.name || 'Unknown'}
+- **Code:** ${error.code || 'N/A'}
 
-**Common Issues:**
-- Wallet connection lost
-- Network connectivity problems
-- Invalid transaction parameters
-- Insufficient permissions
+**Most Common Solutions:**
+1. **Reconnect Wallet:** Disconnect and reconnect your wallet
+2. **Network Check:** Ensure you're on Chiliz Chain (ID: 88888)
+3. **Fresh Start:** Refresh the page and try again
+4. **Wallet Issues:** Try a different wallet or browser
 
-**Solutions:**
-1. Reconnect your wallet
-2. Refresh the page and try again
-3. Check your internet connection
-4. Ensure you're on Chiliz Chain (ID: 88888)`,
+**For MetaMask users:**
+- Check if you have the Chiliz Chain network added
+- Make sure you're not connected to a testnet`,
         },
       ]);
       setIsTyping(false);
@@ -1156,11 +1176,12 @@ Once connected, I'll be able to show you your CHZ balance on Chiliz Chain.`,
                     <Send className="h-4 w-4 md:h-5 md:w-5 text-white" />
                   </button>
 
-                  {input.includes("execute") && walletAddress && (
+                  {(input.toLowerCase().includes("execute") || input.toLowerCase().includes("transfer")) && walletAddress && (
                     <button
                       type="button"
                       onClick={handleExecute}
                       className="h-8 w-8 md:h-10 md:w-10 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-emerald-600 hover:to-green-600 text-white rounded-xl flex items-center justify-center transition-all duration-200 shadow-lg hover:shadow-xl min-h-[44px] min-w-[44px]"
+                      title="Execute Transaction"
                     >
                       <Terminal className="h-4 w-4 md:h-5 md:w-5" />
                     </button>
