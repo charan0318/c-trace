@@ -415,10 +415,10 @@ export default function Hero() {
                       </div>
                       <button
                         onClick={() => {
+                          // Navigate to explorer with the prompt pre-filled in the input
                           const searchParams = new URLSearchParams({
                             chainId: '88888',
-                            query: item.prompt,
-                            searchType: 'general'
+                            prefill: item.prompt
                           });
                           router.push(`/explorer?${searchParams.toString()}`);
                         }}

@@ -353,88 +353,48 @@ export function BlockchainExplorer() {
   ];
 
   useEffect(() => {
-    const initSession = async () => {
-      try {
-        console.log("🔄 Initializing session...");
-        console.log("📋 URL Parameters:", { contractAddress, chainId, hasContractToExplore, textQuery });
+    if (searchParams) {
+      const chainId = searchParams.get('chainId');
+      const query = searchParams.get('query');
+      const searchTerm = searchParams.get('searchTerm');
+      const searchType = searchParams.get('searchType');
+      const symbol = searchParams.get('symbol');
+      const prefill = searchParams.get('prefill');
 
-        const newSessionId = await createSession("Blockchain Explorer Session");
-        console.log("✅ Session created:", newSessionId);
-        setSessionId(newSessionId);
+      console.log('🔍 URL params:', { chainId, query, searchTerm, searchType, symbol, prefill });
 
-        if (hasContractToExplore) {
-          console.log("🔍 Contract to explore:", contractAddress, "on chain:", chainId);
-          setIsTyping(true);
-          const contractDetails = await queryContract(
-            contractAddress!,
-            chainId!,
-            newSessionId
-          );
-          console.log("📄 Contract details received");
-          setMessages([
-            { role: "system", content: "Welcome to the C-TRACE Blockchain Explorer." },
-            {
-              role: "system",
-              content: contractDetails || "No details available for this contract.",
-            },
-          ]);
-          setIsTyping(false);
-        } else if (hasTextQuery) {
-          console.log("🔍 Text query to process:", textQuery, "on chain:", chainId);
-
-          // Get search parameters to understand the type of search
-          const searchType = searchParams.get("searchType");
-          const symbol = searchParams.get("symbol");
-
-          setIsTyping(true);
-
-          // Enhance the query based on search type
-          let enhancedQuery = textQuery!;
-          if (searchType === "token") {
-            enhancedQuery = `I need you to search for the token "${symbol || textQuery}" on Chiliz Chain. Please provide: 1) The exact contract address 2) Token symbol 3) Total supply 4) Number of decimals 5) Current holder count 6) If it exists on Chiliz scan.chiliz.com. If you cannot find it on Chiliz, please indicate that clearly and suggest checking other networks or verify the token name spelling.`;
-          } else if (textQuery!.toLowerCase().includes('contract address') || textQuery!.toLowerCase().includes('chilizinu') || textQuery!.toLowerCase().includes('kayen')) {
-            enhancedQuery = `Search for specific token information: "${textQuery}". I need the exact contract address and token details. Please check the Chiliz blockchain explorer and provide comprehensive information about this token including its contract address, symbol, supply, and verification status.`;
-          }
-
-          const queryResponse = await handleUserMessage(
-            enhancedQuery,
-            newSessionId,
-            chainId!,
-            ""
-          );
-          console.log("📄 Query response received");
-          setMessages([
-            { role: "system", content: "Welcome to the C-TRACE Blockchain Explorer." },
-            { role: "user", content: textQuery! },
-            {
-              role: "system",
-              content: queryResponse || "No information available for this query.",
-            },
-          ]);
-          setIsTyping(false);
-        } else {
-          console.log("💬 Loading default welcome message");
-          setMessages([
-            {
-              role: "system",
-              content: "Welcome to C-TRACE 🚀 I'm your AI assistant for exploring the Chiliz blockchain and ecosystem. I can help you find contract addresses, analyze tokens, and explore the Chiliz ecosystem. What would you like to discover?",
-            },
-          ]);
-        }
-      } catch (error) {
-        console.error("❌ Error in session initialization:", error);
-        setMessages([
-          {
-            role: "system",
-            content: "Welcome to C-TRACE 🚀 I'm ready to help you explore Chiliz blockchain and fan token data. What would you like to discover?",
-          },
-        ]);
-        setIsTyping(false);
+      if (chainId) {
+        setSelectedChain(chainId);
       }
-    };
 
-    initSession();
-  }, [contractAddress, chainId, hasContractToExplore, textQuery, hasTextQuery, searchParams]);
+      // Handle prefill parameter - just populate input without sending
+      if (prefill) {
+        console.log('📝 Prefilling input:', prefill);
+        setInput(prefill);
+        return; // Don't process other parameters if prefill is present
+      }
+
+      // Handle different types of searches
+      if (searchTerm) {
+        console.log('📝 Processing searchTerm:', searchTerm);
+        setContractToExplore(searchTerm);
+        setHasContractToExplore(true);
+        setActiveContractAddress(searchTerm);
+
+        // Auto-send analysis for contract addresses
+        if (/^0x[a-fA-F0-9]{40}$/.test(searchTerm)) {
+          const analysisMessage = `Please analyze this Chiliz smart contract: ${searchTerm}. Provide comprehensive analysis including security audit, functions, recent transactions, and any notable findings.`;
+          handleSendMessage(analysisMessage);
+        }
+      } else if (query) {
+        console.log('🗣️ Processing query:', query);
+        setHasTextQuery(true);
+
+        // Auto-send the query
+        handleSendMessage(query);
+      }
+    }
+  }, [searchParams]);
 
   const handleSend = async () => {
     if (!input.trim() || !sessionId) return;
