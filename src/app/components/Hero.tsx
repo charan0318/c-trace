@@ -4,7 +4,6 @@ import Spline from '@splinetool/react-spline';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import SearchBar from '@/app/components/ui/SearchBar';
 import Silk from '@/app/components/ui/Silk';
-
 import { useRouter } from 'next/navigation';
 
 const blockchains = [
@@ -129,11 +128,10 @@ const hundredThings = [
 
 export default function Hero() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedChain, setSelectedChain] = useState('88888'); // Default to Chiliz Chain
+  const [selectedChain, setSelectedChain] = useState('88888');
   const [splineLoaded, setSplineLoaded] = useState(false);
   const [splineError, setSplineError] = useState(false);
   const [scrollY, setScrollY] = useState(0);
-  const [isScrollingToThings, setIsScrollingToThings] = useState(false);
   const thingsRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
@@ -150,30 +148,25 @@ export default function Hero() {
   // Smooth scroll to 100 things section
   const scrollToThings = useCallback(() => {
     if (thingsRef.current) {
-      setIsScrollingToThings(true);
       thingsRef.current.scrollIntoView({ 
         behavior: 'smooth', 
         block: 'start' 
       });
-      setTimeout(() => setIsScrollingToThings(false), 1000);
     }
   }, []);
 
   const handleSearch = useCallback((searchInput: string, chain: string) => {
-    const finalChain = chain || '88888'; // Default to Chiliz Chain if no chain selected
+    const finalChain = chain || '88888';
     if (!searchInput.trim()) {
       alert('Please enter a contract address or search term');
       return;
     }
 
     const trimmedInput = searchInput.trim();
-
-    // Check if input looks like a contract address (starts with 0x and is 40-42 characters)
     const isContractAddress = /^0x[a-fA-F0-9]{40}$/.test(trimmedInput);
 
     try {
       if (isContractAddress) {
-        // Navigate with contract address
         console.log('Navigating to explorer with contract address:', { address: trimmedInput, chain: finalChain });
         router.push(
           `/explorer?chainId=${finalChain}&searchTerm=${encodeURIComponent(trimmedInput)}`
@@ -183,28 +176,26 @@ export default function Hero() {
         const isTokenSymbol = /^[A-Za-z]+$/.test(normalizedInput);
 
         if (isTokenSymbol) {
-        // Handle token symbol queries with ChilizScan integration
-        const tokenQuery = `Search for ${normalizedInput} token on Chiliz Chain using ChilizScan. If found, provide: 1) Contract address 2) Token symbol 3) Total supply 4) Decimals 5) Current holders. If not found on Chiliz, check spelling and suggest alternatives.`;
-        console.log('Navigating to explorer with token query:', { query: tokenQuery, chain: finalChain });
-        router.push(
-          `/explorer?chainId=${finalChain}&query=${encodeURIComponent(tokenQuery)}&searchType=token&symbol=${encodeURIComponent(normalizedInput)}`
-        );
-      } else {
-        // Handle specific token name searches (like chilizinu, kayen, etc.)
-        const lowerInput = normalizedInput.toLowerCase();
-        let searchQuery;
-
-        if (lowerInput.includes('inu') || lowerInput.includes('token') || lowerInput.includes('coin')) {
-          searchQuery = `Find the contract address and complete details for "${normalizedInput}" token on Chiliz Chain. Search the Chiliz blockchain explorer at https://scan.chiliz.com/tokens and provide: 1) Contract address 2) Token symbol 3) Total supply 4) Decimals 5) Current holders. If not found on Chiliz, check if it exists on other networks.`;
+          const tokenQuery = `Search for ${normalizedInput} token on Chiliz Chain using ChilizScan. If found, provide: 1) Contract address 2) Token symbol 3) Total supply 4) Decimals 5) Current holders. If not found on Chiliz, check spelling and suggest alternatives.`;
+          console.log('Navigating to explorer with token query:', { query: tokenQuery, chain: finalChain });
+          router.push(
+            `/explorer?chainId=${finalChain}&query=${encodeURIComponent(tokenQuery)}&searchType=token&symbol=${encodeURIComponent(normalizedInput)}`
+          );
         } else {
-          searchQuery = normalizedInput.toLowerCase();
-        }
+          const lowerInput = normalizedInput.toLowerCase();
+          let searchQuery;
 
-        console.log('Navigating to explorer with enhanced query:', { query: searchQuery, chain: finalChain });
-        router.push(
-          `/explorer?chainId=${finalChain}&query=${encodeURIComponent(searchQuery)}&searchType=general`
-        );
-      }
+          if (lowerInput.includes('inu') || lowerInput.includes('token') || lowerInput.includes('coin')) {
+            searchQuery = `Find the contract address and complete details for "${normalizedInput}" token on Chiliz Chain. Search the Chiliz blockchain explorer at https://scan.chiliz.com/tokens and provide: 1) Contract address 2) Token symbol 3) Total supply 4) Decimals 5) Current holders. If not found on Chiliz, check if it exists on other networks.`;
+          } else {
+            searchQuery = normalizedInput.toLowerCase();
+          }
+
+          console.log('Navigating to explorer with enhanced query:', { query: searchQuery, chain: finalChain });
+          router.push(
+            `/explorer?chainId=${finalChain}&query=${encodeURIComponent(searchQuery)}&searchType=general`
+          );
+        }
       }
     } catch (error) {
       console.error('Navigation error:', error);
@@ -232,205 +223,149 @@ export default function Hero() {
   }, []);
 
   return (
-    <div className="relative overflow-hidden pt-20" style={{ minHeight: 'calc(120vh + 1100px)' }}>
-      {/* Silk Background - Bottom Layer with parallax */}
-      <div 
-        className="absolute inset-0" 
-        style={{ 
-          zIndex: -10,
-          transform: `translateY(${scrollY * 0.5}px)`,
-        }}
-      >
-        <Silk
-          speed={2}
-          scale={1.8}
-          color="#4a4a7e"
-          noiseIntensity={1.2}
-          rotation={0}
-        />
-      </div>
+    <>
+      {/* MAIN HERO SECTION - EXACTLY AS BEFORE */}
+      <div className="relative overflow-hidden pt-20 h-screen">
+        {/* Silk Background - Bottom Layer */}
+        <div className="absolute inset-0" style={{ zIndex: -10 }}>
+          <Silk
+            speed={2}
+            scale={1.8}
+            color="#4a4a7e"
+            noiseIntensity={1.2}
+            rotation={0}
+          />
+        </div>
 
-      {/* Fallback Background with parallax */}
-      <div 
-        className="absolute inset-0 bg-gradient-to-br from-gray-900/20 via-black/40 to-gray-900/20" 
-        style={{ 
-          zIndex: -5,
-          transform: `translateY(${scrollY * 0.3}px)`,
-        }} 
-      />
+        {/* Fallback Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900/20 via-black/40 to-gray-900/20" style={{ zIndex: -5 }} />
 
-      {/* Spline Scene - Above Silk with subtle parallax */}
-      {!splineError && (
-        <div
-          style={{
-            transform: `translateY(${scrollY * 0.2}px)`,
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            zIndex: 1,
-          }}
-        >
-          <Spline 
-            scene="https://prod.spline.design/lX0ekK8OK9dc4DlA/scene.splinecode"
-            onLoad={handleSplineLoad}
-            onError={handleSplineError}
-            style={{ 
-              width: '100%', 
+        {/* Spline Scene */}
+        {!splineError && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
               height: '100%',
-              minHeight: '100vh',
-              objectFit: 'cover',
+              zIndex: 1,
             }}
+          >
+            <Spline 
+              scene="https://prod.spline.design/lX0ekK8OK9dc4DlA/scene.splinecode"
+              onLoad={handleSplineLoad}
+              onError={handleSplineError}
+              style={{ 
+                width: '100%', 
+                height: '100%',
+                minHeight: '100vh',
+                objectFit: 'cover',
+              }}
+            />
+          </div>
+        )}
+
+        {splineError && (
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-900/60 via-black/80 to-gray-900/60 flex items-center justify-center text-white/60" style={{ zIndex: 1 }}>
+            <p>3D Scene unavailable - Using Silk background</p>
+          </div>
+        )}
+
+        {/* AI Meets Chiliz Banner */}
+        <div className="absolute top-36 md:top-32 left-0 transform -translate-x-0 flex justify-center w-full px-4" style={{ zIndex: 9999 }}>
+          <button
+            onClick={() => router.push('/explorer')}
+            className="group relative px-4 md:px-6 py-2 md:py-3 rounded-2xl bg-transparent border-2 border-chiliz-primary hover:bg-chiliz-primary/10 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl backdrop-blur-md min-h-[44px] min-w-[44px] max-w-full"
+            style={{
+              boxShadow: '0 0 20px rgba(255, 178, 102, 0.3), inset 0 0 20px rgba(255, 178, 102, 0.1)'
+            }}
+          >
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-chiliz-primary/20 to-red-600/20 blur-lg opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
+            <div className="relative z-10 flex items-center gap-2 md:gap-3 justify-center">
+              <span className="font-semibold text-sm md:text-lg text-white transition-colors text-center leading-tight whitespace-nowrap">
+                <span className="hidden sm:inline">AI Meets Chiliz: </span>C-TRACE is Live
+              </span>
+              <div className="w-2 h-2 bg-chiliz-primary rounded-full animate-pulse flex-shrink-0"></div>
+            </div>
+            <div className="absolute inset-0 rounded-2xl border-2 border-chiliz-primary opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+          </button>
+        </div>
+
+        {/* Search box at bottom */}
+        <div className="absolute bottom-24 md:bottom-32 left-1/2 transform -translate-x-1/2 w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl px-4" style={{ zIndex: 999 }}>
+          <SearchBar
+            contractAddress={searchTerm}
+            selectedChain={selectedChain}
+            onSearch={handleSearch}
+            onAddressChange={handleAddressChange}
+            onChainChange={handleChainChange}
+            placeholder="Enter contract address or ask about Chiliz..."
+            chains={blockchains}
+            className="w-full"
           />
         </div>
-      )}
 
-      {splineError && (
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-3" style={{ zIndex: 999 }}>
+          <button
+            onClick={scrollToThings}
+            className="group flex flex-col items-center gap-2 text-white/70 hover:text-chiliz-primary transition-all duration-300"
+          >
+            <span className="text-sm font-medium">Discover 100 Things</span>
+            <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center group-hover:border-chiliz-primary/60 transition-colors">
+              <div className="w-1 h-3 bg-white/50 rounded-full mt-2 animate-bounce group-hover:bg-chiliz-primary/80"></div>
+            </div>
+          </button>
+        </div>
+
+        {/* Check out docs Button - Fixed Position Left */}
+        <div className="fixed bottom-6 left-6 z-50">
+          <button
+            onClick={() => router.push('/docs')}
+            className="group relative inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white bg-gray-900/80 border border-white/30 hover:border-chiliz-primary/60 transition-all duration-300 hover:shadow-lg hover:shadow-chiliz-primary/20 rounded-full backdrop-blur-md"
+          >
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-chiliz-primary/20 to-red-600/20 opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+            <span className="relative z-10 whitespace-nowrap group-hover:text-chiliz-primary transition-colors">Check out docs</span>
+          </button>
+        </div>
+
+        {/* Got Feedback Button - Fixed Position */}
+        <div className="fixed bottom-6 right-6 z-50">
+          <a
+            href="https://t.me/ch04niverse"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white bg-gray-900/80 border border-white/30 hover:border-chiliz-primary/60 transition-all duration-300 hover:shadow-lg hover:shadow-chiliz-primary/20 rounded-full backdrop-blur-md"
+          >
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-chiliz-primary/20 to-red-600/20 opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+            <span className="relative z-10 whitespace-nowrap group-hover:text-chiliz-primary transition-colors">Got Feedback?</span>
+          </a>
+        </div>
+      </div>
+
+      {/* SEPARATE 100 THINGS SECTION WITH PARALLAX - NO SPLINE HERE */}
+      <div ref={thingsRef} className="relative min-h-screen bg-black/90 py-20 px-4 overflow-hidden">
+        {/* Dark background with subtle texture */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900"></div>
+
+        {/* Animated background elements with parallax */}
         <div 
-          className="absolute inset-0 bg-gradient-to-br from-gray-900/60 via-black/80 to-gray-900/60 flex items-center justify-center text-white/60" 
-          style={{ 
-            zIndex: 1,
+          className="absolute inset-0 opacity-10"
+          style={{
             transform: `translateY(${scrollY * 0.2}px)`,
           }}
         >
-          <p>3D Scene unavailable - Using Silk background</p>
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-chiliz-primary/20 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-red-600/20 rounded-full blur-3xl"></div>
         </div>
-      )}
 
-
-      {/* AI Meets Chiliz Banner with parallax */}
-      <div 
-        className="absolute top-36 md:top-32 left-0 transform -translate-x-0 flex justify-center w-full px-4" 
-        style={{ 
-          zIndex: 9999,
-          transform: `translateY(${scrollY * -0.1}px)`,
-        }}
-      >
-        <button
-          onClick={() => router.push('/explorer')}
-          className="group relative px-4 md:px-6 py-2 md:py-3 rounded-2xl bg-transparent border-2 border-chiliz-primary hover:bg-chiliz-primary/10 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl backdrop-blur-md min-h-[44px] min-w-[44px] max-w-full"
-          style={{
-            boxShadow: '0 0 20px rgba(255, 178, 102, 0.3), inset 0 0 20px rgba(255, 178, 102, 0.1)'
-          }}
-        >
-          {/* Neon glow background */}
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-chiliz-primary/20 to-red-600/20 blur-lg opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
-
-          {/* Content */}
-          <div className="relative z-10 flex items-center gap-2 md:gap-3 justify-center">
-            <span className="font-semibold text-sm md:text-lg text-white transition-colors text-center leading-tight whitespace-nowrap">
-              <span className="hidden sm:inline">AI Meets Chiliz: </span>C-TRACE is Live
-            </span>
-            <div className="w-2 h-2 bg-chiliz-primary rounded-full animate-pulse flex-shrink-0"></div>
-          </div>
-
-          {/* Animated border */}
-          <div className="absolute inset-0 rounded-2xl border-2 border-chiliz-primary opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
-        </button>
-      </div>
-
-      {/* Search box at bottom with parallax */}
-      <div 
-        className="absolute bottom-24 md:bottom-32 left-1/2 transform -translate-x-1/2 w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl px-4" 
-        style={{ 
-          zIndex: 999,
-          transform: `translateX(-50%) translateY(${scrollY * -0.15}px)`,
-        }}
-      >
-        <SearchBar
-          contractAddress={searchTerm}
-          selectedChain={selectedChain}
-          onSearch={handleSearch}
-          onAddressChange={handleAddressChange}
-          onChainChange={handleChainChange}
-          placeholder="Enter contract address or ask about Chiliz..."
-          chains={blockchains}
-          className="w-full"
-        />
-      </div>
-
-      {/* Scroll indicator with parallax */}
-      <div 
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-3"
-        style={{ 
-          zIndex: 999,
-          transform: `translateX(-50%) translateY(${scrollY * -0.2}px)`,
-          opacity: Math.max(0, 1 - scrollY / 300),
-        }}
-      >
-        <button
-          onClick={scrollToThings}
-          className="group flex flex-col items-center gap-2 text-white/70 hover:text-chiliz-primary transition-all duration-300"
-        >
-          <span className="text-sm font-medium">Discover 100 Things</span>
-          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center group-hover:border-chiliz-primary/60 transition-colors">
-            <div className="w-1 h-3 bg-white/50 rounded-full mt-2 animate-bounce group-hover:bg-chiliz-primary/80"></div>
-          </div>
-        </button>
-      </div>
-
-      {/* Check out docs Button - Fixed Position Left with subtle parallax */}
-      <div 
-        className="fixed bottom-6 left-6 z-50"
-        style={{
-          transform: `translateY(${scrollY * -0.02}px)`,
-        }}
-      >
-        <button
-          onClick={() => router.push('/docs')}
-          className="group relative inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white bg-gray-900/80 border border-white/30 hover:border-chiliz-primary/60 transition-all duration-300 hover:shadow-lg hover:shadow-chiliz-primary/20 rounded-full backdrop-blur-md"
-        >
-          {/* Gradient background on hover */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-chiliz-primary/20 to-red-600/20 opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
-
-          {/* Button content */}
-          <span className="relative z-10 whitespace-nowrap group-hover:text-chiliz-primary transition-colors">Check out docs</span>
-        </button>
-      </div>
-
-      {/* Got Feedback Button - Fixed Position with subtle parallax */}
-      <div 
-        className="fixed bottom-6 right-6 z-50"
-        style={{
-          transform: `translateY(${scrollY * -0.03}px)`,
-        }}
-      >
-        <a
-          href="https://t.me/ch04niverse"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group relative inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white bg-gray-900/80 border border-white/30 hover:border-chiliz-primary/60 transition-all duration-300 hover:shadow-lg hover:shadow-chiliz-primary/20 rounded-full backdrop-blur-md"
-        >
-          {/* Gradient background on hover */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-chiliz-primary/20 to-red-600/20 opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
-
-          {/* Button content */}
-          <span className="relative z-10 whitespace-nowrap group-hover:text-chiliz-primary transition-colors">Got Feedback?</span>
-        </a>
-      </div>
-
-      {/* 100 Things to Do Section with parallax */}
-      <div 
-        ref={thingsRef}
-        className="absolute top-[120vh] left-0 w-full py-20 px-4"
-        style={{
-          transform: `translateY(${Math.max(0, (scrollY - window.innerHeight) * 0.1)}px)`,
-        }}
-      >
-        <div className="max-w-7xl mx-auto">
-          {/* Parallax background elements */}
+        <div className="max-w-7xl mx-auto relative z-10">
+          {/* Header with parallax */}
           <div 
-            className="absolute inset-0 bg-gradient-to-br from-chiliz-primary/5 to-red-600/5 rounded-3xl blur-3xl"
+            className="text-center mb-16"
             style={{
-              transform: `translateY(${scrollY * 0.05}px) scale(${1 + scrollY * 0.0001})`,
-            }}
-          />
-          
-          <div 
-            className="text-center mb-16 relative z-10"
-            style={{
-              transform: `translateY(${Math.max(0, (scrollY - window.innerHeight * 0.8) * -0.1)}px)`,
+              transform: `translateY(${Math.max(0, (scrollY - window.innerHeight) * -0.3)}px)`,
             }}
           >
             <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
@@ -443,16 +378,12 @@ export default function Hero() {
             </p>
           </div>
 
-          <div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-12 relative z-10"
-            style={{
-              transform: `translateY(${Math.max(0, (scrollY - window.innerHeight * 1.2) * 0.05)}px)`,
-            }}
-          >
+          {/* Cards Grid with staggered parallax */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-12">
             {hundredThings.map((item, index) => {
               const row = Math.floor(index / 4);
-              const cardDelay = (index % 4) * 0.02 + row * 0.05;
-              
+              const cardDelay = (index % 4) * 0.1 + row * 0.05;
+
               return (
                 <div
                   key={index}
@@ -461,62 +392,62 @@ export default function Hero() {
                     background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
                     backdropFilter: 'blur(10px)',
                     boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-                    transform: `translateY(${Math.max(0, (scrollY - window.innerHeight * 1.5) * (0.03 + cardDelay))}px)`,
-                    opacity: Math.max(0.3, 1 - Math.max(0, (scrollY - window.innerHeight * 1.8) * 0.001)),
+                    transform: `translateY(${Math.max(0, (scrollY - window.innerHeight * 0.8) * (0.1 + cardDelay))}px)`,
                   }}
                 >
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 mt-1">
-                    {item.requiresWallet ? (
-                      <div className="w-6 h-6 bg-chiliz-primary/20 rounded-full flex items-center justify-center border border-chiliz-primary/40">
-                        <div className="w-2 h-2 bg-chiliz-primary rounded-full"></div>
-                      </div>
-                    ) : (
-                      <div className="w-6 h-6 bg-green-500/20 rounded-full flex items-center justify-center border border-green-500/40">
-                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-chiliz-primary/80 text-xs font-mono">#{(index + 1).toString().padStart(3, '0')}</span>
-                      <span className="text-xs text-white/60">{item.category}</span>
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 mt-1">
+                      {item.requiresWallet ? (
+                        <div className="w-6 h-6 bg-chiliz-primary/20 rounded-full flex items-center justify-center border border-chiliz-primary/40">
+                          <div className="w-2 h-2 bg-chiliz-primary rounded-full"></div>
+                        </div>
+                      ) : (
+                        <div className="w-6 h-6 bg-green-500/20 rounded-full flex items-center justify-center border border-green-500/40">
+                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        </div>
+                      )}
                     </div>
-                    <h3 className="text-white font-semibold text-sm mb-2 leading-tight">
-                      {item.title}
-                    </h3>
-                    <p className="text-white/70 text-xs leading-relaxed mb-3">
-                      {item.description}
-                    </p>
-                    <div className="bg-black/20 rounded-lg p-2 mb-3">
-                      <code className="text-chiliz-primary text-xs font-mono break-all">
-                        "{item.prompt}"
-                      </code>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-chiliz-primary/80 text-xs font-mono">#{(index + 1).toString().padStart(3, '0')}</span>
+                        <span className="text-xs text-white/60">{item.category}</span>
+                      </div>
+                      <h3 className="text-white font-semibold text-sm mb-2 leading-tight">
+                        {item.title}
+                      </h3>
+                      <p className="text-white/70 text-xs leading-relaxed mb-3">
+                        {item.description}
+                      </p>
+                      <div className="bg-black/20 rounded-lg p-2 mb-3">
+                        <code className="text-chiliz-primary text-xs font-mono break-all">
+                          "{item.prompt}"
+                        </code>
+                      </div>
+                      <button
+                        onClick={() => {
+                          const searchParams = new URLSearchParams({
+                            chainId: '88888',
+                            query: item.prompt,
+                            searchType: 'general'
+                          });
+                          router.push(`/explorer?${searchParams.toString()}`);
+                        }}
+                        className="w-full bg-chiliz-primary/10 hover:bg-chiliz-primary/20 border border-chiliz-primary/30 text-chiliz-primary text-xs font-semibold py-2 px-3 rounded-lg transition-all duration-200 hover:scale-105"
+                      >
+                        Try Now →
+                      </button>
                     </div>
-                    <button
-                      onClick={() => {
-                        const searchParams = new URLSearchParams({
-                          chainId: '88888',
-                          query: item.prompt,
-                          searchType: 'general'
-                        });
-                        router.push(`/explorer?${searchParams.toString()}`);
-                      }}
-                      className="w-full bg-chiliz-primary/10 hover:bg-chiliz-primary/20 border border-chiliz-primary/30 text-chiliz-primary text-xs font-semibold py-2 px-3 rounded-lg transition-all duration-200 hover:scale-105"
-                    >
-                      Try Now →
-                    </button>
                   </div>
                 </div>
-              </div>
               );
             })}
           </div>
 
+          {/* Legend with parallax */}
           <div 
-            className="text-center relative z-10"
+            className="text-center"
             style={{
-              transform: `translateY(${Math.max(0, (scrollY - window.innerHeight * 2) * 0.08)}px)`,
+              transform: `translateY(${Math.max(0, (scrollY - window.innerHeight * 1.5) * 0.2)}px)`,
             }}
           >
             <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6">
@@ -532,22 +463,16 @@ export default function Hero() {
               </div>
             </div>
           </div>
+
+          {/* Footer */}
+          <footer className="mt-20 text-center">
+            <div className="space-y-1">
+              <p className="text-red-500 font-semibold">#BuiltOnChiliz</p>
+              <span className="text-white/40 text-sm">&copy; {new Date().getFullYear()} c-trace | Crafted with ❤️ by ch04niverse</span>
+            </div>
+          </footer>
         </div>
       </div>
-
-      {/* Footer with parallax */}
-      <footer 
-        className="absolute bottom-4 md:bottom-6 left-1/2 transform -translate-x-1/2 text-xs md:text-sm text-white/40 text-center px-4 max-w-full" 
-        style={{ 
-          top: 'calc(120vh + 1000px)',
-          transform: `translateX(-50%) translateY(${Math.max(0, (scrollY - window.innerHeight * 2.5) * 0.1)}px)`,
-        }}
-      >
-        <div className="space-y-1">
-          <p className="text-red-500 font-semibold">#BuiltOnChiliz</p>
-          <span className="block">&copy; {new Date().getFullYear()} c-trace | Crafted with ❤️ by ch04niverse</span>
-        </div>
-      </footer>
-    </div>
+    </>
   );
 }
