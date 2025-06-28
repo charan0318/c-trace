@@ -1,7 +1,7 @@
 'use client';
 
 import Spline from '@splinetool/react-spline';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import SearchBar from '@/app/components/ui/SearchBar';
 import Silk from '@/app/components/ui/Silk';
 
@@ -132,7 +132,32 @@ export default function Hero() {
   const [selectedChain, setSelectedChain] = useState('88888'); // Default to Chiliz Chain
   const [splineLoaded, setSplineLoaded] = useState(false);
   const [splineError, setSplineError] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+  const [isScrollingToThings, setIsScrollingToThings] = useState(false);
+  const thingsRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+
+  // Parallax scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Smooth scroll to 100 things section
+  const scrollToThings = useCallback(() => {
+    if (thingsRef.current) {
+      setIsScrollingToThings(true);
+      thingsRef.current.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'start' 
+      });
+      setTimeout(() => setIsScrollingToThings(false), 1000);
+    }
+  }, []);
 
   const handleSearch = useCallback((searchInput: string, chain: string) => {
     const finalChain = chain || '88888'; // Default to Chiliz Chain if no chain selected
@@ -208,8 +233,14 @@ export default function Hero() {
 
   return (
     <div className="relative overflow-hidden pt-20" style={{ minHeight: 'calc(120vh + 1100px)' }}>
-      {/* Silk Background - Bottom Layer */}
-      <div className="absolute inset-0" style={{ zIndex: -10 }}>
+      {/* Silk Background - Bottom Layer with parallax */}
+      <div 
+        className="absolute inset-0" 
+        style={{ 
+          zIndex: -10,
+          transform: `translateY(${scrollY * 0.5}px)`,
+        }}
+      >
         <Silk
           speed={2}
           scale={1.8}
@@ -219,37 +250,63 @@ export default function Hero() {
         />
       </div>
 
-      {/* Fallback Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900/20 via-black/40 to-gray-900/20" style={{ zIndex: -5 }} />
+      {/* Fallback Background with parallax */}
+      <div 
+        className="absolute inset-0 bg-gradient-to-br from-gray-900/20 via-black/40 to-gray-900/20" 
+        style={{ 
+          zIndex: -5,
+          transform: `translateY(${scrollY * 0.3}px)`,
+        }} 
+      />
 
-      {/* Spline Scene - Above Silk */}
+      {/* Spline Scene - Above Silk with subtle parallax */}
       {!splineError && (
-        <Spline 
-          scene="https://prod.spline.design/lX0ekK8OK9dc4DlA/scene.splinecode"
-          onLoad={handleSplineLoad}
-          onError={handleSplineError}
-          style={{ 
-            width: '100%', 
-            height: '100%',
-            minHeight: '100vh',
-            objectFit: 'cover',
+        <div
+          style={{
+            transform: `translateY(${scrollY * 0.2}px)`,
             position: 'absolute',
             top: 0,
             left: 0,
+            width: '100%',
+            height: '100%',
             zIndex: 1,
           }}
-        />
+        >
+          <Spline 
+            scene="https://prod.spline.design/lX0ekK8OK9dc4DlA/scene.splinecode"
+            onLoad={handleSplineLoad}
+            onError={handleSplineError}
+            style={{ 
+              width: '100%', 
+              height: '100%',
+              minHeight: '100vh',
+              objectFit: 'cover',
+            }}
+          />
+        </div>
       )}
 
       {splineError && (
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900/60 via-black/80 to-gray-900/60 flex items-center justify-center text-white/60" style={{ zIndex: 1 }}>
+        <div 
+          className="absolute inset-0 bg-gradient-to-br from-gray-900/60 via-black/80 to-gray-900/60 flex items-center justify-center text-white/60" 
+          style={{ 
+            zIndex: 1,
+            transform: `translateY(${scrollY * 0.2}px)`,
+          }}
+        >
           <p>3D Scene unavailable - Using Silk background</p>
         </div>
       )}
 
 
-      {/* AI Meets Chiliz Banner */}
-      <div className="absolute top-36 md:top-32 left-0 transform -translate-x-0 flex justify-center w-full px-4" style={{ zIndex: 9999 }}>
+      {/* AI Meets Chiliz Banner with parallax */}
+      <div 
+        className="absolute top-36 md:top-32 left-0 transform -translate-x-0 flex justify-center w-full px-4" 
+        style={{ 
+          zIndex: 9999,
+          transform: `translateY(${scrollY * -0.1}px)`,
+        }}
+      >
         <button
           onClick={() => router.push('/explorer')}
           className="group relative px-4 md:px-6 py-2 md:py-3 rounded-2xl bg-transparent border-2 border-chiliz-primary hover:bg-chiliz-primary/10 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl backdrop-blur-md min-h-[44px] min-w-[44px] max-w-full"
@@ -273,8 +330,14 @@ export default function Hero() {
         </button>
       </div>
 
-      {/* Search box at bottom */}
-      <div className="absolute bottom-24 md:bottom-32 left-1/2 transform -translate-x-1/2 w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl px-4" style={{ zIndex: 999 }}>
+      {/* Search box at bottom with parallax */}
+      <div 
+        className="absolute bottom-24 md:bottom-32 left-1/2 transform -translate-x-1/2 w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl px-4" 
+        style={{ 
+          zIndex: 999,
+          transform: `translateX(-50%) translateY(${scrollY * -0.15}px)`,
+        }}
+      >
         <SearchBar
           contractAddress={searchTerm}
           selectedChain={selectedChain}
@@ -287,8 +350,33 @@ export default function Hero() {
         />
       </div>
 
-      {/* Check out docs Button - Fixed Position Left */}
-      <div className="fixed bottom-6 left-6 z-50">
+      {/* Scroll indicator with parallax */}
+      <div 
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-3"
+        style={{ 
+          zIndex: 999,
+          transform: `translateX(-50%) translateY(${scrollY * -0.2}px)`,
+          opacity: Math.max(0, 1 - scrollY / 300),
+        }}
+      >
+        <button
+          onClick={scrollToThings}
+          className="group flex flex-col items-center gap-2 text-white/70 hover:text-chiliz-primary transition-all duration-300"
+        >
+          <span className="text-sm font-medium">Discover 100 Things</span>
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center group-hover:border-chiliz-primary/60 transition-colors">
+            <div className="w-1 h-3 bg-white/50 rounded-full mt-2 animate-bounce group-hover:bg-chiliz-primary/80"></div>
+          </div>
+        </button>
+      </div>
+
+      {/* Check out docs Button - Fixed Position Left with subtle parallax */}
+      <div 
+        className="fixed bottom-6 left-6 z-50"
+        style={{
+          transform: `translateY(${scrollY * -0.02}px)`,
+        }}
+      >
         <button
           onClick={() => router.push('/docs')}
           className="group relative inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white bg-gray-900/80 border border-white/30 hover:border-chiliz-primary/60 transition-all duration-300 hover:shadow-lg hover:shadow-chiliz-primary/20 rounded-full backdrop-blur-md"
@@ -301,8 +389,13 @@ export default function Hero() {
         </button>
       </div>
 
-      {/* Got Feedback Button - Fixed Position */}
-      <div className="fixed bottom-6 right-6 z-50">
+      {/* Got Feedback Button - Fixed Position with subtle parallax */}
+      <div 
+        className="fixed bottom-6 right-6 z-50"
+        style={{
+          transform: `translateY(${scrollY * -0.03}px)`,
+        }}
+      >
         <a
           href="https://t.me/ch04niverse"
           target="_blank"
@@ -317,10 +410,29 @@ export default function Hero() {
         </a>
       </div>
 
-      {/* 100 Things to Do Section */}
-      <div className="absolute top-[120vh] left-0 w-full py-20 px-4">
+      {/* 100 Things to Do Section with parallax */}
+      <div 
+        ref={thingsRef}
+        className="absolute top-[120vh] left-0 w-full py-20 px-4"
+        style={{
+          transform: `translateY(${Math.max(0, (scrollY - window.innerHeight) * 0.1)}px)`,
+        }}
+      >
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          {/* Parallax background elements */}
+          <div 
+            className="absolute inset-0 bg-gradient-to-br from-chiliz-primary/5 to-red-600/5 rounded-3xl blur-3xl"
+            style={{
+              transform: `translateY(${scrollY * 0.05}px) scale(${1 + scrollY * 0.0001})`,
+            }}
+          />
+          
+          <div 
+            className="text-center mb-16 relative z-10"
+            style={{
+              transform: `translateY(${Math.max(0, (scrollY - window.innerHeight * 0.8) * -0.1)}px)`,
+            }}
+          >
             <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
               100 Things You Can Do
               <span className="block text-chiliz-primary">with C-TRACE</span>
@@ -331,17 +443,28 @@ export default function Hero() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-12">
-            {hundredThings.map((item, index) => (
-              <div
-                key={index}
-                className="group relative bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-4 hover:bg-white/10 transition-all duration-300 hover:scale-105 hover:border-chiliz-primary/30"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
-                  backdropFilter: 'blur(10px)',
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-                }}
-              >
+          <div 
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-12 relative z-10"
+            style={{
+              transform: `translateY(${Math.max(0, (scrollY - window.innerHeight * 1.2) * 0.05)}px)`,
+            }}
+          >
+            {hundredThings.map((item, index) => {
+              const row = Math.floor(index / 4);
+              const cardDelay = (index % 4) * 0.02 + row * 0.05;
+              
+              return (
+                <div
+                  key={index}
+                  className="group relative bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-4 hover:bg-white/10 transition-all duration-300 hover:scale-105 hover:border-chiliz-primary/30"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+                    backdropFilter: 'blur(10px)',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+                    transform: `translateY(${Math.max(0, (scrollY - window.innerHeight * 1.5) * (0.03 + cardDelay))}px)`,
+                    opacity: Math.max(0.3, 1 - Math.max(0, (scrollY - window.innerHeight * 1.8) * 0.001)),
+                  }}
+                >
                 <div className="flex items-start gap-3">
                   <div className="flex-shrink-0 mt-1">
                     {item.requiresWallet ? (
@@ -386,10 +509,16 @@ export default function Hero() {
                   </div>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
 
-          <div className="text-center">
+          <div 
+            className="text-center relative z-10"
+            style={{
+              transform: `translateY(${Math.max(0, (scrollY - window.innerHeight * 2) * 0.08)}px)`,
+            }}
+          >
             <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6">
               <div className="flex gap-3">
                 <div className="flex items-center gap-2">
@@ -406,8 +535,14 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="absolute bottom-4 md:bottom-6 left-1/2 transform -translate-x-1/2 text-xs md:text-sm text-white/40 text-center px-4 max-w-full" style={{ top: 'calc(120vh + 1000px)' }}>
+      {/* Footer with parallax */}
+      <footer 
+        className="absolute bottom-4 md:bottom-6 left-1/2 transform -translate-x-1/2 text-xs md:text-sm text-white/40 text-center px-4 max-w-full" 
+        style={{ 
+          top: 'calc(120vh + 1000px)',
+          transform: `translateX(-50%) translateY(${Math.max(0, (scrollY - window.innerHeight * 2.5) * 0.1)}px)`,
+        }}
+      >
         <div className="space-y-1">
           <p className="text-red-500 font-semibold">#BuiltOnChiliz</p>
           <span className="block">&copy; {new Date().getFullYear()} c-trace | Crafted with ❤️ by ch04niverse</span>
