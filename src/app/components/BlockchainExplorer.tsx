@@ -282,6 +282,9 @@ export function BlockchainExplorer() {
   const [showSuggestedActions, setShowSuggestedActions] = useState(false);
   const [executeMode, setExecuteMode] = useState(false);
   const [executeResponse, setExecuteResponse] = useState(null);
+  const [selectedChain, setSelectedChain] = useState("88888");
+  const [contractToExplore, setContractToExplore] = useState<string | null>(null);
+  const [activeContractAddress, setActiveContractAddress] = useState<string | null>(null);
 
   const account = useActiveAccount();
   const walletAddress = account?.address;
@@ -378,23 +381,86 @@ export function BlockchainExplorer() {
       if (searchTerm) {
         console.log('📝 Processing searchTerm:', searchTerm);
         setContractToExplore(searchTerm);
-        setHasContractToExplore(true);
         setActiveContractAddress(searchTerm);
-
-        // Auto-send analysis for contract addresses
-        if (/^0x[a-fA-F0-9]{40}$/.test(searchTerm)) {
-          const analysisMessage = `Please analyze this Chiliz smart contract: ${searchTerm}. Provide comprehensive analysis including security audit, functions, recent transactions, and any notable findings.`;
-          handleSendMessage(analysisMessage);
-        }
       } else if (query) {
         console.log('🗣️ Processing query:', query);
-        setHasTextQuery(true);
 
         // Auto-send the query
-        handleSendMessage(query);
+        if (sessionId) {
+            handleSendMessage(query);
+        }
       }
     }
-  }, [searchParams]);
+  }, [searchParams, sessionId, handleSendMessage]);
+
+// Initialize session
+  useEffect(() => {
+    const initSession = async () => {
+      try {
+        console.log("🔄 Initializing session...");
+        const newSessionId = await createSession("Blockchain Explorer Session");
+        console.log("✅ Session created:", newSessionId);
+        setSessionId(newSessionId);
+
+        if (hasContractToExplore && contractAddress) {
+          console.log("🔍 Contract to explore:", contractAddress, "on chain:", selectedChain);
+          setIsTyping(true);
+          const contractDetails = await queryContract(
+            contractAddress,
+            selectedChain,
+            newSessionId
+          );
+          console.log("📄 Contract details received");
+          setMessages([
+            { role: "system", content: "Welcome to the C-TRACE Blockchain Explorer." },
+            {
+              role: "system",
+              content: contractDetails || "No details available for this contract.",
+            },
+          ]);
+          setIsTyping(false);
+        } else if (hasTextQuery && textQuery) {
+          console.log("🔍 Text query to process:", textQuery, "on chain:", selectedChain);
+          setIsTyping(true);
+          const queryResponse = await handleUserMessage(
+            textQuery,
+            newSessionId,
+            selectedChain,
+            ""
+          );
+          console.log("📄 Query response received");
+          setMessages([
+            { role: "system", content: "Welcome to the C-TRACE Blockchain Explorer." },
+            { role: "user", content: textQuery },
+            {
+              role: "system",
+              content: queryResponse || "No information available for this query.",
+            },
+          ]);
+          setIsTyping(false);
+        } else {
+          console.log("💬 Loading default welcome message");
+          setMessages([
+            {
+              role: "system",
+              content: "Welcome to C-TRACE 🚀 I'm your AI assistant for exploring the Chiliz blockchain and ecosystem. I can help you with learning about Chiliz, finding contract addresses, analyzing tokens, and exploring the Chiliz ecosystem. What would you like to discover?",
+            },
+          ]);
+        }
+      } catch (error) {
+        console.error("❌ Error in session initialization:", error);
+        setMessages([
+          {
+            role: "system",
+            content: "Welcome to C-TRACE 🚀 I'm ready to help you explore Chiliz blockchain and fan token data. What would you like to discover?",
+          },
+        ]);
+        setIsTyping(false);
+      }
+    };
+
+    initSession();
+  }, [hasContractToExplore, hasTextQuery, contractAddress, textQuery, selectedChain]);
 
   const handleSend = async () => {
     if (!input.trim() || !sessionId) return;
@@ -664,7 +730,7 @@ No valid transaction data received from the Nebula API.
     }
   };
 
-  const handleSendMessage = async (userMessage: string) => {
+  const handleSendMessage = useCallback(async (userMessage: string) => {
     if (!userMessage.trim() || !sessionId) return;
 
     // Check for balance queries first
@@ -803,7 +869,7 @@ Once connected, I'll be able to show you your CHZ balance on Chiliz Chain.`,
     } finally {
       setIsTyping(false);
     }
-  };
+  }, [chainId, contractAddress, executeMode, handleUserMessage, sessionId, walletAddress]);
 
   return (
     <div className="fixed inset-0 bg-black overflow-hidden z-10">
