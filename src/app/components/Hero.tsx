@@ -344,30 +344,25 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* SEPARATE 100 THINGS SECTION WITH PARALLAX - NO SPLINE HERE */}
-      <div ref={thingsRef} className="relative min-h-screen bg-black/90 py-20 px-4 overflow-hidden">
-        {/* Dark background with subtle texture */}
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900"></div>
-
-        {/* Animated background elements with parallax */}
-        <div 
-          className="absolute inset-0 opacity-10"
-          style={{
-            transform: `translateY(${scrollY * 0.2}px)`,
-          }}
-        >
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-chiliz-primary/20 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-red-600/20 rounded-full blur-3xl"></div>
+      {/* SEPARATE 100 THINGS SECTION - SAME BACKGROUND AS MAIN */}
+      <div ref={thingsRef} className="relative min-h-screen py-20 px-4 overflow-hidden">
+        {/* Same Silk Background as main hero */}
+        <div className="absolute inset-0" style={{ zIndex: -10 }}>
+          <Silk
+            speed={2}
+            scale={1.8}
+            color="#4a4a7e"
+            noiseIntensity={1.2}
+            rotation={0}
+          />
         </div>
 
+        {/* Same fallback background overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900/20 via-black/40 to-gray-900/20" style={{ zIndex: -5 }} />
+
         <div className="max-w-7xl mx-auto relative z-10">
-          {/* Header with parallax */}
-          <div 
-            className="text-center mb-16"
-            style={{
-              transform: `translateY(${Math.max(0, (scrollY - window.innerHeight) * -0.3)}px)`,
-            }}
-          >
+          {/* Header without parallax */}
+          <div className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
               100 Things You Can Do
               <span className="block text-chiliz-primary">with C-TRACE</span>
@@ -378,13 +373,9 @@ export default function Hero() {
             </p>
           </div>
 
-          {/* Cards Grid with staggered parallax */}
+          {/* Cards Grid without parallax */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-12">
-            {hundredThings.map((item, index) => {
-              const row = Math.floor(index / 4);
-              const cardDelay = (index % 4) * 0.1 + row * 0.05;
-
-              return (
+            {hundredThings.map((item, index) => (
                 <div
                   key={index}
                   className="group relative bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-4 hover:bg-white/10 transition-all duration-300 hover:scale-105 hover:border-chiliz-primary/30"
@@ -392,7 +383,6 @@ export default function Hero() {
                     background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
                     backdropFilter: 'blur(10px)',
                     boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-                    transform: `translateY(${Math.max(0, (scrollY - window.innerHeight * 0.8) * (0.1 + cardDelay))}px)`,
                   }}
                 >
                   <div className="flex items-start gap-3">
@@ -439,17 +429,11 @@ export default function Hero() {
                     </div>
                   </div>
                 </div>
-              );
-            })}
+              ))}
           </div>
 
-          {/* Legend with parallax */}
-          <div 
-            className="text-center"
-            style={{
-              transform: `translateY(${Math.max(0, (scrollY - window.innerHeight * 1.5) * 0.2)}px)`,
-            }}
-          >
+          {/* Legend without parallax */}
+          <div className="text-center">
             <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6">
               <div className="flex gap-3">
                 <div className="flex items-center gap-2">
