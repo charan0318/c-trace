@@ -24,7 +24,7 @@ const hundredThings = [
   { category: "Chiliz Chain", title: "Chiliz History", description: "Origin story and development of Chiliz", prompt: "Tell me the history of Chiliz blockchain", requiresWallet: false },
   { category: "Chiliz Chain", title: "Validator Network", description: "Understanding Chiliz Chain validators", prompt: "How does Chiliz Chain validation work?", requiresWallet: false },
   { category: "Chiliz Chain", title: "Bridge to Chiliz", description: "How to move assets to Chiliz Chain", prompt: "How to bridge tokens to Chiliz Chain?", requiresWallet: false },
-  { category: "Chiliz Chain", title: "Chiliz Roadmap", description: "Future development plans for Chiliz", prompt: "What is Chiliz Chain roadmap for 2024?", requiresWallet: false },
+  { category: "General", title: "Chiliz & Socios Ecosystem", description: "Chiliz roadmap and Socios platform insights", prompt: "What is Chiliz Chain roadmap for 2025 and how does Socios.com platform work?", requiresWallet: false },
   { category: "Chiliz Chain", title: "Developer Resources", description: "Building on Chiliz Chain guide", prompt: "How to develop on Chiliz Chain?", requiresWallet: false },
   { category: "Chiliz Chain", title: "Network Security", description: "Chiliz Chain security features and audits", prompt: "How secure is Chiliz Chain?", requiresWallet: false },
   { category: "Chiliz Chain", title: "Chiliz vs BSC", description: "Comparison with Binance Smart Chain", prompt: "Compare Chiliz Chain with Binance Smart Chain", requiresWallet: false },
@@ -99,7 +99,6 @@ const hundredThings = [
   { category: "Explorer", title: "Transaction Details", description: "Analyze specific transaction", prompt: "Analyze transaction 0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890ab", requiresWallet: false },
   { category: "Explorer", title: "Address Analysis", description: "Deep dive into any address", prompt: "Analyze address 0x67f6d0F49F43a48D5f5A75205AF95c72b5186d9f", requiresWallet: false },
   { category: "Explorer", title: "Network Statistics", description: "Chiliz Chain network stats", prompt: "Show Chiliz Chain network statistics", requiresWallet: false },
-  { category: "Explorer", title: "Top Token Holders", description: "Find top holders of any token", prompt: "Who are the top PSG token holders?", requiresWallet: false },
   { category: "Explorer", title: "Block Analysis", description: "Analyze specific block", prompt: "Analyze block 1234567", requiresWallet: false },
   { category: "Explorer", title: "Validator Information", description: "Information about Chiliz validators", prompt: "Show Chiliz Chain validators", requiresWallet: false },
   { category: "Explorer", title: "Transaction Volume", description: "Daily transaction volume analysis", prompt: "What is daily transaction volume on Chiliz?", requiresWallet: false },
@@ -120,7 +119,7 @@ const hundredThings = [
   { category: "DeFi", title: "Arbitrage Opportunities", description: "Find arbitrage opportunities", prompt: "Are there arbitrage opportunities on Chiliz?", requiresWallet: false },
   { category: "DeFi", title: "Lending Protocols", description: "Lending and borrowing on Chiliz", prompt: "What lending protocols exist on Chiliz?", requiresWallet: false },
   { category: "DeFi", title: "Cross-chain Bridges", description: "Bridge tokens to/from Chiliz", prompt: "How to bridge tokens to Chiliz Chain?", requiresWallet: false },
-  { category: "DeFi", title: "Impermanent Loss", description: "Calculate impermanent loss", prompt: "Calculate impermanent loss for PSG/CHZ pool", requiresWallet: false },
+  { category: "DeFi", title: "Impermanent Loss", description: "Calculate impermanent loss", prompt: "Calculate impermanent loss for PSG token / CHZ pool", requiresWallet: false },
   { category: "DeFi", title: "DeFi Security", description: "DeFi security best practices", prompt: "How to stay safe in Chiliz DeFi?", requiresWallet: false },
 
   // Educational & Guide (15 items)
