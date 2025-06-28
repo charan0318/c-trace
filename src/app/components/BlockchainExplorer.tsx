@@ -355,6 +355,147 @@ export function BlockchainExplorer() {
     },
   ];
 
+  const handleSendMessage = useCallback(async (userMessage: string) => {
+    if (!userMessage.trim() || !sessionId) return;
+
+    // Check for balance queries first
+    const balanceQueries = [
+      'what is my balance',
+      'show my balance', 
+      'check my balance',
+      'get my balance',
+      'my balance',
+      'wallet balance'
+    ];
+
+    const isBalanceQuery = balanceQueries.some(query => 
+      userMessage.toLowerCase().includes(query)
+    );
+
+    if (isBalanceQuery) {
+      setIsTyping(true);
+      const newMessage = { role: "user", content: userMessage };
+      setMessages((prev) => [...prev, newMessage]);
+
+      if (!walletAddress) {
+        const connectWalletMessage = {
+          role: "system",
+          content: `## 🔗 Connect Your Wallet
+
+To check your balance, please connect your wallet first using the "Connect Wallet" button in the top-right corner.
+
+**Supported Wallets:**
+- MetaMask
+- Coinbase Wallet
+- Rainbow
+- Rabby Wallet
+- Chiliz Wallet
+- In-App Wallet (Email, Google, Apple, Facebook, Phone)
+
+Once connected, I'll be able to show you your CHZ balance on Chiliz Chain.`,
+        };
+        setMessages((prev) => [...prev, connectWalletMessage]);
+        setIsTyping(false);
+        return;
+      }
+
+      try {
+          // Fetch balance directly from ChilizScan API
+          const balance = await chilizScanAPI.getAccountBalance(walletAddress);
+
+        if (balance !== null) {
+          const balanceInCHZ = (parseInt(balance) / Math.pow(10, 18)).toFixed(4);
+          const balanceMessage = {
+            role: "system",
+            content: `## Your Chiliz Balance
+
+**Address:** \`${walletAddress}\`
+**Balance:** ${balanceInCHZ} CHZ
+
+**Network:** Chiliz Chain (Chain ID: 88888)
+**Explorer:** [View on ChilizScan](https://scan.chiliz.com/address/${walletAddress})`,
+          };
+          setMessages((prev) => [...prev, balanceMessage]);
+        } else {
+          const errorMessage = {
+            role: "system",
+            content: `## ❌ Unable to fetch your balance
+
+**Possible reasons:**
+- Your wallet is not connected to Chiliz Chain
+- Network connectivity issues
+- API rate limiting
+
+**Solutions:**
+1. Make sure your wallet is connected to Chiliz Chain (Chain ID: 88888)
+2. Check your internet connection
+3. Try reconnecting your wallet
+
+**Manual Check:** Visit [ChilizScan](https://scan.chiliz.com/address/${walletAddress}) to view your balance manually.`,
+          };
+          setMessages((prev) => [...prev, errorMessage]);
+        }
+      } catch (error) {
+        console.error("Balance fetch error:", error);
+        const errorMessage = {
+          role: "system",
+          content: `## ❌ Unable to fetch your balance. Please ensure your wallet is connected to Chiliz Chain.
+
+**Troubleshooting:**
+- Check your wallet network (should be Chiliz Chain - Chain ID: 88888)
+- Reconnect your wallet
+- Refresh the page and try again`,
+        };
+        setMessages((prev) => [...prev, errorMessage]);
+      }
+
+      setIsTyping(false);
+      return;
+    }
+
+    setIsTyping(true);
+    const newMessage = { role: "user", content: userMessage };
+    setMessages((prev) => [...prev, newMessage]);
+
+    try {
+      let response;
+      if (executeMode && walletAddress) {
+        response = await executeCommand(
+          userMessage,
+          walletAddress,
+          "default-user",
+          false,
+          chainId || "88888",
+          contractAddress || "",
+          sessionId
+        );
+        setExecuteResponse(response);
+      } else {
+        response = await handleUserMessage(
+          userMessage,
+          sessionId,
+          chainId || "88888",
+          contractAddress || ""
+        );
+      }
+
+      const aiMessage = {
+        role: "system",
+        content: response?.message || response || "No response received.",
+      };
+      setMessages((prev) => [...prev, aiMessage]);
+    } catch (error) {
+      console.error("Error handling message:", error);
+      const errorMessage = {
+        role: "system",
+        content: "Sorry, I encountered an error. Please try again.",
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
+      setIsTyping(false);
+    }
+  }, [chainId, contractAddress, executeMode, handleUserMessage, sessionId, walletAddress]);
+
   useEffect(() => {
     if (searchParams) {
       const chainId = searchParams.get('chainId');
@@ -730,146 +871,7 @@ No valid transaction data received from the Nebula API.
     }
   };
 
-  const handleSendMessage = useCallback(async (userMessage: string) => {
-    if (!userMessage.trim() || !sessionId) return;
-
-    // Check for balance queries first
-    const balanceQueries = [
-      'what is my balance',
-      'show my balance', 
-      'check my balance',
-      'get my balance',
-      'my balance',
-      'wallet balance'
-    ];
-
-    const isBalanceQuery = balanceQueries.some(query => 
-      userMessage.toLowerCase().includes(query)
-    );
-
-    if (isBalanceQuery) {
-      setIsTyping(true);
-      const newMessage = { role: "user", content: userMessage };
-      setMessages((prev) => [...prev, newMessage]);
-
-      if (!walletAddress) {
-        const connectWalletMessage = {
-          role: "system",
-          content: `## 🔗 Connect Your Wallet
-
-To check your balance, please connect your wallet first using the "Connect Wallet" button in the top-right corner.
-
-**Supported Wallets:**
-- MetaMask
-- Coinbase Wallet
-- Rainbow
-- Rabby Wallet
-- Chiliz Wallet
-- In-App Wallet (Email, Google, Apple, Facebook, Phone)
-
-Once connected, I'll be able to show you your CHZ balance on Chiliz Chain.`,
-        };
-        setMessages((prev) => [...prev, connectWalletMessage]);
-        setIsTyping(false);
-        return;
-      }
-
-      try {
-          // Fetch balance directly from ChilizScan API
-          const balance = await chilizScanAPI.getAccountBalance(walletAddress);
-
-        if (balance !== null) {
-          const balanceInCHZ = (parseInt(balance) / Math.pow(10, 18)).toFixed(4);
-          const balanceMessage = {
-            role: "system",
-            content: `## Your Chiliz Balance
-
-**Address:** \`${walletAddress}\`
-**Balance:** ${balanceInCHZ} CHZ
-
-**Network:** Chiliz Chain (Chain ID: 88888)
-**Explorer:** [View on ChilizScan](https://scan.chiliz.com/address/${walletAddress})`,
-          };
-          setMessages((prev) => [...prev, balanceMessage]);
-        } else {
-          const errorMessage = {
-            role: "system",
-            content: `## ❌ Unable to fetch your balance
-
-**Possible reasons:**
-- Your wallet is not connected to Chiliz Chain
-- Network connectivity issues
-- API rate limiting
-
-**Solutions:**
-1. Make sure your wallet is connected to Chiliz Chain (Chain ID: 88888)
-2. Check your internet connection
-3. Try reconnecting your wallet
-
-**Manual Check:** Visit [ChilizScan](https://scan.chiliz.com/address/${walletAddress}) to view your balance manually.`,
-          };
-          setMessages((prev) => [...prev, errorMessage]);
-        }
-      } catch (error) {
-        console.error("Balance fetch error:", error);
-        const errorMessage = {
-          role: "system",
-          content: `## ❌ Unable to fetch your balance. Please ensure your wallet is connected to Chiliz Chain.
-
-**Troubleshooting:**
-- Check your wallet network (should be Chiliz Chain - Chain ID: 88888)
-- Reconnect your wallet
-- Refresh the page and try again`,
-        };
-        setMessages((prev) => [...prev, errorMessage]);
-      }
-
-      setIsTyping(false);
-      return;
-    }
-
-    setIsTyping(true);
-    const newMessage = { role: "user", content: userMessage };
-    setMessages((prev) => [...prev, newMessage]);
-
-    try {
-      let response;
-      if (executeMode && walletAddress) {
-        response = await executeCommand(
-          userMessage,
-          walletAddress,
-          "default-user",
-          false,
-          chainId || "88888",
-          contractAddress || "",
-          sessionId
-        );
-        setExecuteResponse(response);
-      } else {
-        response = await handleUserMessage(
-          userMessage,
-          sessionId,
-          chainId || "88888",
-          contractAddress || ""
-        );
-      }
-
-      const aiMessage = {
-        role: "system",
-        content: response?.message || response || "No response received.",
-      };
-      setMessages((prev) => [...prev, aiMessage]);
-    } catch (error) {
-      console.error("Error handling message:", error);
-      const errorMessage = {
-        role: "system",
-        content: "Sorry, I encountered an error. Please try again.",
-      };
-      setMessages((prev) => [...prev, errorMessage]);
-    } finally {
-      setIsTyping(false);
-    }
-  }, [chainId, contractAddress, executeMode, handleUserMessage, sessionId, walletAddress]);
+  
 
   return (
     <div className="fixed inset-0 bg-black overflow-hidden z-10">
