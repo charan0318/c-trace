@@ -318,19 +318,25 @@ export function BlockchainExplorer() {
 
   const suggestedActions = [
     "What is Chiliz and how does it work?",
+    "What is CHZ token?",
+    "How does Chiliz Chain compare to Ethereum?",
+    "Show me Chiliz Chain network statistics",
     "Show me popular fan tokens",
-    "$CHZ token information",
-    "$BAR (FC Barcelona) fan token details",
     "How to interact with fan tokens?",
-    "Popular tokens on Chiliz Chain",
   ];
 
   const actionButtons = [
     {
       icon: Search,
-      title: "Analyze Chiliz Contract",
-      description: "Explore any Chiliz smart contract. Uncover methods, data, and fan token logic instantly",
-      prompt: "Analyze this smart contract on Chiliz Chain: [paste address]"
+      title: "Learn About Chiliz",
+      description: "Comprehensive guide to Chiliz blockchain, CHZ token, and ecosystem overview",
+      prompt: "What is Chiliz Chain and how does it work?"
+    },
+    {
+      icon: FileText,
+      title: "CHZ Token Information", 
+      description: "Deep dive into the native CHZ token: utility, economics, and use cases",
+      prompt: "What is CHZ token and what can I do with it?"
     },
     {
       icon: TrendingUp,
@@ -339,16 +345,10 @@ export function BlockchainExplorer() {
       prompt: "Show me popular fan tokens on Chiliz Chain"
     },
     {
-      icon: FileText,
-      title: "Token Lookup",
-      description: "Search for any token by name, symbol, or contract address using ChilizScan data",
-      prompt: "Search for a specific token (e.g., chilizinu, kayen, or $CHZ)"
-    },
-    {
       icon: Zap,
-      title: "Contract Interaction",
-      description: "Execute read-only functions on Chiliz contracts and fan tokens",
-      prompt: "Help me interact with a fan token contract on Chiliz Chain."
+      title: "Network Analysis",
+      description: "Explore Chiliz Chain performance, statistics, and blockchain data",
+      prompt: "Show me Chiliz Chain network statistics and performance"
     },
   ];
 

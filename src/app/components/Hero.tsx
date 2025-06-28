@@ -11,6 +11,28 @@ const blockchains = [
 ];
 
 const hundredThings = [
+  // Chiliz Chain Basics (20 items)
+  { category: "Chiliz Chain", title: "What is Chiliz?", description: "Complete introduction to Chiliz blockchain and ecosystem", prompt: "What is Chiliz Chain?", requiresWallet: false },
+  { category: "Chiliz Chain", title: "CHZ Token Overview", description: "Learn about the native Chiliz token", prompt: "What is CHZ token?", requiresWallet: false },
+  { category: "Chiliz Chain", title: "Chiliz vs Ethereum", description: "Compare Chiliz Chain features with Ethereum", prompt: "Compare Chiliz Chain with Ethereum", requiresWallet: false },
+  { category: "Chiliz Chain", title: "Network Statistics", description: "Current Chiliz Chain network metrics and performance", prompt: "Show Chiliz Chain network statistics", requiresWallet: false },
+  { category: "Chiliz Chain", title: "Blockchain Explorer Guide", description: "How to use ChilizScan explorer effectively", prompt: "How to use ChilizScan blockchain explorer?", requiresWallet: false },
+  { category: "Chiliz Chain", title: "Transaction Fees", description: "Understanding gas fees and transaction costs", prompt: "What are transaction fees on Chiliz Chain?", requiresWallet: false },
+  { category: "Chiliz Chain", title: "Block Time & Speed", description: "Chiliz Chain performance and speed analysis", prompt: "How fast is Chiliz Chain compared to other blockchains?", requiresWallet: false },
+  { category: "Chiliz Chain", title: "Consensus Mechanism", description: "How Chiliz Chain validates transactions", prompt: "What consensus mechanism does Chiliz Chain use?", requiresWallet: false },
+  { category: "Chiliz Chain", title: "Ecosystem Overview", description: "Projects and applications built on Chiliz", prompt: "What projects are built on Chiliz Chain?", requiresWallet: false },
+  { category: "Chiliz Chain", title: "Chiliz History", description: "Origin story and development of Chiliz", prompt: "Tell me the history of Chiliz blockchain", requiresWallet: false },
+  { category: "Chiliz Chain", title: "Validator Network", description: "Understanding Chiliz Chain validators", prompt: "How does Chiliz Chain validation work?", requiresWallet: false },
+  { category: "Chiliz Chain", title: "Bridge to Chiliz", description: "How to move assets to Chiliz Chain", prompt: "How to bridge tokens to Chiliz Chain?", requiresWallet: false },
+  { category: "Chiliz Chain", title: "Chiliz Roadmap", description: "Future development plans for Chiliz", prompt: "What is Chiliz Chain roadmap for 2024?", requiresWallet: false },
+  { category: "Chiliz Chain", title: "Developer Resources", description: "Building on Chiliz Chain guide", prompt: "How to develop on Chiliz Chain?", requiresWallet: false },
+  { category: "Chiliz Chain", title: "Network Security", description: "Chiliz Chain security features and audits", prompt: "How secure is Chiliz Chain?", requiresWallet: false },
+  { category: "Chiliz Chain", title: "Chiliz vs BSC", description: "Comparison with Binance Smart Chain", prompt: "Compare Chiliz Chain with Binance Smart Chain", requiresWallet: false },
+  { category: "Chiliz Chain", title: "Chiliz vs Polygon", description: "Feature comparison with Polygon network", prompt: "Compare Chiliz Chain with Polygon", requiresWallet: false },
+  { category: "Chiliz Chain", title: "Environmental Impact", description: "Chiliz Chain sustainability and energy usage", prompt: "What is Chiliz Chain environmental impact?", requiresWallet: false },
+  { category: "Chiliz Chain", title: "Governance Model", description: "How decisions are made on Chiliz Chain", prompt: "How does Chiliz Chain governance work?", requiresWallet: false },
+  { category: "Chiliz Chain", title: "Future of Sports Blockchain", description: "Chiliz role in sports technology evolution", prompt: "How will Chiliz change sports industry?", requiresWallet: false },
+
   // Fan Token Analysis (20 items)
   { category: "Fan Tokens", title: "PSG Fan Token Analysis", description: "Get detailed information about Paris Saint-Germain fan token", prompt: "What is PSG fan token?", requiresWallet: false },
   { category: "Fan Tokens", title: "Barcelona Token Details", description: "Explore FC Barcelona fan token metrics and usage", prompt: "Explain BAR fan token", requiresWallet: false },
@@ -19,7 +41,6 @@ const hundredThings = [
   { category: "Fan Tokens", title: "AS Roma Token Stats", description: "AS Roma fan token performance and utility", prompt: "What is ASR fan token?", requiresWallet: false },
   { category: "Fan Tokens", title: "Compare PSG vs BAR", description: "Side-by-side comparison of top fan tokens", prompt: "Compare PSG and BAR fan tokens", requiresWallet: false },
   { category: "Fan Tokens", title: "Compare JUV vs ACM", description: "Italian football fan tokens comparison", prompt: "Compare JUV and ACM fan tokens", requiresWallet: false },
-  { category: "Fan Tokens", title: "CHZ Token Overview", description: "Learn about the native Chiliz token", prompt: "What is CHZ token?", requiresWallet: false },
   { category: "Fan Tokens", title: "Fan Token Market Analysis", description: "Overall fan token market trends and insights", prompt: "Analyze the fan token market on Chiliz", requiresWallet: false },
   { category: "Fan Tokens", title: "Top Fan Tokens Ranking", description: "Ranking of most popular fan tokens", prompt: "List top fan tokens on Chiliz Chain", requiresWallet: false },
   { category: "Fan Tokens", title: "Fan Token Use Cases", description: "Practical applications of fan tokens", prompt: "What can I do with fan tokens?", requiresWallet: false },
@@ -32,6 +53,7 @@ const hundredThings = [
   { category: "Fan Tokens", title: "Fan Token Partnerships", description: "Club partnerships and collaborations", prompt: "What partnerships do fan tokens have?", requiresWallet: false },
   { category: "Fan Tokens", title: "Fan Token Rewards", description: "Rewards and benefits for holders", prompt: "What rewards do fan token holders get?", requiresWallet: false },
   { category: "Fan Tokens", title: "Fan Token Price History", description: "Historical price analysis of fan tokens", prompt: "Show PSG fan token price history", requiresWallet: false },
+  { category: "Fan Tokens", title: "How Fan Tokens Work", description: "Complete guide to fan token mechanics", prompt: "How do fan tokens work?", requiresWallet: false },
 
   // Wallet & Balance Features (15 items)
   { category: "Wallet", title: "Check CHZ Balance", description: "View your native CHZ token balance", prompt: "What is my CHZ balance?", requiresWallet: true },
